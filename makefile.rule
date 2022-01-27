@@ -1,0 +1,25 @@
+BIN = exercise1-1
+OUT = build
+
+TARGET = src/exercise1/$(BIN).c
+
+HAL = drivers/hal
+FREERTOS = drivers/freertos
+STARTUP = startup
+CONFIG = drivers/config
+
+C_SRCS = \
+$(HAL)/usart.c \
+$(FREERTOS)/portable/GCC/ARM_CM4F/port.c \
+$(FREERTOS)/portable/MemMang/heap_1.c \
+$(wildcard $(FREERTOS)/*.c) \
+$(STARTUP)/startup.c \
+$(TARGET)
+
+C_INCS = \
+-I$(HAL) \
+-I$(FREERTOS)/portable/GCC/ARM_CM4F \
+-I$(FREERTOS)/include \
+-I$(CONFIG)
+
+LDSCRIPT = $(STARTUP)/link.ld
