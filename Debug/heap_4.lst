@@ -1,0 +1,2021 @@
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"heap_4.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.ucHeap,"aw",%nobits
+  18              		.align	2
+  21              	ucHeap:
+  22 0000 00000000 		.space	76800
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  23              		.section	.rodata.xHeapStructSize,"a"
+  24              		.align	2
+  27              	xHeapStructSize:
+  28 0000 08000000 		.word	8
+  29              		.section	.bss.xStart,"aw",%nobits
+  30              		.align	2
+  33              	xStart:
+  34 0000 00000000 		.space	8
+  34      00000000 
+  35              		.section	.bss.pxEnd,"aw",%nobits
+  36              		.align	2
+  39              	pxEnd:
+  40 0000 00000000 		.space	4
+  41              		.section	.bss.xFreeBytesRemaining,"aw",%nobits
+  42              		.align	2
+  45              	xFreeBytesRemaining:
+  46 0000 00000000 		.space	4
+  47              		.section	.bss.xMinimumEverFreeBytesRemaining,"aw",%nobits
+  48              		.align	2
+  51              	xMinimumEverFreeBytesRemaining:
+  52 0000 00000000 		.space	4
+  53              		.section	.bss.xNumberOfSuccessfulAllocations,"aw",%nobits
+  54              		.align	2
+  57              	xNumberOfSuccessfulAllocations:
+  58 0000 00000000 		.space	4
+  59              		.section	.bss.xNumberOfSuccessfulFrees,"aw",%nobits
+  60              		.align	2
+  63              	xNumberOfSuccessfulFrees:
+  64 0000 00000000 		.space	4
+  65              		.section	.bss.xBlockAllocatedBit,"aw",%nobits
+  66              		.align	2
+  69              	xBlockAllocatedBit:
+  70 0000 00000000 		.space	4
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 2
+
+
+  71              		.section	.text.pvPortMalloc,"ax",%progbits
+  72              		.align	1
+  73              		.global	pvPortMalloc
+  74              		.arch armv7e-m
+  75              		.syntax unified
+  76              		.thumb
+  77              		.thumb_func
+  78              		.fpu fpv4-sp-d16
+  80              	pvPortMalloc:
+  81              	.LFB5:
+  82              		.file 1 "./Drivers/FreeRTOS/portable/MemMang/heap_4.c"
+   1:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*
+   2:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * FreeRTOS Kernel V10.4.6
+   3:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+   5:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * SPDX-License-Identifier: MIT
+   6:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+   7:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * this software and associated documentation files (the "Software"), to deal in
+   9:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * the Software without restriction, including without limitation the rights to
+  10:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * subject to the following conditions:
+  13:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+  14:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * The above copyright notice and this permission notice shall be included in all
+  15:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * copies or substantial portions of the Software.
+  16:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+  17:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+  24:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * https://www.FreeRTOS.org
+  25:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * https://github.com/FreeRTOS
+  26:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+  27:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  */
+  28:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  29:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*
+  30:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * A sample implementation of pvPortMalloc() and vPortFree() that combines
+  31:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * (coalescences) adjacent memory blocks as they are freed, and in so doing
+  32:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * limits memory fragmentation.
+  33:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  *
+  34:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * See heap_1.c, heap_2.c and heap_3.c for alternative implementations, and the
+  35:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * memory management pages of https://www.FreeRTOS.org for more information.
+  36:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  */
+  37:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #include <stdlib.h>
+  38:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  39:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  40:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * all the API functions to use the MPU wrappers.  That should only be done when
+  41:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * task.h is included from an application file. */
+  42:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  43:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  44:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #include "FreeRTOS.h"
+  45:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #include "task.h"
+  46:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 3
+
+
+  47:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  48:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  49:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #if ( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
+  50:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     #error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+  51:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #endif
+  52:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  53:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Block sizes must not get too small. */
+  54:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #define heapMINIMUM_BLOCK_SIZE    ( ( size_t ) ( xHeapStructSize << 1 ) )
+  55:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  56:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Assumes 8bit bytes! */
+  57:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #define heapBITS_PER_BYTE         ( ( size_t ) 8 )
+  58:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  59:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Allocate the memory for the heap. */
+  60:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #if ( configAPPLICATION_ALLOCATED_HEAP == 1 )
+  61:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  62:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* The application writer has already defined the array used for the RTOS
+  63:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** * heap - probably so it can be placed in a special segment or address. */
+  64:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     extern uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  65:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #else
+  66:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     PRIVILEGED_DATA static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  67:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** #endif /* configAPPLICATION_ALLOCATED_HEAP */
+  68:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  69:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Define the linked list structure.  This is used to link free blocks in order
+  70:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * of their memory address. */
+  71:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** typedef struct A_BLOCK_LINK
+  72:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+  73:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     struct A_BLOCK_LINK * pxNextFreeBlock; /*<< The next free block in the list. */
+  74:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     size_t xBlockSize;                     /*<< The size of the free block. */
+  75:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** } BlockLink_t;
+  76:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  77:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+  78:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  79:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*
+  80:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * Inserts a block of memory that is being freed into the correct position in
+  81:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * the list of free memory blocks.  The block being freed will be merged with
+  82:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * the block in front it and/or the block behind it if the memory blocks are
+  83:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * adjacent to each other.
+  84:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  */
+  85:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t * pxBlockToInsert ) PRIVILEGED_FUNCTION;
+  86:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  87:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*
+  88:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * Called automatically to setup the required heap structures the first time
+  89:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * pvPortMalloc() is called.
+  90:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  */
+  91:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** static void prvHeapInit( void ) PRIVILEGED_FUNCTION;
+  92:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  93:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+  94:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  95:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* The size of the structure placed at the beginning of each allocated memory
+  96:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * block must by correctly byte aligned. */
+  97:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** static const size_t xHeapStructSize = ( sizeof( BlockLink_t ) + ( ( size_t ) ( portBYTE_ALIGNMENT -
+  98:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+  99:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Create a couple of list links to mark the start and end of the list. */
+ 100:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** PRIVILEGED_DATA static BlockLink_t xStart, * pxEnd = NULL;
+ 101:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 102:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Keeps track of the number of calls to allocate and free memory as well as the
+ 103:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * number of free bytes remaining, but says nothing about fragmentation. */
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 4
+
+
+ 104:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** PRIVILEGED_DATA static size_t xFreeBytesRemaining = 0U;
+ 105:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** PRIVILEGED_DATA static size_t xMinimumEverFreeBytesRemaining = 0U;
+ 106:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** PRIVILEGED_DATA static size_t xNumberOfSuccessfulAllocations = 0;
+ 107:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** PRIVILEGED_DATA static size_t xNumberOfSuccessfulFrees = 0;
+ 108:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 109:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /* Gets set to the top bit of an size_t type.  When this bit in the xBlockSize
+ 110:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * member of an BlockLink_t structure is set then the block belongs to the
+ 111:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * application.  When the bit is free the block is still part of the free heap
+ 112:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****  * space. */
+ 113:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** PRIVILEGED_DATA static size_t xBlockAllocatedBit = 0;
+ 114:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 115:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 116:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 117:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** void * pvPortMalloc( size_t xWantedSize )
+ 118:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+  83              		.loc 1 118 1
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 40
+  86              		@ frame_needed = 1, uses_anonymous_args = 0
+  87 0000 80B5     		push	{r7, lr}
+  88              	.LCFI0:
+  89              		.cfi_def_cfa_offset 8
+  90              		.cfi_offset 7, -8
+  91              		.cfi_offset 14, -4
+  92 0002 8AB0     		sub	sp, sp, #40
+  93              	.LCFI1:
+  94              		.cfi_def_cfa_offset 48
+  95 0004 00AF     		add	r7, sp, #0
+  96              	.LCFI2:
+  97              		.cfi_def_cfa_register 7
+  98 0006 7860     		str	r0, [r7, #4]
+ 119:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     BlockLink_t * pxBlock, * pxPreviousBlock, * pxNewBlockLink;
+ 120:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     void * pvReturn = NULL;
+  99              		.loc 1 120 12
+ 100 0008 0023     		movs	r3, #0
+ 101 000a FB61     		str	r3, [r7, #28]
+ 121:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 122:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     vTaskSuspendAll();
+ 102              		.loc 1 122 5
+ 103 000c FFF7FEFF 		bl	vTaskSuspendAll
+ 123:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 124:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* If this is the first call to malloc then the heap will require
+ 125:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****          * initialisation to setup the list of free blocks. */
+ 126:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         if( pxEnd == NULL )
+ 104              		.loc 1 126 19
+ 105 0010 654B     		ldr	r3, .L20
+ 106 0012 1B68     		ldr	r3, [r3]
+ 107              		.loc 1 126 11
+ 108 0014 002B     		cmp	r3, #0
+ 109 0016 01D1     		bne	.L2
+ 127:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 128:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             prvHeapInit();
+ 110              		.loc 1 128 13
+ 111 0018 FFF7FEFF 		bl	prvHeapInit
+ 112              	.L2:
+ 129:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 130:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         else
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 5
+
+
+ 131:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 132:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 133:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 134:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 135:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* Check the requested block size is not so large that the top bit is
+ 136:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****          * set.  The top bit of the block size member of the BlockLink_t structure
+ 137:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****          * is used to determine who owns the block - the application or the
+ 138:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****          * kernel, so it must be free. */
+ 139:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         if( ( xWantedSize & xBlockAllocatedBit ) == 0 )
+ 113              		.loc 1 139 27
+ 114 001c 634B     		ldr	r3, .L20+4
+ 115 001e 1A68     		ldr	r2, [r3]
+ 116 0020 7B68     		ldr	r3, [r7, #4]
+ 117 0022 1340     		ands	r3, r3, r2
+ 118              		.loc 1 139 11
+ 119 0024 002B     		cmp	r3, #0
+ 120 0026 40F0A780 		bne	.L3
+ 140:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 141:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             /* The wanted size must be increased so it can contain a BlockLink_t
+ 142:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****              * structure in addition to the requested amount of bytes. */
+ 143:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             if( ( xWantedSize > 0 ) &&
+ 121              		.loc 1 143 15
+ 122 002a 7B68     		ldr	r3, [r7, #4]
+ 123 002c 002B     		cmp	r3, #0
+ 124 002e 2DD0     		beq	.L4
+ 144:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 ( ( xWantedSize + xHeapStructSize ) >  xWantedSize ) ) /* Overflow check */
+ 125              		.loc 1 144 33 discriminator 1
+ 126 0030 0822     		movs	r2, #8
+ 127 0032 7B68     		ldr	r3, [r7, #4]
+ 128 0034 1344     		add	r3, r3, r2
+ 143:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 ( ( xWantedSize + xHeapStructSize ) >  xWantedSize ) ) /* Overflow check */
+ 129              		.loc 1 143 37 discriminator 1
+ 130 0036 7A68     		ldr	r2, [r7, #4]
+ 131 0038 9A42     		cmp	r2, r3
+ 132 003a 27D2     		bcs	.L4
+ 145:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 146:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 xWantedSize += xHeapStructSize;
+ 133              		.loc 1 146 29
+ 134 003c 0822     		movs	r2, #8
+ 135 003e 7B68     		ldr	r3, [r7, #4]
+ 136 0040 1344     		add	r3, r3, r2
+ 137 0042 7B60     		str	r3, [r7, #4]
+ 147:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 148:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 /* Ensure that blocks are always aligned. */
+ 149:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
+ 138              		.loc 1 149 35
+ 139 0044 7B68     		ldr	r3, [r7, #4]
+ 140 0046 03F00703 		and	r3, r3, #7
+ 141              		.loc 1 149 19
+ 142 004a 002B     		cmp	r3, #0
+ 143 004c 21D0     		beq	.L19
+ 150:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 151:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     /* Byte alignment required. Check for overflow. */
+ 152:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     if( ( xWantedSize + ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_M
+ 144              		.loc 1 152 39
+ 145 004e 7B68     		ldr	r3, [r7, #4]
+ 146 0050 23F00703 		bic	r3, r3, #7
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 6
+
+
+ 147 0054 0833     		adds	r3, r3, #8
+ 148              		.loc 1 152 23
+ 149 0056 7A68     		ldr	r2, [r7, #4]
+ 150 0058 9A42     		cmp	r2, r3
+ 151 005a 14D2     		bcs	.L6
+ 153:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                             > xWantedSize )
+ 154:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     {
+ 155:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MA
+ 152              		.loc 1 155 37
+ 153 005c 7B68     		ldr	r3, [r7, #4]
+ 154 005e 23F00703 		bic	r3, r3, #7
+ 155 0062 0833     		adds	r3, r3, #8
+ 156 0064 7B60     		str	r3, [r7, #4]
+ 156:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 157              		.loc 1 156 25
+ 158 0066 7B68     		ldr	r3, [r7, #4]
+ 159 0068 03F00703 		and	r3, r3, #7
+ 160 006c 002B     		cmp	r3, #0
+ 161 006e 10D0     		beq	.L19
+ 162              	.LBB12:
+ 163              	.LBB13:
+ 164              		.file 2 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h"
+   1:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*
+   2:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * FreeRTOS Kernel V10.4.6
+   3:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   5:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * SPDX-License-Identifier: MIT
+   6:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   7:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * this software and associated documentation files (the "Software"), to deal in
+   9:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software without restriction, including without limitation the rights to
+  10:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * subject to the following conditions:
+  13:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  14:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * The above copyright notice and this permission notice shall be included in all
+  15:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * copies or substantial portions of the Software.
+  16:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  17:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  24:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * https://www.FreeRTOS.org
+  25:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * https://github.com/FreeRTOS
+  26:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  27:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  28:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  29:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  30:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef PORTMACRO_H
+  31:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define PORTMACRO_H
+  32:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  33:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifdef __cplusplus
+  34:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         extern "C" {
+  35:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 7
+
+
+  36:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  37:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------
+  38:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Port specific definitions.
+  39:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  40:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * The settings in this file configure FreeRTOS correctly for the
+  41:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * given hardware and compiler.
+  42:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  43:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * These settings should not be altered.
+  44:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *-----------------------------------------------------------
+  45:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  46:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  47:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Type definitions. */
+  48:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portCHAR          char
+  49:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portFLOAT         float
+  50:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDOUBLE        double
+  51:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portLONG          long
+  52:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSHORT         short
+  53:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSTACK_TYPE    uint32_t
+  54:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portBASE_TYPE     long
+  55:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  56:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef portSTACK_TYPE   StackType_t;
+  57:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef long             BaseType_t;
+  58:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef unsigned long    UBaseType_t;
+  59:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  60:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #if ( configUSE_16_BIT_TICKS == 1 )
+  61:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         typedef uint16_t     TickType_t;
+  62:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portMAX_DELAY              ( TickType_t ) 0xffff
+  63:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #else
+  64:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         typedef uint32_t     TickType_t;
+  65:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portMAX_DELAY              ( TickType_t ) 0xffffffffUL
+  66:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  67:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* 32-bit tick type on a 32-bit architecture, so reads of the tick count do
+  68:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * not need to be guarded with a critical section. */
+  69:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portTICK_TYPE_IS_ATOMIC    1
+  70:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+  71:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  72:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  73:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specifics. */
+  74:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSTACK_GROWTH      ( -1 )
+  75:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTICK_PERIOD_MS    ( ( TickType_t ) 1000 / configTICK_RATE_HZ )
+  76:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portBYTE_ALIGNMENT    8
+  77:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDONT_DISCARD      __attribute__( ( used ) )
+  78:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  79:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  80:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Scheduler utilities. */
+  81:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portYIELD()                                 \
+  82:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {                                                   \
+  83:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Set a PendSV to request a context switch. */ \
+  84:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT; \
+  85:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****                                                         \
+  86:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Barriers are normally not required but do ensure the code is completely \
+  87:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****          * within the specified behaviour for the architecture. */ \
+  88:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "dsb" ::: "memory" );                     \
+  89:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "isb" );                                  \
+  90:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+  91:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  92:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNVIC_INT_CTRL_REG     ( *( ( volatile uint32_t * ) 0xe000ed04 ) )
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 8
+
+
+  93:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )
+  94:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portEND_SWITCHING_ISR( xSwitchRequired )    do { if( xSwitchRequired != pdFALSE ) portY
+  95:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portYIELD_FROM_ISR( x )                     portEND_SWITCHING_ISR( x )
+  96:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  97:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  98:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Critical section management. */
+  99:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortEnterCritical( void );
+ 100:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortExitCritical( void );
+ 101:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSET_INTERRUPT_MASK_FROM_ISR()         ulPortRaiseBASEPRI()
+ 102:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portCLEAR_INTERRUPT_MASK_FROM_ISR( x )    vPortSetBASEPRI( x )
+ 103:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDISABLE_INTERRUPTS()                  vPortRaiseBASEPRI()
+ 104:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portENABLE_INTERRUPTS()                   vPortSetBASEPRI( 0 )
+ 105:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portENTER_CRITICAL()                      vPortEnterCritical()
+ 106:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portEXIT_CRITICAL()                       vPortExitCritical()
+ 107:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 108:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 109:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 110:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Task function macros as described on the FreeRTOS.org WEB site.  These are
+ 111:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * not necessary for to use this port.  They are defined so the common demo files
+ 112:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * (which build with all the ports) will build. */
+ 113:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParamete
+ 114:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTASK_FUNCTION( vFunction, pvParameters )          void vFunction( void * pvParamete
+ 115:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 116:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 117:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Tickless idle/low power functionality. */
+ 118:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef portSUPPRESS_TICKS_AND_SLEEP
+ 119:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
+ 120:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime )    vPortSuppressTicksAndSleep( xE
+ 121:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 122:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 123:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 124:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specific optimisations. */
+ 125:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
+ 126:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define configUSE_PORT_OPTIMISED_TASK_SELECTION    1
+ 127:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 128:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 129:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+ 130:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 131:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Generic helper function. */
+ 132:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t 
+ 133:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 134:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             uint8_t ucReturn;
+ 135:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 136:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
+ 137:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 138:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             return ucReturn;
+ 139:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 140:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 141:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Check the configuration. */
+ 142:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #if ( configMAX_PRIORITIES > 32 )
+ 143:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             #error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIO
+ 144:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #endif
+ 145:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 146:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Store/clear the ready priorities in a bit map. */
+ 147:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities )    ( uxReadyPriorities )
+ 148:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities )     ( uxReadyPriorities )
+ 149:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 9
+
+
+ 150:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 151:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 152:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities )    uxTopPriority = ( 3
+ 153:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 154:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+ 155:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 156:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 157:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 158:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifdef configASSERT
+ 159:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         void vPortValidateInterruptPriority( void );
+ 160:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portASSERT_IF_INTERRUPT_PRIORITY_INVALID()    vPortValidateInterruptPriority()
+ 161:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 162:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 163:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* portNOP() is not required by this port. */
+ 164:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNOP()
+ 165:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 166:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portINLINE              __inline
+ 167:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 168:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef portFORCE_INLINE
+ 169:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portFORCE_INLINE    inline __attribute__( ( always_inline ) )
+ 170:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 171:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 172:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
+ 173:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 174:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulCurrentInterrupt;
+ 175:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         BaseType_t xReturn;
+ 176:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 177:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Obtain the number of the currently executing interrupt. */
+ 178:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
+ 179:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 180:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         if( ulCurrentInterrupt == 0 )
+ 181:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 182:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             xReturn = pdFALSE;
+ 183:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 184:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         else
+ 185:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 186:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             xReturn = pdTRUE;
+ 187:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 188:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 189:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         return xReturn;
+ 190:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 191:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 192:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 193:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 194:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static void vPortRaiseBASEPRI( void )
+ 195:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 196:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulNewBASEPRI;
+ 197:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 165              		.loc 2 198 9
+ 166              		.syntax unified
+ 167              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 168 0070 4FF05003 			mov r3, #80												
+ 169 0074 83F31188 		msr basepri, r3											
+ 170 0078 BFF36F8F 		isb														
+ 171 007c BFF34F8F 		dsb														
+ 172              	
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 10
+
+
+ 173              	@ 0 "" 2
+ 174              		.thumb
+ 175              		.syntax unified
+ 176 0080 7B61     		str	r3, [r7, #20]
+ 199:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 200:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mov %0, %1												\n"\
+ 201:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %0											\n"\
+ 202:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	isb														\n"\
+ 203:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	dsb														\n"\
+ 204:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             : "=r" ( ulNewBASEPRI ) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY ) : "memory"
+ 205:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 177              		.loc 2 206 5
+ 178 0082 00BF     		nop
+ 179              	.L7:
+ 180              	.LBE13:
+ 181              	.LBE12:
+ 182              		.loc 1 156 25 discriminator 1
+ 183 0084 FEE7     		b	.L7
+ 184              	.L6:
+ 157:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     }
+ 158:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     else
+ 159:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     {
+ 160:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         xWantedSize = 0;
+ 185              		.loc 1 160 37
+ 186 0086 0023     		movs	r3, #0
+ 187 0088 7B60     		str	r3, [r7, #4]
+ 149:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 188              		.loc 1 149 19
+ 189 008a 02E0     		b	.L19
+ 190              	.L4:
+ 161:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     }
+ 162:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 163:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 else
+ 164:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 165:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     mtCOVERAGE_TEST_MARKER();
+ 166:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 167:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 168:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             else
+ 169:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 170:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 xWantedSize = 0;
+ 191              		.loc 1 170 29
+ 192 008c 0023     		movs	r3, #0
+ 193 008e 7B60     		str	r3, [r7, #4]
+ 194 0090 00E0     		b	.L8
+ 195              	.L19:
+ 149:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 196              		.loc 1 149 19
+ 197 0092 00BF     		nop
+ 198              	.L8:
+ 171:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 172:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 173:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
+ 199              		.loc 1 173 15
+ 200 0094 7B68     		ldr	r3, [r7, #4]
+ 201 0096 002B     		cmp	r3, #0
+ 202 0098 6ED0     		beq	.L3
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 11
+
+
+ 203              		.loc 1 173 54 discriminator 1
+ 204 009a 454B     		ldr	r3, .L20+8
+ 205 009c 1B68     		ldr	r3, [r3]
+ 206              		.loc 1 173 37 discriminator 1
+ 207 009e 7A68     		ldr	r2, [r7, #4]
+ 208 00a0 9A42     		cmp	r2, r3
+ 209 00a2 69D8     		bhi	.L3
+ 174:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 175:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 /* Traverse the list from the start (lowest address) block until
+ 176:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                  * one of adequate size is found. */
+ 177:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 pxPreviousBlock = &xStart;
+ 210              		.loc 1 177 33
+ 211 00a4 434B     		ldr	r3, .L20+12
+ 212 00a6 3B62     		str	r3, [r7, #32]
+ 178:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 pxBlock = xStart.pxNextFreeBlock;
+ 213              		.loc 1 178 25
+ 214 00a8 424B     		ldr	r3, .L20+12
+ 215 00aa 1B68     		ldr	r3, [r3]
+ 216 00ac 7B62     		str	r3, [r7, #36]
+ 179:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 180:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL 
+ 217              		.loc 1 180 22
+ 218 00ae 04E0     		b	.L9
+ 219              	.L11:
+ 181:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 182:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     pxPreviousBlock = pxBlock;
+ 220              		.loc 1 182 37
+ 221 00b0 7B6A     		ldr	r3, [r7, #36]
+ 222 00b2 3B62     		str	r3, [r7, #32]
+ 183:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     pxBlock = pxBlock->pxNextFreeBlock;
+ 223              		.loc 1 183 29
+ 224 00b4 7B6A     		ldr	r3, [r7, #36]
+ 225 00b6 1B68     		ldr	r3, [r3]
+ 226 00b8 7B62     		str	r3, [r7, #36]
+ 227              	.L9:
+ 180:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 228              		.loc 1 180 33
+ 229 00ba 7B6A     		ldr	r3, [r7, #36]
+ 230 00bc 5B68     		ldr	r3, [r3, #4]
+ 180:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 231              		.loc 1 180 22
+ 232 00be 7A68     		ldr	r2, [r7, #4]
+ 233 00c0 9A42     		cmp	r2, r3
+ 234 00c2 03D9     		bls	.L10
+ 180:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 235              		.loc 1 180 74 discriminator 1
+ 236 00c4 7B6A     		ldr	r3, [r7, #36]
+ 237 00c6 1B68     		ldr	r3, [r3]
+ 180:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 238              		.loc 1 180 62 discriminator 1
+ 239 00c8 002B     		cmp	r3, #0
+ 240 00ca F1D1     		bne	.L11
+ 241              	.L10:
+ 184:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 185:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 186:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 /* If the end marker was reached then a block of adequate size
+ 187:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                  * was not found. */
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 12
+
+
+ 188:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 if( pxBlock != pxEnd )
+ 242              		.loc 1 188 29
+ 243 00cc 364B     		ldr	r3, .L20
+ 244 00ce 1B68     		ldr	r3, [r3]
+ 245              		.loc 1 188 19
+ 246 00d0 7A6A     		ldr	r2, [r7, #36]
+ 247 00d2 9A42     		cmp	r2, r3
+ 248 00d4 50D0     		beq	.L3
+ 189:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 190:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     /* Return the memory space pointed to - jumping over the
+ 191:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                      * BlockLink_t structure at its start. */
+ 192:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->pxNextFreeBlock ) + xH
+ 249              		.loc 1 192 76
+ 250 00d6 3B6A     		ldr	r3, [r7, #32]
+ 251 00d8 1B68     		ldr	r3, [r3]
+ 252              		.loc 1 192 32
+ 253 00da 0822     		movs	r2, #8
+ 254              		.loc 1 192 30
+ 255 00dc 1344     		add	r3, r3, r2
+ 256 00de FB61     		str	r3, [r7, #28]
+ 193:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 194:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     /* This block is being returned for use so must be taken out
+ 195:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                      * of the list of free blocks. */
+ 196:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
+ 257              		.loc 1 196 63
+ 258 00e0 7B6A     		ldr	r3, [r7, #36]
+ 259 00e2 1A68     		ldr	r2, [r3]
+ 260              		.loc 1 196 54
+ 261 00e4 3B6A     		ldr	r3, [r7, #32]
+ 262 00e6 1A60     		str	r2, [r3]
+ 197:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 198:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     /* If the block is larger than required it can be split into
+ 199:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                      * two. */
+ 200:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
+ 263              		.loc 1 200 34
+ 264 00e8 7B6A     		ldr	r3, [r7, #36]
+ 265 00ea 5A68     		ldr	r2, [r3, #4]
+ 266              		.loc 1 200 47
+ 267 00ec 7B68     		ldr	r3, [r7, #4]
+ 268 00ee D21A     		subs	r2, r2, r3
+ 269              		.loc 1 200 65
+ 270 00f0 0823     		movs	r3, #8
+ 271 00f2 5B00     		lsls	r3, r3, #1
+ 272              		.loc 1 200 23
+ 273 00f4 9A42     		cmp	r2, r3
+ 274 00f6 1FD9     		bls	.L12
+ 201:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     {
+ 202:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         /* This block is to be split into two.  Create a new
+ 203:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                          * block following the number of bytes requested. The void
+ 204:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                          * cast is used to prevent byte alignment warnings from the
+ 205:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                          * compiler. */
+ 206:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
+ 275              		.loc 1 206 40
+ 276 00f8 7A6A     		ldr	r2, [r7, #36]
+ 277 00fa 7B68     		ldr	r3, [r7, #4]
+ 278 00fc 1344     		add	r3, r3, r2
+ 279 00fe BB61     		str	r3, [r7, #24]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 13
+
+
+ 207:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) =
+ 280              		.loc 1 207 25
+ 281 0100 BB69     		ldr	r3, [r7, #24]
+ 282 0102 03F00703 		and	r3, r3, #7
+ 283 0106 002B     		cmp	r3, #0
+ 284 0108 0AD0     		beq	.L13
+ 285              	.LBB14:
+ 286              	.LBB15:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 287              		.loc 2 198 9
+ 288              		.syntax unified
+ 289              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 290 010a 4FF05003 			mov r3, #80												
+ 291 010e 83F31188 		msr basepri, r3											
+ 292 0112 BFF36F8F 		isb														
+ 293 0116 BFF34F8F 		dsb														
+ 294              	
+ 295              	@ 0 "" 2
+ 296              		.thumb
+ 297              		.syntax unified
+ 298 011a 3B61     		str	r3, [r7, #16]
+ 299              		.loc 2 206 5
+ 300 011c 00BF     		nop
+ 301              	.L14:
+ 302              	.LBE15:
+ 303              	.LBE14:
+ 304              		.loc 1 207 25 discriminator 4
+ 305 011e FEE7     		b	.L14
+ 306              	.L13:
+ 208:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 209:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         /* Calculate the sizes of two blocks split from the
+ 210:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                          * single block. */
+ 211:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         pxNewBlockLink->xBlockSize = pxBlock->xBlockSize - xWantedSize;
+ 307              		.loc 1 211 61
+ 308 0120 7B6A     		ldr	r3, [r7, #36]
+ 309 0122 5A68     		ldr	r2, [r3, #4]
+ 310              		.loc 1 211 74
+ 311 0124 7B68     		ldr	r3, [r7, #4]
+ 312 0126 D21A     		subs	r2, r2, r3
+ 313              		.loc 1 211 52
+ 314 0128 BB69     		ldr	r3, [r7, #24]
+ 315 012a 5A60     		str	r2, [r3, #4]
+ 212:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         pxBlock->xBlockSize = xWantedSize;
+ 316              		.loc 1 212 45
+ 317 012c 7B6A     		ldr	r3, [r7, #36]
+ 318 012e 7A68     		ldr	r2, [r7, #4]
+ 319 0130 5A60     		str	r2, [r3, #4]
+ 213:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 214:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         /* Insert the new block into the list of free blocks. */
+ 215:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         prvInsertBlockIntoFreeList( pxNewBlockLink );
+ 320              		.loc 1 215 25
+ 321 0132 B869     		ldr	r0, [r7, #24]
+ 322 0134 FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 323              	.L12:
+ 216:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     }
+ 217:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     else
+ 218:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     {
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 14
+
+
+ 219:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         mtCOVERAGE_TEST_MARKER();
+ 220:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     }
+ 221:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 222:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     xFreeBytesRemaining -= pxBlock->xBlockSize;
+ 324              		.loc 1 222 41
+ 325 0138 1D4B     		ldr	r3, .L20+8
+ 326 013a 1A68     		ldr	r2, [r3]
+ 327              		.loc 1 222 51
+ 328 013c 7B6A     		ldr	r3, [r7, #36]
+ 329 013e 5B68     		ldr	r3, [r3, #4]
+ 330              		.loc 1 222 41
+ 331 0140 D31A     		subs	r3, r2, r3
+ 332 0142 1B4A     		ldr	r2, .L20+8
+ 333 0144 1360     		str	r3, [r2]
+ 223:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 224:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     if( xFreeBytesRemaining < xMinimumEverFreeBytesRemaining )
+ 334              		.loc 1 224 45
+ 335 0146 1A4B     		ldr	r3, .L20+8
+ 336 0148 1A68     		ldr	r2, [r3]
+ 337 014a 1B4B     		ldr	r3, .L20+16
+ 338 014c 1B68     		ldr	r3, [r3]
+ 339              		.loc 1 224 23
+ 340 014e 9A42     		cmp	r2, r3
+ 341 0150 03D2     		bcs	.L15
+ 225:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     {
+ 226:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         xMinimumEverFreeBytesRemaining = xFreeBytesRemaining;
+ 342              		.loc 1 226 56
+ 343 0152 174B     		ldr	r3, .L20+8
+ 344 0154 1B68     		ldr	r3, [r3]
+ 345 0156 184A     		ldr	r2, .L20+16
+ 346 0158 1360     		str	r3, [r2]
+ 347              	.L15:
+ 227:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     }
+ 228:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     else
+ 229:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     {
+ 230:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                         mtCOVERAGE_TEST_MARKER();
+ 231:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     }
+ 232:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 233:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     /* The block is being returned - it is allocated and owned
+ 234:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                      * by the application and has no "next" block. */
+ 235:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     pxBlock->xBlockSize |= xBlockAllocatedBit;
+ 348              		.loc 1 235 41
+ 349 015a 7B6A     		ldr	r3, [r7, #36]
+ 350 015c 5A68     		ldr	r2, [r3, #4]
+ 351 015e 134B     		ldr	r3, .L20+4
+ 352 0160 1B68     		ldr	r3, [r3]
+ 353 0162 1A43     		orrs	r2, r2, r3
+ 354 0164 7B6A     		ldr	r3, [r7, #36]
+ 355 0166 5A60     		str	r2, [r3, #4]
+ 236:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     pxBlock->pxNextFreeBlock = NULL;
+ 356              		.loc 1 236 46
+ 357 0168 7B6A     		ldr	r3, [r7, #36]
+ 358 016a 0022     		movs	r2, #0
+ 359 016c 1A60     		str	r2, [r3]
+ 237:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     xNumberOfSuccessfulAllocations++;
+ 360              		.loc 1 237 51
+ 361 016e 134B     		ldr	r3, .L20+20
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 15
+
+
+ 362 0170 1B68     		ldr	r3, [r3]
+ 363 0172 0133     		adds	r3, r3, #1
+ 364 0174 114A     		ldr	r2, .L20+20
+ 365 0176 1360     		str	r3, [r2]
+ 366              	.L3:
+ 238:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 239:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 else
+ 240:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 241:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     mtCOVERAGE_TEST_MARKER();
+ 242:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 243:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 244:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             else
+ 245:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 246:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 mtCOVERAGE_TEST_MARKER();
+ 247:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 248:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 249:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         else
+ 250:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 251:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 252:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 253:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 254:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         traceMALLOC( pvReturn, xWantedSize );
+ 255:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 256:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     ( void ) xTaskResumeAll();
+ 367              		.loc 1 256 14
+ 368 0178 FFF7FEFF 		bl	xTaskResumeAll
+ 257:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 258:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     #if ( configUSE_MALLOC_FAILED_HOOK == 1 )
+ 259:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 260:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             if( pvReturn == NULL )
+ 261:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 262:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 extern void vApplicationMallocFailedHook( void );
+ 263:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 vApplicationMallocFailedHook();
+ 264:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 265:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             else
+ 266:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 267:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 mtCOVERAGE_TEST_MARKER();
+ 268:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 269:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 270:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     #endif /* if ( configUSE_MALLOC_FAILED_HOOK == 1 ) */
+ 271:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 272:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     configASSERT( ( ( ( size_t ) pvReturn ) & ( size_t ) portBYTE_ALIGNMENT_MASK ) == 0 );
+ 369              		.loc 1 272 5
+ 370 017c FB69     		ldr	r3, [r7, #28]
+ 371 017e 03F00703 		and	r3, r3, #7
+ 372 0182 002B     		cmp	r3, #0
+ 373 0184 0AD0     		beq	.L16
+ 374              	.LBB16:
+ 375              	.LBB17:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 376              		.loc 2 198 9
+ 377              		.syntax unified
+ 378              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 379 0186 4FF05003 			mov r3, #80												
+ 380 018a 83F31188 		msr basepri, r3											
+ 381 018e BFF36F8F 		isb														
+ 382 0192 BFF34F8F 		dsb														
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 16
+
+
+ 383              	
+ 384              	@ 0 "" 2
+ 385              		.thumb
+ 386              		.syntax unified
+ 387 0196 FB60     		str	r3, [r7, #12]
+ 388              		.loc 2 206 5
+ 389 0198 00BF     		nop
+ 390              	.L17:
+ 391              	.LBE17:
+ 392              	.LBE16:
+ 393              		.loc 1 272 5 discriminator 6
+ 394 019a FEE7     		b	.L17
+ 395              	.L16:
+ 273:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     return pvReturn;
+ 396              		.loc 1 273 12
+ 397 019c FB69     		ldr	r3, [r7, #28]
+ 274:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 398              		.loc 1 274 1
+ 399 019e 1846     		mov	r0, r3
+ 400 01a0 2837     		adds	r7, r7, #40
+ 401              	.LCFI3:
+ 402              		.cfi_def_cfa_offset 8
+ 403 01a2 BD46     		mov	sp, r7
+ 404              	.LCFI4:
+ 405              		.cfi_def_cfa_register 13
+ 406              		@ sp needed
+ 407 01a4 80BD     		pop	{r7, pc}
+ 408              	.L21:
+ 409 01a6 00BF     		.align	2
+ 410              	.L20:
+ 411 01a8 00000000 		.word	pxEnd
+ 412 01ac 00000000 		.word	xBlockAllocatedBit
+ 413 01b0 00000000 		.word	xFreeBytesRemaining
+ 414 01b4 00000000 		.word	xStart
+ 415 01b8 00000000 		.word	xMinimumEverFreeBytesRemaining
+ 416 01bc 00000000 		.word	xNumberOfSuccessfulAllocations
+ 417              		.cfi_endproc
+ 418              	.LFE5:
+ 420              		.section	.text.vPortFree,"ax",%progbits
+ 421              		.align	1
+ 422              		.global	vPortFree
+ 423              		.syntax unified
+ 424              		.thumb
+ 425              		.thumb_func
+ 426              		.fpu fpv4-sp-d16
+ 428              	vPortFree:
+ 429              	.LFB6:
+ 275:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 276:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 277:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** void vPortFree( void * pv )
+ 278:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 430              		.loc 1 278 1
+ 431              		.cfi_startproc
+ 432              		@ args = 0, pretend = 0, frame = 24
+ 433              		@ frame_needed = 1, uses_anonymous_args = 0
+ 434 0000 80B5     		push	{r7, lr}
+ 435              	.LCFI5:
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 17
+
+
+ 436              		.cfi_def_cfa_offset 8
+ 437              		.cfi_offset 7, -8
+ 438              		.cfi_offset 14, -4
+ 439 0002 86B0     		sub	sp, sp, #24
+ 440              	.LCFI6:
+ 441              		.cfi_def_cfa_offset 32
+ 442 0004 00AF     		add	r7, sp, #0
+ 443              	.LCFI7:
+ 444              		.cfi_def_cfa_register 7
+ 445 0006 7860     		str	r0, [r7, #4]
+ 279:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uint8_t * puc = ( uint8_t * ) pv;
+ 446              		.loc 1 279 15
+ 447 0008 7B68     		ldr	r3, [r7, #4]
+ 448 000a 7B61     		str	r3, [r7, #20]
+ 280:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     BlockLink_t * pxLink;
+ 281:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 282:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     if( pv != NULL )
+ 449              		.loc 1 282 7
+ 450 000c 7B68     		ldr	r3, [r7, #4]
+ 451 000e 002B     		cmp	r3, #0
+ 452 0010 4DD0     		beq	.L28
+ 283:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 284:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* The memory being freed will have an BlockLink_t structure immediately
+ 285:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****          * before it. */
+ 286:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         puc -= xHeapStructSize;
+ 453              		.loc 1 286 13
+ 454 0012 0823     		movs	r3, #8
+ 455 0014 5B42     		rsbs	r3, r3, #0
+ 456 0016 7A69     		ldr	r2, [r7, #20]
+ 457 0018 1344     		add	r3, r3, r2
+ 458 001a 7B61     		str	r3, [r7, #20]
+ 287:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 288:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* This casting is to keep the compiler from issuing warnings. */
+ 289:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxLink = ( void * ) puc;
+ 459              		.loc 1 289 16
+ 460 001c 7B69     		ldr	r3, [r7, #20]
+ 461 001e 3B61     		str	r3, [r7, #16]
+ 290:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 291:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* Check the block is actually allocated. */
+ 292:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         configASSERT( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 );
+ 462              		.loc 1 292 9
+ 463 0020 3B69     		ldr	r3, [r7, #16]
+ 464 0022 5A68     		ldr	r2, [r3, #4]
+ 465 0024 244B     		ldr	r3, .L29
+ 466 0026 1B68     		ldr	r3, [r3]
+ 467 0028 1340     		ands	r3, r3, r2
+ 468 002a 002B     		cmp	r3, #0
+ 469 002c 0AD1     		bne	.L24
+ 470              	.LBB18:
+ 471              	.LBB19:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 472              		.loc 2 198 9
+ 473              		.syntax unified
+ 474              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 475 002e 4FF05003 			mov r3, #80												
+ 476 0032 83F31188 		msr basepri, r3											
+ 477 0036 BFF36F8F 		isb														
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 18
+
+
+ 478 003a BFF34F8F 		dsb														
+ 479              	
+ 480              	@ 0 "" 2
+ 481              		.thumb
+ 482              		.syntax unified
+ 483 003e FB60     		str	r3, [r7, #12]
+ 484              		.loc 2 206 5
+ 485 0040 00BF     		nop
+ 486              	.L25:
+ 487              	.LBE19:
+ 488              	.LBE18:
+ 489              		.loc 1 292 9 discriminator 1
+ 490 0042 FEE7     		b	.L25
+ 491              	.L24:
+ 293:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 492              		.loc 1 293 9
+ 493 0044 3B69     		ldr	r3, [r7, #16]
+ 494 0046 1B68     		ldr	r3, [r3]
+ 495 0048 002B     		cmp	r3, #0
+ 496 004a 0AD0     		beq	.L26
+ 497              	.LBB20:
+ 498              	.LBB21:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 499              		.loc 2 198 9
+ 500              		.syntax unified
+ 501              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 502 004c 4FF05003 			mov r3, #80												
+ 503 0050 83F31188 		msr basepri, r3											
+ 504 0054 BFF36F8F 		isb														
+ 505 0058 BFF34F8F 		dsb														
+ 506              	
+ 507              	@ 0 "" 2
+ 508              		.thumb
+ 509              		.syntax unified
+ 510 005c BB60     		str	r3, [r7, #8]
+ 511              		.loc 2 206 5
+ 512 005e 00BF     		nop
+ 513              	.L27:
+ 514              	.LBE21:
+ 515              	.LBE20:
+ 516              		.loc 1 293 9 discriminator 2
+ 517 0060 FEE7     		b	.L27
+ 518              	.L26:
+ 294:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 295:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         if( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 )
+ 519              		.loc 1 295 21
+ 520 0062 3B69     		ldr	r3, [r7, #16]
+ 521 0064 5A68     		ldr	r2, [r3, #4]
+ 522              		.loc 1 295 34
+ 523 0066 144B     		ldr	r3, .L29
+ 524 0068 1B68     		ldr	r3, [r3]
+ 525 006a 1340     		ands	r3, r3, r2
+ 526              		.loc 1 295 11
+ 527 006c 002B     		cmp	r3, #0
+ 528 006e 1ED0     		beq	.L28
+ 296:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 297:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             if( pxLink->pxNextFreeBlock == NULL )
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 19
+
+
+ 529              		.loc 1 297 23
+ 530 0070 3B69     		ldr	r3, [r7, #16]
+ 531 0072 1B68     		ldr	r3, [r3]
+ 532              		.loc 1 297 15
+ 533 0074 002B     		cmp	r3, #0
+ 534 0076 1AD1     		bne	.L28
+ 298:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 299:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 /* The block is being returned to the heap - it is no longer
+ 300:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                  * allocated. */
+ 301:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 pxLink->xBlockSize &= ~xBlockAllocatedBit;
+ 535              		.loc 1 301 36
+ 536 0078 3B69     		ldr	r3, [r7, #16]
+ 537 007a 5A68     		ldr	r2, [r3, #4]
+ 538              		.loc 1 301 39
+ 539 007c 0E4B     		ldr	r3, .L29
+ 540 007e 1B68     		ldr	r3, [r3]
+ 541 0080 DB43     		mvns	r3, r3
+ 542              		.loc 1 301 36
+ 543 0082 1A40     		ands	r2, r2, r3
+ 544 0084 3B69     		ldr	r3, [r7, #16]
+ 545 0086 5A60     		str	r2, [r3, #4]
+ 302:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 303:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 vTaskSuspendAll();
+ 546              		.loc 1 303 17
+ 547 0088 FFF7FEFF 		bl	vTaskSuspendAll
+ 304:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 305:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     /* Add this block to the list of free blocks. */
+ 306:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     xFreeBytesRemaining += pxLink->xBlockSize;
+ 548              		.loc 1 306 50
+ 549 008c 3B69     		ldr	r3, [r7, #16]
+ 550 008e 5A68     		ldr	r2, [r3, #4]
+ 551              		.loc 1 306 41
+ 552 0090 0A4B     		ldr	r3, .L29+4
+ 553 0092 1B68     		ldr	r3, [r3]
+ 554 0094 1344     		add	r3, r3, r2
+ 555 0096 094A     		ldr	r2, .L29+4
+ 556 0098 1360     		str	r3, [r2]
+ 307:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 308:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 557              		.loc 1 308 21
+ 558 009a 3869     		ldr	r0, [r7, #16]
+ 559 009c FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 309:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     xNumberOfSuccessfulFrees++;
+ 560              		.loc 1 309 45
+ 561 00a0 074B     		ldr	r3, .L29+8
+ 562 00a2 1B68     		ldr	r3, [r3]
+ 563 00a4 0133     		adds	r3, r3, #1
+ 564 00a6 064A     		ldr	r2, .L29+8
+ 565 00a8 1360     		str	r3, [r2]
+ 310:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 311:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 ( void ) xTaskResumeAll();
+ 566              		.loc 1 311 26
+ 567 00aa FFF7FEFF 		bl	xTaskResumeAll
+ 568              	.L28:
+ 312:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 313:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             else
+ 314:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 20
+
+
+ 315:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 mtCOVERAGE_TEST_MARKER();
+ 316:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             }
+ 317:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 318:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         else
+ 319:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 320:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 321:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 322:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 323:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 569              		.loc 1 323 1
+ 570 00ae 00BF     		nop
+ 571 00b0 1837     		adds	r7, r7, #24
+ 572              	.LCFI8:
+ 573              		.cfi_def_cfa_offset 8
+ 574 00b2 BD46     		mov	sp, r7
+ 575              	.LCFI9:
+ 576              		.cfi_def_cfa_register 13
+ 577              		@ sp needed
+ 578 00b4 80BD     		pop	{r7, pc}
+ 579              	.L30:
+ 580 00b6 00BF     		.align	2
+ 581              	.L29:
+ 582 00b8 00000000 		.word	xBlockAllocatedBit
+ 583 00bc 00000000 		.word	xFreeBytesRemaining
+ 584 00c0 00000000 		.word	xNumberOfSuccessfulFrees
+ 585              		.cfi_endproc
+ 586              	.LFE6:
+ 588              		.section	.text.xPortGetFreeHeapSize,"ax",%progbits
+ 589              		.align	1
+ 590              		.global	xPortGetFreeHeapSize
+ 591              		.syntax unified
+ 592              		.thumb
+ 593              		.thumb_func
+ 594              		.fpu fpv4-sp-d16
+ 596              	xPortGetFreeHeapSize:
+ 597              	.LFB7:
+ 324:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 325:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 326:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** size_t xPortGetFreeHeapSize( void )
+ 327:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 598              		.loc 1 327 1
+ 599              		.cfi_startproc
+ 600              		@ args = 0, pretend = 0, frame = 0
+ 601              		@ frame_needed = 1, uses_anonymous_args = 0
+ 602              		@ link register save eliminated.
+ 603 0000 80B4     		push	{r7}
+ 604              	.LCFI10:
+ 605              		.cfi_def_cfa_offset 4
+ 606              		.cfi_offset 7, -4
+ 607 0002 00AF     		add	r7, sp, #0
+ 608              	.LCFI11:
+ 609              		.cfi_def_cfa_register 7
+ 328:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     return xFreeBytesRemaining;
+ 610              		.loc 1 328 12
+ 611 0004 034B     		ldr	r3, .L33
+ 612 0006 1B68     		ldr	r3, [r3]
+ 329:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 21
+
+
+ 613              		.loc 1 329 1
+ 614 0008 1846     		mov	r0, r3
+ 615 000a BD46     		mov	sp, r7
+ 616              	.LCFI12:
+ 617              		.cfi_def_cfa_register 13
+ 618              		@ sp needed
+ 619 000c 5DF8047B 		ldr	r7, [sp], #4
+ 620              	.LCFI13:
+ 621              		.cfi_restore 7
+ 622              		.cfi_def_cfa_offset 0
+ 623 0010 7047     		bx	lr
+ 624              	.L34:
+ 625 0012 00BF     		.align	2
+ 626              	.L33:
+ 627 0014 00000000 		.word	xFreeBytesRemaining
+ 628              		.cfi_endproc
+ 629              	.LFE7:
+ 631              		.section	.text.xPortGetMinimumEverFreeHeapSize,"ax",%progbits
+ 632              		.align	1
+ 633              		.global	xPortGetMinimumEverFreeHeapSize
+ 634              		.syntax unified
+ 635              		.thumb
+ 636              		.thumb_func
+ 637              		.fpu fpv4-sp-d16
+ 639              	xPortGetMinimumEverFreeHeapSize:
+ 640              	.LFB8:
+ 330:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 331:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 332:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** size_t xPortGetMinimumEverFreeHeapSize( void )
+ 333:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 641              		.loc 1 333 1
+ 642              		.cfi_startproc
+ 643              		@ args = 0, pretend = 0, frame = 0
+ 644              		@ frame_needed = 1, uses_anonymous_args = 0
+ 645              		@ link register save eliminated.
+ 646 0000 80B4     		push	{r7}
+ 647              	.LCFI14:
+ 648              		.cfi_def_cfa_offset 4
+ 649              		.cfi_offset 7, -4
+ 650 0002 00AF     		add	r7, sp, #0
+ 651              	.LCFI15:
+ 652              		.cfi_def_cfa_register 7
+ 334:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     return xMinimumEverFreeBytesRemaining;
+ 653              		.loc 1 334 12
+ 654 0004 034B     		ldr	r3, .L37
+ 655 0006 1B68     		ldr	r3, [r3]
+ 335:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 656              		.loc 1 335 1
+ 657 0008 1846     		mov	r0, r3
+ 658 000a BD46     		mov	sp, r7
+ 659              	.LCFI16:
+ 660              		.cfi_def_cfa_register 13
+ 661              		@ sp needed
+ 662 000c 5DF8047B 		ldr	r7, [sp], #4
+ 663              	.LCFI17:
+ 664              		.cfi_restore 7
+ 665              		.cfi_def_cfa_offset 0
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 22
+
+
+ 666 0010 7047     		bx	lr
+ 667              	.L38:
+ 668 0012 00BF     		.align	2
+ 669              	.L37:
+ 670 0014 00000000 		.word	xMinimumEverFreeBytesRemaining
+ 671              		.cfi_endproc
+ 672              	.LFE8:
+ 674              		.section	.text.vPortInitialiseBlocks,"ax",%progbits
+ 675              		.align	1
+ 676              		.global	vPortInitialiseBlocks
+ 677              		.syntax unified
+ 678              		.thumb
+ 679              		.thumb_func
+ 680              		.fpu fpv4-sp-d16
+ 682              	vPortInitialiseBlocks:
+ 683              	.LFB9:
+ 336:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 337:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 338:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** void vPortInitialiseBlocks( void )
+ 339:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 684              		.loc 1 339 1
+ 685              		.cfi_startproc
+ 686              		@ args = 0, pretend = 0, frame = 0
+ 687              		@ frame_needed = 1, uses_anonymous_args = 0
+ 688              		@ link register save eliminated.
+ 689 0000 80B4     		push	{r7}
+ 690              	.LCFI18:
+ 691              		.cfi_def_cfa_offset 4
+ 692              		.cfi_offset 7, -4
+ 693 0002 00AF     		add	r7, sp, #0
+ 694              	.LCFI19:
+ 695              		.cfi_def_cfa_register 7
+ 340:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* This just exists to keep the linker quiet. */
+ 341:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 696              		.loc 1 341 1
+ 697 0004 00BF     		nop
+ 698 0006 BD46     		mov	sp, r7
+ 699              	.LCFI20:
+ 700              		.cfi_def_cfa_register 13
+ 701              		@ sp needed
+ 702 0008 5DF8047B 		ldr	r7, [sp], #4
+ 703              	.LCFI21:
+ 704              		.cfi_restore 7
+ 705              		.cfi_def_cfa_offset 0
+ 706 000c 7047     		bx	lr
+ 707              		.cfi_endproc
+ 708              	.LFE9:
+ 710              		.section	.text.prvHeapInit,"ax",%progbits
+ 711              		.align	1
+ 712              		.syntax unified
+ 713              		.thumb
+ 714              		.thumb_func
+ 715              		.fpu fpv4-sp-d16
+ 717              	prvHeapInit:
+ 718              	.LFB10:
+ 342:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 343:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 23
+
+
+ 344:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** static void prvHeapInit( void ) /* PRIVILEGED_FUNCTION */
+ 345:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 719              		.loc 1 345 1
+ 720              		.cfi_startproc
+ 721              		@ args = 0, pretend = 0, frame = 16
+ 722              		@ frame_needed = 1, uses_anonymous_args = 0
+ 723              		@ link register save eliminated.
+ 724 0000 80B4     		push	{r7}
+ 725              	.LCFI22:
+ 726              		.cfi_def_cfa_offset 4
+ 727              		.cfi_offset 7, -4
+ 728 0002 85B0     		sub	sp, sp, #20
+ 729              	.LCFI23:
+ 730              		.cfi_def_cfa_offset 24
+ 731 0004 00AF     		add	r7, sp, #0
+ 732              	.LCFI24:
+ 733              		.cfi_def_cfa_register 7
+ 346:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     BlockLink_t * pxFirstFreeBlock;
+ 347:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uint8_t * pucAlignedHeap;
+ 348:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     size_t uxAddress;
+ 349:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     size_t xTotalHeapSize = configTOTAL_HEAP_SIZE;
+ 734              		.loc 1 349 12
+ 735 0006 4FF49633 		mov	r3, #76800
+ 736 000a BB60     		str	r3, [r7, #8]
+ 350:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 351:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* Ensure the heap starts on a correctly aligned boundary. */
+ 352:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uxAddress = ( size_t ) ucHeap;
+ 737              		.loc 1 352 15
+ 738 000c 274B     		ldr	r3, .L42
+ 739 000e FB60     		str	r3, [r7, #12]
+ 353:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 354:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     if( ( uxAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
+ 740              		.loc 1 354 21
+ 741 0010 FB68     		ldr	r3, [r7, #12]
+ 742 0012 03F00703 		and	r3, r3, #7
+ 743              		.loc 1 354 7
+ 744 0016 002B     		cmp	r3, #0
+ 745 0018 0CD0     		beq	.L41
+ 355:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 356:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         uxAddress += ( portBYTE_ALIGNMENT - 1 );
+ 746              		.loc 1 356 19
+ 747 001a FB68     		ldr	r3, [r7, #12]
+ 748 001c 0733     		adds	r3, r3, #7
+ 749 001e FB60     		str	r3, [r7, #12]
+ 357:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+ 750              		.loc 1 357 19
+ 751 0020 FB68     		ldr	r3, [r7, #12]
+ 752 0022 23F00703 		bic	r3, r3, #7
+ 753 0026 FB60     		str	r3, [r7, #12]
+ 358:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         xTotalHeapSize -= uxAddress - ( size_t ) ucHeap;
+ 754              		.loc 1 358 24
+ 755 0028 BA68     		ldr	r2, [r7, #8]
+ 756 002a FB68     		ldr	r3, [r7, #12]
+ 757 002c D31A     		subs	r3, r2, r3
+ 758              		.loc 1 358 39
+ 759 002e 1F4A     		ldr	r2, .L42
+ 760              		.loc 1 358 24
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 24
+
+
+ 761 0030 1344     		add	r3, r3, r2
+ 762 0032 BB60     		str	r3, [r7, #8]
+ 763              	.L41:
+ 359:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 360:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 361:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pucAlignedHeap = ( uint8_t * ) uxAddress;
+ 764              		.loc 1 361 20
+ 765 0034 FB68     		ldr	r3, [r7, #12]
+ 766 0036 7B60     		str	r3, [r7, #4]
+ 362:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 363:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* xStart is used to hold a pointer to the first item in the list of free
+ 364:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * blocks.  The void cast is used to prevent compiler warnings. */
+ 365:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     xStart.pxNextFreeBlock = ( void * ) pucAlignedHeap;
+ 767              		.loc 1 365 28
+ 768 0038 1D4A     		ldr	r2, .L42+4
+ 769 003a 7B68     		ldr	r3, [r7, #4]
+ 770 003c 1360     		str	r3, [r2]
+ 366:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     xStart.xBlockSize = ( size_t ) 0;
+ 771              		.loc 1 366 23
+ 772 003e 1C4B     		ldr	r3, .L42+4
+ 773 0040 0022     		movs	r2, #0
+ 774 0042 5A60     		str	r2, [r3, #4]
+ 367:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 368:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* pxEnd is used to mark the end of the list of free blocks and is inserted
+ 369:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * at the end of the heap space. */
+ 370:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uxAddress = ( ( size_t ) pucAlignedHeap ) + xTotalHeapSize;
+ 775              		.loc 1 370 19
+ 776 0044 7B68     		ldr	r3, [r7, #4]
+ 777              		.loc 1 370 15
+ 778 0046 BA68     		ldr	r2, [r7, #8]
+ 779 0048 1344     		add	r3, r3, r2
+ 780 004a FB60     		str	r3, [r7, #12]
+ 371:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uxAddress -= xHeapStructSize;
+ 781              		.loc 1 371 15
+ 782 004c 0822     		movs	r2, #8
+ 783 004e FB68     		ldr	r3, [r7, #12]
+ 784 0050 9B1A     		subs	r3, r3, r2
+ 785 0052 FB60     		str	r3, [r7, #12]
+ 372:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+ 786              		.loc 1 372 15
+ 787 0054 FB68     		ldr	r3, [r7, #12]
+ 788 0056 23F00703 		bic	r3, r3, #7
+ 789 005a FB60     		str	r3, [r7, #12]
+ 373:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxEnd = ( void * ) uxAddress;
+ 790              		.loc 1 373 13
+ 791 005c FB68     		ldr	r3, [r7, #12]
+ 792              		.loc 1 373 11
+ 793 005e 154A     		ldr	r2, .L42+8
+ 794 0060 1360     		str	r3, [r2]
+ 374:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxEnd->xBlockSize = 0;
+ 795              		.loc 1 374 10
+ 796 0062 144B     		ldr	r3, .L42+8
+ 797 0064 1B68     		ldr	r3, [r3]
+ 798              		.loc 1 374 23
+ 799 0066 0022     		movs	r2, #0
+ 800 0068 5A60     		str	r2, [r3, #4]
+ 375:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxEnd->pxNextFreeBlock = NULL;
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 25
+
+
+ 801              		.loc 1 375 10
+ 802 006a 124B     		ldr	r3, .L42+8
+ 803 006c 1B68     		ldr	r3, [r3]
+ 804              		.loc 1 375 28
+ 805 006e 0022     		movs	r2, #0
+ 806 0070 1A60     		str	r2, [r3]
+ 376:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 377:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* To start with there is a single free block that is sized to take up the
+ 378:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * entire heap space, minus the space taken by pxEnd. */
+ 379:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxFirstFreeBlock = ( void * ) pucAlignedHeap;
+ 807              		.loc 1 379 22
+ 808 0072 7B68     		ldr	r3, [r7, #4]
+ 809 0074 3B60     		str	r3, [r7]
+ 380:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxFirstFreeBlock->xBlockSize = uxAddress - ( size_t ) pxFirstFreeBlock;
+ 810              		.loc 1 380 48
+ 811 0076 3B68     		ldr	r3, [r7]
+ 812              		.loc 1 380 46
+ 813 0078 FA68     		ldr	r2, [r7, #12]
+ 814 007a D21A     		subs	r2, r2, r3
+ 815              		.loc 1 380 34
+ 816 007c 3B68     		ldr	r3, [r7]
+ 817 007e 5A60     		str	r2, [r3, #4]
+ 381:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxFirstFreeBlock->pxNextFreeBlock = pxEnd;
+ 818              		.loc 1 381 39
+ 819 0080 0C4B     		ldr	r3, .L42+8
+ 820 0082 1A68     		ldr	r2, [r3]
+ 821 0084 3B68     		ldr	r3, [r7]
+ 822 0086 1A60     		str	r2, [r3]
+ 382:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 383:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* Only one block exists - and it covers the entire usable heap space. */
+ 384:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     xMinimumEverFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+ 823              		.loc 1 384 54
+ 824 0088 3B68     		ldr	r3, [r7]
+ 825 008a 5B68     		ldr	r3, [r3, #4]
+ 826              		.loc 1 384 36
+ 827 008c 0A4A     		ldr	r2, .L42+12
+ 828 008e 1360     		str	r3, [r2]
+ 385:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     xFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+ 829              		.loc 1 385 43
+ 830 0090 3B68     		ldr	r3, [r7]
+ 831 0092 5B68     		ldr	r3, [r3, #4]
+ 832              		.loc 1 385 25
+ 833 0094 094A     		ldr	r2, .L42+16
+ 834 0096 1360     		str	r3, [r2]
+ 386:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 387:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* Work out the position of the top bit in a size_t variable. */
+ 388:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     xBlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * heapBITS_PER_BYTE ) - 1 );
+ 835              		.loc 1 388 24
+ 836 0098 094B     		ldr	r3, .L42+20
+ 837 009a 4FF00042 		mov	r2, #-2147483648
+ 838 009e 1A60     		str	r2, [r3]
+ 389:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 839              		.loc 1 389 1
+ 840 00a0 00BF     		nop
+ 841 00a2 1437     		adds	r7, r7, #20
+ 842              	.LCFI25:
+ 843              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 26
+
+
+ 844 00a4 BD46     		mov	sp, r7
+ 845              	.LCFI26:
+ 846              		.cfi_def_cfa_register 13
+ 847              		@ sp needed
+ 848 00a6 5DF8047B 		ldr	r7, [sp], #4
+ 849              	.LCFI27:
+ 850              		.cfi_restore 7
+ 851              		.cfi_def_cfa_offset 0
+ 852 00aa 7047     		bx	lr
+ 853              	.L43:
+ 854              		.align	2
+ 855              	.L42:
+ 856 00ac 00000000 		.word	ucHeap
+ 857 00b0 00000000 		.word	xStart
+ 858 00b4 00000000 		.word	pxEnd
+ 859 00b8 00000000 		.word	xMinimumEverFreeBytesRemaining
+ 860 00bc 00000000 		.word	xFreeBytesRemaining
+ 861 00c0 00000000 		.word	xBlockAllocatedBit
+ 862              		.cfi_endproc
+ 863              	.LFE10:
+ 865              		.section	.text.prvInsertBlockIntoFreeList,"ax",%progbits
+ 866              		.align	1
+ 867              		.syntax unified
+ 868              		.thumb
+ 869              		.thumb_func
+ 870              		.fpu fpv4-sp-d16
+ 872              	prvInsertBlockIntoFreeList:
+ 873              	.LFB11:
+ 390:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 391:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 392:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t * pxBlockToInsert ) /* PRIVILEGED_FUNCTION */
+ 393:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 874              		.loc 1 393 1
+ 875              		.cfi_startproc
+ 876              		@ args = 0, pretend = 0, frame = 16
+ 877              		@ frame_needed = 1, uses_anonymous_args = 0
+ 878              		@ link register save eliminated.
+ 879 0000 80B4     		push	{r7}
+ 880              	.LCFI28:
+ 881              		.cfi_def_cfa_offset 4
+ 882              		.cfi_offset 7, -4
+ 883 0002 85B0     		sub	sp, sp, #20
+ 884              	.LCFI29:
+ 885              		.cfi_def_cfa_offset 24
+ 886 0004 00AF     		add	r7, sp, #0
+ 887              	.LCFI30:
+ 888              		.cfi_def_cfa_register 7
+ 889 0006 7860     		str	r0, [r7, #4]
+ 394:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     BlockLink_t * pxIterator;
+ 395:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     uint8_t * puc;
+ 396:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 397:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* Iterate through the list until a block is found that has a higher address
+ 398:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * than the block being inserted. */
+ 399:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     for( pxIterator = &xStart; pxIterator->pxNextFreeBlock < pxBlockToInsert; pxIterator = pxIterat
+ 890              		.loc 1 399 21
+ 891 0008 284B     		ldr	r3, .L53
+ 892 000a FB60     		str	r3, [r7, #12]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 27
+
+
+ 893              		.loc 1 399 5
+ 894 000c 02E0     		b	.L45
+ 895              	.L46:
+ 896              		.loc 1 399 90 discriminator 3
+ 897 000e FB68     		ldr	r3, [r7, #12]
+ 898 0010 1B68     		ldr	r3, [r3]
+ 899 0012 FB60     		str	r3, [r7, #12]
+ 900              	.L45:
+ 901              		.loc 1 399 42 discriminator 1
+ 902 0014 FB68     		ldr	r3, [r7, #12]
+ 903 0016 1B68     		ldr	r3, [r3]
+ 904              		.loc 1 399 5 discriminator 1
+ 905 0018 7A68     		ldr	r2, [r7, #4]
+ 906 001a 9A42     		cmp	r2, r3
+ 907 001c F7D8     		bhi	.L46
+ 400:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 401:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* Nothing to do here, just iterate to the right position. */
+ 402:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 403:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 404:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* Do the block being inserted, and the block it is being inserted after
+ 405:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * make a contiguous block of memory? */
+ 406:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     puc = ( uint8_t * ) pxIterator;
+ 908              		.loc 1 406 9
+ 909 001e FB68     		ldr	r3, [r7, #12]
+ 910 0020 BB60     		str	r3, [r7, #8]
+ 407:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 408:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     if( ( puc + pxIterator->xBlockSize ) == ( uint8_t * ) pxBlockToInsert )
+ 911              		.loc 1 408 27
+ 912 0022 FB68     		ldr	r3, [r7, #12]
+ 913 0024 5B68     		ldr	r3, [r3, #4]
+ 914              		.loc 1 408 15
+ 915 0026 BA68     		ldr	r2, [r7, #8]
+ 916 0028 1344     		add	r3, r3, r2
+ 917              		.loc 1 408 7
+ 918 002a 7A68     		ldr	r2, [r7, #4]
+ 919 002c 9A42     		cmp	r2, r3
+ 920 002e 08D1     		bne	.L47
+ 409:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 410:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxIterator->xBlockSize += pxBlockToInsert->xBlockSize;
+ 921              		.loc 1 410 32
+ 922 0030 FB68     		ldr	r3, [r7, #12]
+ 923 0032 5A68     		ldr	r2, [r3, #4]
+ 924              		.loc 1 410 50
+ 925 0034 7B68     		ldr	r3, [r7, #4]
+ 926 0036 5B68     		ldr	r3, [r3, #4]
+ 927              		.loc 1 410 32
+ 928 0038 1A44     		add	r2, r2, r3
+ 929 003a FB68     		ldr	r3, [r7, #12]
+ 930 003c 5A60     		str	r2, [r3, #4]
+ 411:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxBlockToInsert = pxIterator;
+ 931              		.loc 1 411 25
+ 932 003e FB68     		ldr	r3, [r7, #12]
+ 933 0040 7B60     		str	r3, [r7, #4]
+ 934              	.L47:
+ 412:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 413:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     else
+ 414:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 28
+
+
+ 415:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         mtCOVERAGE_TEST_MARKER();
+ 416:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 417:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 418:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* Do the block being inserted, and the block it is being inserted before
+ 419:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * make a contiguous block of memory? */
+ 420:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     puc = ( uint8_t * ) pxBlockToInsert;
+ 935              		.loc 1 420 9
+ 936 0042 7B68     		ldr	r3, [r7, #4]
+ 937 0044 BB60     		str	r3, [r7, #8]
+ 421:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 422:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     if( ( puc + pxBlockToInsert->xBlockSize ) == ( uint8_t * ) pxIterator->pxNextFreeBlock )
+ 938              		.loc 1 422 32
+ 939 0046 7B68     		ldr	r3, [r7, #4]
+ 940 0048 5B68     		ldr	r3, [r3, #4]
+ 941              		.loc 1 422 15
+ 942 004a BA68     		ldr	r2, [r7, #8]
+ 943 004c 1A44     		add	r2, r2, r3
+ 944              		.loc 1 422 74
+ 945 004e FB68     		ldr	r3, [r7, #12]
+ 946 0050 1B68     		ldr	r3, [r3]
+ 947              		.loc 1 422 7
+ 948 0052 9A42     		cmp	r2, r3
+ 949 0054 18D1     		bne	.L48
+ 423:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 424:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         if( pxIterator->pxNextFreeBlock != pxEnd )
+ 950              		.loc 1 424 23
+ 951 0056 FB68     		ldr	r3, [r7, #12]
+ 952 0058 1A68     		ldr	r2, [r3]
+ 953              		.loc 1 424 41
+ 954 005a 154B     		ldr	r3, .L53+4
+ 955 005c 1B68     		ldr	r3, [r3]
+ 956              		.loc 1 424 11
+ 957 005e 9A42     		cmp	r2, r3
+ 958 0060 0DD0     		beq	.L49
+ 425:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 426:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             /* Form one big block from the two blocks. */
+ 427:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             pxBlockToInsert->xBlockSize += pxIterator->pxNextFreeBlock->xBlockSize;
+ 959              		.loc 1 427 41
+ 960 0062 7B68     		ldr	r3, [r7, #4]
+ 961 0064 5A68     		ldr	r2, [r3, #4]
+ 962              		.loc 1 427 54
+ 963 0066 FB68     		ldr	r3, [r7, #12]
+ 964 0068 1B68     		ldr	r3, [r3]
+ 965              		.loc 1 427 71
+ 966 006a 5B68     		ldr	r3, [r3, #4]
+ 967              		.loc 1 427 41
+ 968 006c 1A44     		add	r2, r2, r3
+ 969 006e 7B68     		ldr	r3, [r7, #4]
+ 970 0070 5A60     		str	r2, [r3, #4]
+ 428:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 971              		.loc 1 428 58
+ 972 0072 FB68     		ldr	r3, [r7, #12]
+ 973 0074 1B68     		ldr	r3, [r3]
+ 974              		.loc 1 428 75
+ 975 0076 1A68     		ldr	r2, [r3]
+ 976              		.loc 1 428 46
+ 977 0078 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 29
+
+
+ 978 007a 1A60     		str	r2, [r3]
+ 979 007c 08E0     		b	.L50
+ 980              	.L49:
+ 429:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 430:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         else
+ 431:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 432:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = pxEnd;
+ 981              		.loc 1 432 46
+ 982 007e 0C4B     		ldr	r3, .L53+4
+ 983 0080 1A68     		ldr	r2, [r3]
+ 984 0082 7B68     		ldr	r3, [r7, #4]
+ 985 0084 1A60     		str	r2, [r3]
+ 986 0086 03E0     		b	.L50
+ 987              	.L48:
+ 433:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 434:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 435:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     else
+ 436:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 437:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
+ 988              		.loc 1 437 54
+ 989 0088 FB68     		ldr	r3, [r7, #12]
+ 990 008a 1A68     		ldr	r2, [r3]
+ 991              		.loc 1 437 42
+ 992 008c 7B68     		ldr	r3, [r7, #4]
+ 993 008e 1A60     		str	r2, [r3]
+ 994              	.L50:
+ 438:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 439:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 440:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     /* If the block being inserted plugged a gab, so was merged with the block
+ 441:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * before and the block after, then it's pxNextFreeBlock pointer will have
+ 442:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * already been set, and should not be set here as that would make it point
+ 443:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****      * to itself. */
+ 444:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     if( pxIterator != pxBlockToInsert )
+ 995              		.loc 1 444 7
+ 996 0090 FA68     		ldr	r2, [r7, #12]
+ 997 0092 7B68     		ldr	r3, [r7, #4]
+ 998 0094 9A42     		cmp	r2, r3
+ 999 0096 02D0     		beq	.L52
+ 445:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 446:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxIterator->pxNextFreeBlock = pxBlockToInsert;
+ 1000              		.loc 1 446 37
+ 1001 0098 FB68     		ldr	r3, [r7, #12]
+ 1002 009a 7A68     		ldr	r2, [r7, #4]
+ 1003 009c 1A60     		str	r2, [r3]
+ 1004              	.L52:
+ 447:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 448:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     else
+ 449:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 450:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         mtCOVERAGE_TEST_MARKER();
+ 451:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 452:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 1005              		.loc 1 452 1
+ 1006 009e 00BF     		nop
+ 1007 00a0 1437     		adds	r7, r7, #20
+ 1008              	.LCFI31:
+ 1009              		.cfi_def_cfa_offset 4
+ 1010 00a2 BD46     		mov	sp, r7
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 30
+
+
+ 1011              	.LCFI32:
+ 1012              		.cfi_def_cfa_register 13
+ 1013              		@ sp needed
+ 1014 00a4 5DF8047B 		ldr	r7, [sp], #4
+ 1015              	.LCFI33:
+ 1016              		.cfi_restore 7
+ 1017              		.cfi_def_cfa_offset 0
+ 1018 00a8 7047     		bx	lr
+ 1019              	.L54:
+ 1020 00aa 00BF     		.align	2
+ 1021              	.L53:
+ 1022 00ac 00000000 		.word	xStart
+ 1023 00b0 00000000 		.word	pxEnd
+ 1024              		.cfi_endproc
+ 1025              	.LFE11:
+ 1027              		.section	.text.vPortGetHeapStats,"ax",%progbits
+ 1028              		.align	1
+ 1029              		.global	vPortGetHeapStats
+ 1030              		.syntax unified
+ 1031              		.thumb
+ 1032              		.thumb_func
+ 1033              		.fpu fpv4-sp-d16
+ 1035              	vPortGetHeapStats:
+ 1036              	.LFB12:
+ 453:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 454:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 455:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** void vPortGetHeapStats( HeapStats_t * pxHeapStats )
+ 456:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** {
+ 1037              		.loc 1 456 1
+ 1038              		.cfi_startproc
+ 1039              		@ args = 0, pretend = 0, frame = 24
+ 1040              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1041 0000 80B5     		push	{r7, lr}
+ 1042              	.LCFI34:
+ 1043              		.cfi_def_cfa_offset 8
+ 1044              		.cfi_offset 7, -8
+ 1045              		.cfi_offset 14, -4
+ 1046 0002 86B0     		sub	sp, sp, #24
+ 1047              	.LCFI35:
+ 1048              		.cfi_def_cfa_offset 32
+ 1049 0004 00AF     		add	r7, sp, #0
+ 1050              	.LCFI36:
+ 1051              		.cfi_def_cfa_register 7
+ 1052 0006 7860     		str	r0, [r7, #4]
+ 457:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     BlockLink_t * pxBlock;
+ 458:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     size_t xBlocks = 0, xMaxSize = 0, xMinSize = portMAX_DELAY; /* portMAX_DELAY used as a portable
+ 1053              		.loc 1 458 12
+ 1054 0008 0023     		movs	r3, #0
+ 1055 000a 3B61     		str	r3, [r7, #16]
+ 1056              		.loc 1 458 25
+ 1057 000c 0023     		movs	r3, #0
+ 1058 000e FB60     		str	r3, [r7, #12]
+ 1059              		.loc 1 458 39
+ 1060 0010 4FF0FF33 		mov	r3, #-1
+ 1061 0014 BB60     		str	r3, [r7, #8]
+ 459:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 460:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     vTaskSuspendAll();
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 31
+
+
+ 1062              		.loc 1 460 5
+ 1063 0016 FFF7FEFF 		bl	vTaskSuspendAll
+ 461:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 462:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxBlock = xStart.pxNextFreeBlock;
+ 1064              		.loc 1 462 17
+ 1065 001a 224B     		ldr	r3, .L60
+ 1066 001c 1B68     		ldr	r3, [r3]
+ 1067 001e 7B61     		str	r3, [r7, #20]
+ 463:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 464:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         /* pxBlock will be NULL if the heap has not been initialised.  The heap
+ 465:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****          * is initialised automatically when the first allocation is made. */
+ 466:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         if( pxBlock != NULL )
+ 1068              		.loc 1 466 11
+ 1069 0020 7B69     		ldr	r3, [r7, #20]
+ 1070 0022 002B     		cmp	r3, #0
+ 1071 0024 1AD0     		beq	.L56
+ 1072              	.L59:
+ 467:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         {
+ 468:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             do
+ 469:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             {
+ 470:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 /* Increment the number of blocks and record the largest block seen
+ 471:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                  * so far. */
+ 472:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 xBlocks++;
+ 1073              		.loc 1 472 24
+ 1074 0026 3B69     		ldr	r3, [r7, #16]
+ 1075 0028 0133     		adds	r3, r3, #1
+ 1076 002a 3B61     		str	r3, [r7, #16]
+ 473:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 474:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 if( pxBlock->xBlockSize > xMaxSize )
+ 1077              		.loc 1 474 28
+ 1078 002c 7B69     		ldr	r3, [r7, #20]
+ 1079 002e 5B68     		ldr	r3, [r3, #4]
+ 1080              		.loc 1 474 19
+ 1081 0030 FA68     		ldr	r2, [r7, #12]
+ 1082 0032 9A42     		cmp	r2, r3
+ 1083 0034 02D2     		bcs	.L57
+ 475:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 476:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     xMaxSize = pxBlock->xBlockSize;
+ 1084              		.loc 1 476 30
+ 1085 0036 7B69     		ldr	r3, [r7, #20]
+ 1086 0038 5B68     		ldr	r3, [r3, #4]
+ 1087 003a FB60     		str	r3, [r7, #12]
+ 1088              	.L57:
+ 477:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 478:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 479:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 if( pxBlock->xBlockSize < xMinSize )
+ 1089              		.loc 1 479 28
+ 1090 003c 7B69     		ldr	r3, [r7, #20]
+ 1091 003e 5B68     		ldr	r3, [r3, #4]
+ 1092              		.loc 1 479 19
+ 1093 0040 BA68     		ldr	r2, [r7, #8]
+ 1094 0042 9A42     		cmp	r2, r3
+ 1095 0044 02D9     		bls	.L58
+ 480:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 {
+ 481:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                     xMinSize = pxBlock->xBlockSize;
+ 1096              		.loc 1 481 30
+ 1097 0046 7B69     		ldr	r3, [r7, #20]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 32
+
+
+ 1098 0048 5B68     		ldr	r3, [r3, #4]
+ 1099 004a BB60     		str	r3, [r7, #8]
+ 1100              	.L58:
+ 482:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 }
+ 483:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 484:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 /* Move to the next block in the chain until the last block is
+ 485:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                  * reached. */
+ 486:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****                 pxBlock = pxBlock->pxNextFreeBlock;
+ 1101              		.loc 1 486 25
+ 1102 004c 7B69     		ldr	r3, [r7, #20]
+ 1103 004e 1B68     		ldr	r3, [r3]
+ 1104 0050 7B61     		str	r3, [r7, #20]
+ 487:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****             } while( pxBlock != pxEnd );
+ 1105              		.loc 1 487 30
+ 1106 0052 154B     		ldr	r3, .L60+4
+ 1107 0054 1B68     		ldr	r3, [r3]
+ 1108              		.loc 1 487 13
+ 1109 0056 7A69     		ldr	r2, [r7, #20]
+ 1110 0058 9A42     		cmp	r2, r3
+ 1111 005a E4D1     		bne	.L59
+ 1112              	.L56:
+ 488:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         }
+ 489:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 490:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     ( void ) xTaskResumeAll();
+ 1113              		.loc 1 490 14
+ 1114 005c FFF7FEFF 		bl	xTaskResumeAll
+ 491:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 492:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxHeapStats->xSizeOfLargestFreeBlockInBytes = xMaxSize;
+ 1115              		.loc 1 492 49
+ 1116 0060 7B68     		ldr	r3, [r7, #4]
+ 1117 0062 FA68     		ldr	r2, [r7, #12]
+ 1118 0064 5A60     		str	r2, [r3, #4]
+ 493:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxHeapStats->xSizeOfSmallestFreeBlockInBytes = xMinSize;
+ 1119              		.loc 1 493 50
+ 1120 0066 7B68     		ldr	r3, [r7, #4]
+ 1121 0068 BA68     		ldr	r2, [r7, #8]
+ 1122 006a 9A60     		str	r2, [r3, #8]
+ 494:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     pxHeapStats->xNumberOfFreeBlocks = xBlocks;
+ 1123              		.loc 1 494 38
+ 1124 006c 7B68     		ldr	r3, [r7, #4]
+ 1125 006e 3A69     		ldr	r2, [r7, #16]
+ 1126 0070 DA60     		str	r2, [r3, #12]
+ 495:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** 
+ 496:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     taskENTER_CRITICAL();
+ 1127              		.loc 1 496 5
+ 1128 0072 FFF7FEFF 		bl	vPortEnterCritical
+ 497:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     {
+ 498:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxHeapStats->xAvailableHeapSpaceInBytes = xFreeBytesRemaining;
+ 1129              		.loc 1 498 49
+ 1130 0076 0D4B     		ldr	r3, .L60+8
+ 1131 0078 1A68     		ldr	r2, [r3]
+ 1132 007a 7B68     		ldr	r3, [r7, #4]
+ 1133 007c 1A60     		str	r2, [r3]
+ 499:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxHeapStats->xNumberOfSuccessfulAllocations = xNumberOfSuccessfulAllocations;
+ 1134              		.loc 1 499 53
+ 1135 007e 0C4B     		ldr	r3, .L60+12
+ 1136 0080 1A68     		ldr	r2, [r3]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 33
+
+
+ 1137 0082 7B68     		ldr	r3, [r7, #4]
+ 1138 0084 5A61     		str	r2, [r3, #20]
+ 500:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxHeapStats->xNumberOfSuccessfulFrees = xNumberOfSuccessfulFrees;
+ 1139              		.loc 1 500 47
+ 1140 0086 0B4B     		ldr	r3, .L60+16
+ 1141 0088 1A68     		ldr	r2, [r3]
+ 1142 008a 7B68     		ldr	r3, [r7, #4]
+ 1143 008c 9A61     		str	r2, [r3, #24]
+ 501:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****         pxHeapStats->xMinimumEverFreeBytesRemaining = xMinimumEverFreeBytesRemaining;
+ 1144              		.loc 1 501 53
+ 1145 008e 0A4B     		ldr	r3, .L60+20
+ 1146 0090 1A68     		ldr	r2, [r3]
+ 1147 0092 7B68     		ldr	r3, [r7, #4]
+ 1148 0094 1A61     		str	r2, [r3, #16]
+ 502:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     }
+ 503:./Drivers/FreeRTOS/portable/MemMang/heap_4.c ****     taskEXIT_CRITICAL();
+ 1149              		.loc 1 503 5
+ 1150 0096 FFF7FEFF 		bl	vPortExitCritical
+ 504:./Drivers/FreeRTOS/portable/MemMang/heap_4.c **** }
+ 1151              		.loc 1 504 1
+ 1152 009a 00BF     		nop
+ 1153 009c 1837     		adds	r7, r7, #24
+ 1154              	.LCFI37:
+ 1155              		.cfi_def_cfa_offset 8
+ 1156 009e BD46     		mov	sp, r7
+ 1157              	.LCFI38:
+ 1158              		.cfi_def_cfa_register 13
+ 1159              		@ sp needed
+ 1160 00a0 80BD     		pop	{r7, pc}
+ 1161              	.L61:
+ 1162 00a2 00BF     		.align	2
+ 1163              	.L60:
+ 1164 00a4 00000000 		.word	xStart
+ 1165 00a8 00000000 		.word	pxEnd
+ 1166 00ac 00000000 		.word	xFreeBytesRemaining
+ 1167 00b0 00000000 		.word	xNumberOfSuccessfulAllocations
+ 1168 00b4 00000000 		.word	xNumberOfSuccessfulFrees
+ 1169 00b8 00000000 		.word	xMinimumEverFreeBytesRemaining
+ 1170              		.cfi_endproc
+ 1171              	.LFE12:
+ 1173              		.text
+ 1174              	.Letext0:
+ 1175              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\lib\\gcc\\arm-none-eabi\
+ 1176              		.file 4 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\arm-none-eabi\\include\\
+ 1177              		.file 5 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\arm-none-eabi\\include\\
+ 1178              		.file 6 "Drivers/FreeRTOS/include/portable.h"
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s 			page 34
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 heap_4.c
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:18     .bss.ucHeap:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:21     .bss.ucHeap:00000000 ucHeap
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:24     .rodata.xHeapStructSize:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:27     .rodata.xHeapStructSize:00000000 xHeapStructSize
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:30     .bss.xStart:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:33     .bss.xStart:00000000 xStart
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:36     .bss.pxEnd:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:39     .bss.pxEnd:00000000 pxEnd
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:42     .bss.xFreeBytesRemaining:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:45     .bss.xFreeBytesRemaining:00000000 xFreeBytesRemaining
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:48     .bss.xMinimumEverFreeBytesRemaining:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:51     .bss.xMinimumEverFreeBytesRemaining:00000000 xMinimumEverFreeBytesRemaining
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:54     .bss.xNumberOfSuccessfulAllocations:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:57     .bss.xNumberOfSuccessfulAllocations:00000000 xNumberOfSuccessfulAllocations
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:60     .bss.xNumberOfSuccessfulFrees:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:63     .bss.xNumberOfSuccessfulFrees:00000000 xNumberOfSuccessfulFrees
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:66     .bss.xBlockAllocatedBit:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:69     .bss.xBlockAllocatedBit:00000000 xBlockAllocatedBit
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:72     .text.pvPortMalloc:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:80     .text.pvPortMalloc:00000000 pvPortMalloc
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:717    .text.prvHeapInit:00000000 prvHeapInit
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:872    .text.prvInsertBlockIntoFreeList:00000000 prvInsertBlockIntoFreeList
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:411    .text.pvPortMalloc:000001a8 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:421    .text.vPortFree:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:428    .text.vPortFree:00000000 vPortFree
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:582    .text.vPortFree:000000b8 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:589    .text.xPortGetFreeHeapSize:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:596    .text.xPortGetFreeHeapSize:00000000 xPortGetFreeHeapSize
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:627    .text.xPortGetFreeHeapSize:00000014 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:632    .text.xPortGetMinimumEverFreeHeapSize:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:639    .text.xPortGetMinimumEverFreeHeapSize:00000000 xPortGetMinimumEverFreeHeapSize
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:670    .text.xPortGetMinimumEverFreeHeapSize:00000014 $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:675    .text.vPortInitialiseBlocks:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:682    .text.vPortInitialiseBlocks:00000000 vPortInitialiseBlocks
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:711    .text.prvHeapInit:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:856    .text.prvHeapInit:000000ac $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:866    .text.prvInsertBlockIntoFreeList:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:1022   .text.prvInsertBlockIntoFreeList:000000ac $d
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:1028   .text.vPortGetHeapStats:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:1035   .text.vPortGetHeapStats:00000000 vPortGetHeapStats
+C:\Users\Benson\AppData\Local\Temp\ccEPN9BA.s:1164   .text.vPortGetHeapStats:000000a4 $d
+
+UNDEFINED SYMBOLS
+vTaskSuspendAll
+xTaskResumeAll
+vPortEnterCritical
+vPortExitCritical

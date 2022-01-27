@@ -1,0 +1,2428 @@
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"port.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.data.uxCriticalNesting,"aw"
+  18              		.align	2
+  21              	uxCriticalNesting:
+  22 0000 AAAAAAAA 		.word	-1431655766
+  23              		.section	.bss.ucMaxSysCallPriority,"aw",%nobits
+  26              	ucMaxSysCallPriority:
+  27 0000 00       		.space	1
+  28              		.section	.bss.ulMaxPRIGROUPValue,"aw",%nobits
+  29              		.align	2
+  32              	ulMaxPRIGROUPValue:
+  33 0000 00000000 		.space	4
+  34              		.section	.rodata.pcInterruptPriorityRegisters,"a"
+  35              		.align	2
+  38              	pcInterruptPriorityRegisters:
+  39 0000 F0E300E0 		.word	-536812560
+  40              		.section	.text.pxPortInitialiseStack,"ax",%progbits
+  41              		.align	1
+  42              		.global	pxPortInitialiseStack
+  43              		.arch armv7e-m
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  47              		.fpu fpv4-sp-d16
+  49              	pxPortInitialiseStack:
+  50              	.LFB5:
+  51              		.file 1 "./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c"
+   1:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+   2:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * FreeRTOS Kernel V10.4.6
+   3:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  *
+   5:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * SPDX-License-Identifier: MIT
+   6:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  *
+   7:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * this software and associated documentation files (the "Software"), to deal in
+   9:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * the Software without restriction, including without limitation the rights to
+  10:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * subject to the following conditions:
+  13:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  *
+  14:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * The above copyright notice and this permission notice shall be included in all
+  15:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * copies or substantial portions of the Software.
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 2
+
+
+  16:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  *
+  17:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  *
+  24:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * https://www.FreeRTOS.org
+  25:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * https://github.com/FreeRTOS
+  26:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  *
+  27:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+  28:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  29:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------
+  30:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** * Implementation of functions defined in portable.h for the ARM CM4F port.
+  31:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** *----------------------------------------------------------*/
+  32:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  33:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Scheduler includes. */
+  34:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #include "FreeRTOS.h"
+  35:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #include "task.h"
+  36:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  37:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #ifndef __VFP_FP__
+  38:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #error This port can only be used when the project options are configured to enable hardware fl
+  39:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif
+  40:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  41:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #ifndef configSYSTICK_CLOCK_HZ
+  42:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #define configSYSTICK_CLOCK_HZ      configCPU_CLOCK_HZ
+  43:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Ensure the SysTick is clocked at the same frequency as the core. */
+  44:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #define portNVIC_SYSTICK_CLK_BIT    ( 1UL << 2UL )
+  45:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #else
+  46:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  47:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* The way the SysTick is clocked is not modified in case it is not the same
+  48:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * as the core. */
+  49:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #define portNVIC_SYSTICK_CLK_BIT    ( 0 )
+  50:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif
+  51:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  52:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Constants required to manipulate the core.  Registers first... */
+  53:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_CTRL_REG             ( *( ( volatile uint32_t * ) 0xe000e010 ) )
+  54:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_LOAD_REG             ( *( ( volatile uint32_t * ) 0xe000e014 ) )
+  55:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_CURRENT_VALUE_REG    ( *( ( volatile uint32_t * ) 0xe000e018 ) )
+  56:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SHPR3_REG                    ( *( ( volatile uint32_t * ) 0xe000ed20 ) )
+  57:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* ...then bits in the registers. */
+  58:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_INT_BIT              ( 1UL << 1UL )
+  59:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_ENABLE_BIT           ( 1UL << 0UL )
+  60:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_COUNT_FLAG_BIT       ( 1UL << 16UL )
+  61:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_PENDSVCLEAR_BIT              ( 1UL << 27UL )
+  62:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_PEND_SYSTICK_CLEAR_BIT       ( 1UL << 25UL )
+  63:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  64:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Constants used to detect a Cortex-M7 r0p1 core, which should use the ARM_CM7
+  65:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * r0p1 port. */
+  66:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portCPUID                             ( *( ( volatile uint32_t * ) 0xE000ed00 ) )
+  67:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portCORTEX_M7_r0p1_ID                 ( 0x410FC271UL )
+  68:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portCORTEX_M7_r0p0_ID                 ( 0x410FC270UL )
+  69:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  70:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_PENDSV_PRI                   ( ( ( uint32_t ) configKERNEL_INTERRUPT_PRIORITY ) <<
+  71:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_SYSTICK_PRI                  ( ( ( uint32_t ) configKERNEL_INTERRUPT_PRIORITY ) <<
+  72:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 3
+
+
+  73:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Constants required to check the validity of an interrupt priority. */
+  74:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portFIRST_USER_INTERRUPT_NUMBER       ( 16 )
+  75:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portNVIC_IP_REGISTERS_OFFSET_16       ( 0xE000E3F0 )
+  76:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portAIRCR_REG                         ( *( ( volatile uint32_t * ) 0xE000ED0C ) )
+  77:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portMAX_8_BIT_VALUE                   ( ( uint8_t ) 0xff )
+  78:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portTOP_BIT_OF_BYTE                   ( ( uint8_t ) 0x80 )
+  79:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portMAX_PRIGROUP_BITS                 ( ( uint8_t ) 7 )
+  80:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portPRIORITY_GROUP_MASK               ( 0x07UL << 8UL )
+  81:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portPRIGROUP_SHIFT                    ( 8UL )
+  82:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  83:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Masks off all bits but the VECTACTIVE bits in the ICSR register. */
+  84:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portVECTACTIVE_MASK                   ( 0xFFUL )
+  85:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  86:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Constants required to manipulate the VFP. */
+  87:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portFPCCR                             ( ( volatile uint32_t * ) 0xe000ef34 ) /* Floating po
+  88:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portASPEN_AND_LSPEN_BITS              ( 0x3UL << 30UL )
+  89:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  90:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Constants required to set up the initial stack. */
+  91:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portINITIAL_XPSR                      ( 0x01000000 )
+  92:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portINITIAL_EXC_RETURN                ( 0xfffffffd )
+  93:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  94:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* The systick is a 24-bit counter. */
+  95:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portMAX_24_BIT_NUMBER                 ( 0xffffffUL )
+  96:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+  97:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* For strict compliance with the Cortex-M spec the task start address should
+  98:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * have bit-0 clear, as it is loaded into the PC on exit from an ISR. */
+  99:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portSTART_ADDRESS_MASK                ( ( StackType_t ) 0xfffffffeUL )
+ 100:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 101:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* A fiddle factor to estimate the number of SysTick counts that would have
+ 102:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * occurred while the SysTick counter is stopped during tickless idle
+ 103:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * calculations. */
+ 104:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #define portMISSED_COUNTS_FACTOR              ( 45UL )
+ 105:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 106:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Let the user override the pre-loading of the initial LR with the address of
+ 107:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * prvTaskExitError() in case it messes up unwinding of the stack in the
+ 108:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * debugger. */
+ 109:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #ifdef configTASK_RETURN_ADDRESS
+ 110:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #define portTASK_RETURN_ADDRESS    configTASK_RETURN_ADDRESS
+ 111:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #else
+ 112:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #define portTASK_RETURN_ADDRESS    prvTaskExitError
+ 113:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif
+ 114:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 115:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 116:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Setup the timer to generate the tick interrupts.  The implementation in this
+ 117:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * file is weak to allow application writers to change the timer used to
+ 118:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * generate the tick interrupt.
+ 119:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 120:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void vPortSetupTimerInterrupt( void );
+ 121:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 122:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 123:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Exception handlers.
+ 124:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 125:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void xPortPendSVHandler( void ) __attribute__( ( naked ) );
+ 126:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void xPortSysTickHandler( void );
+ 127:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void vPortSVCHandler( void ) __attribute__( ( naked ) );
+ 128:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 129:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 4
+
+
+ 130:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Start first task is a separate function so it can be tested in isolation.
+ 131:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 132:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static void prvPortStartFirstTask( void ) __attribute__( ( naked ) );
+ 133:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 134:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 135:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Function to enable the VFP.
+ 136:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 137:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static void vPortEnableVFP( void ) __attribute__( ( naked ) );
+ 138:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 139:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 140:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Used to catch tasks that attempt to return from their implementing function.
+ 141:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 142:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static void prvTaskExitError( void );
+ 143:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 144:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 145:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 146:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* Each task maintains its own interrupt status in the critical nesting
+ 147:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * variable. */
+ 148:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static UBaseType_t uxCriticalNesting = 0xaaaaaaaa;
+ 149:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 150:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 151:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * The number of SysTick increments that make up one tick period.
+ 152:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 153:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #if ( configUSE_TICKLESS_IDLE == 1 )
+ 154:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     static uint32_t ulTimerCountsForOneTick = 0;
+ 155:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif /* configUSE_TICKLESS_IDLE */
+ 156:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 157:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 158:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * The maximum number of tick periods that can be suppressed is limited by the
+ 159:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * 24 bit resolution of the SysTick timer.
+ 160:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 161:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #if ( configUSE_TICKLESS_IDLE == 1 )
+ 162:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     static uint32_t xMaximumPossibleSuppressedTicks = 0;
+ 163:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif /* configUSE_TICKLESS_IDLE */
+ 164:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 165:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 166:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Compensate for the CPU cycles that pass while the SysTick is stopped (low
+ 167:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * power functionality only.
+ 168:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 169:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #if ( configUSE_TICKLESS_IDLE == 1 )
+ 170:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     static uint32_t ulStoppedTimerCompensation = 0;
+ 171:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif /* configUSE_TICKLESS_IDLE */
+ 172:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 173:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 174:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Used by the portASSERT_IF_INTERRUPT_PRIORITY_INVALID() macro to ensure
+ 175:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * FreeRTOS API functions are not called from interrupts that have been assigned
+ 176:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * a priority above configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 177:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 178:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #if ( configASSERT_DEFINED == 1 )
+ 179:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     static uint8_t ucMaxSysCallPriority = 0;
+ 180:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     static uint32_t ulMaxPRIGROUPValue = 0;
+ 181:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     static const volatile uint8_t * const pcInterruptPriorityRegisters = ( const volatile uint8_t *
+ 182:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif /* configASSERT_DEFINED */
+ 183:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 184:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 185:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 186:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 5
+
+
+ 187:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * See header file for description.
+ 188:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 189:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
+ 190:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                                      TaskFunction_t pxCode,
+ 191:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                                      void * pvParameters )
+ 192:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+  52              		.loc 1 192 1
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 16
+  55              		@ frame_needed = 1, uses_anonymous_args = 0
+  56              		@ link register save eliminated.
+  57 0000 80B4     		push	{r7}
+  58              	.LCFI0:
+  59              		.cfi_def_cfa_offset 4
+  60              		.cfi_offset 7, -4
+  61 0002 85B0     		sub	sp, sp, #20
+  62              	.LCFI1:
+  63              		.cfi_def_cfa_offset 24
+  64 0004 00AF     		add	r7, sp, #0
+  65              	.LCFI2:
+  66              		.cfi_def_cfa_register 7
+  67 0006 F860     		str	r0, [r7, #12]
+  68 0008 B960     		str	r1, [r7, #8]
+  69 000a 7A60     		str	r2, [r7, #4]
+ 193:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Simulate the stack frame as it would be created by a context switch
+ 194:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * interrupt. */
+ 195:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 196:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Offset added to account for the way the MCU uses the stack on entry/exit
+ 197:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * of interrupts, and to ensure alignment. */
+ 198:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack--;
+  70              		.loc 1 198 17
+  71 000c FB68     		ldr	r3, [r7, #12]
+  72 000e 043B     		subs	r3, r3, #4
+  73 0010 FB60     		str	r3, [r7, #12]
+ 199:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 200:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     *pxTopOfStack = portINITIAL_XPSR;                                    /* xPSR */
+  74              		.loc 1 200 19
+  75 0012 FB68     		ldr	r3, [r7, #12]
+  76 0014 4FF08072 		mov	r2, #16777216
+  77 0018 1A60     		str	r2, [r3]
+ 201:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack--;
+  78              		.loc 1 201 17
+  79 001a FB68     		ldr	r3, [r7, #12]
+  80 001c 043B     		subs	r3, r3, #4
+  81 001e FB60     		str	r3, [r7, #12]
+ 202:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     *pxTopOfStack = ( ( StackType_t ) pxCode ) & portSTART_ADDRESS_MASK; /* PC */
+  82              		.loc 1 202 23
+  83 0020 BB68     		ldr	r3, [r7, #8]
+  84              		.loc 1 202 48
+  85 0022 23F00102 		bic	r2, r3, #1
+  86              		.loc 1 202 19
+  87 0026 FB68     		ldr	r3, [r7, #12]
+  88 0028 1A60     		str	r2, [r3]
+ 203:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack--;
+  89              		.loc 1 203 17
+  90 002a FB68     		ldr	r3, [r7, #12]
+  91 002c 043B     		subs	r3, r3, #4
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 6
+
+
+  92 002e FB60     		str	r3, [r7, #12]
+ 204:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     *pxTopOfStack = ( StackType_t ) portTASK_RETURN_ADDRESS;             /* LR */
+  93              		.loc 1 204 21
+  94 0030 0C4A     		ldr	r2, .L3
+  95              		.loc 1 204 19
+  96 0032 FB68     		ldr	r3, [r7, #12]
+  97 0034 1A60     		str	r2, [r3]
+ 205:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 206:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Save code space by skipping register initialisation. */
+ 207:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack -= 5;                            /* R12, R3, R2 and R1. */
+  98              		.loc 1 207 18
+  99 0036 FB68     		ldr	r3, [r7, #12]
+ 100 0038 143B     		subs	r3, r3, #20
+ 101 003a FB60     		str	r3, [r7, #12]
+ 208:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     *pxTopOfStack = ( StackType_t ) pvParameters; /* R0 */
+ 102              		.loc 1 208 21
+ 103 003c 7A68     		ldr	r2, [r7, #4]
+ 104              		.loc 1 208 19
+ 105 003e FB68     		ldr	r3, [r7, #12]
+ 106 0040 1A60     		str	r2, [r3]
+ 209:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 210:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* A save method is being used that requires each task to maintain its
+ 211:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * own exec return value. */
+ 212:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack--;
+ 107              		.loc 1 212 17
+ 108 0042 FB68     		ldr	r3, [r7, #12]
+ 109 0044 043B     		subs	r3, r3, #4
+ 110 0046 FB60     		str	r3, [r7, #12]
+ 213:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     *pxTopOfStack = portINITIAL_EXC_RETURN;
+ 111              		.loc 1 213 19
+ 112 0048 FB68     		ldr	r3, [r7, #12]
+ 113 004a 6FF00202 		mvn	r2, #2
+ 114 004e 1A60     		str	r2, [r3]
+ 214:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 215:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack -= 8; /* R11, R10, R9, R8, R7, R6, R5 and R4. */
+ 115              		.loc 1 215 18
+ 116 0050 FB68     		ldr	r3, [r7, #12]
+ 117 0052 203B     		subs	r3, r3, #32
+ 118 0054 FB60     		str	r3, [r7, #12]
+ 216:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 217:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     return pxTopOfStack;
+ 119              		.loc 1 217 12
+ 120 0056 FB68     		ldr	r3, [r7, #12]
+ 218:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 121              		.loc 1 218 1
+ 122 0058 1846     		mov	r0, r3
+ 123 005a 1437     		adds	r7, r7, #20
+ 124              	.LCFI3:
+ 125              		.cfi_def_cfa_offset 4
+ 126 005c BD46     		mov	sp, r7
+ 127              	.LCFI4:
+ 128              		.cfi_def_cfa_register 13
+ 129              		@ sp needed
+ 130 005e 5DF8047B 		ldr	r7, [sp], #4
+ 131              	.LCFI5:
+ 132              		.cfi_restore 7
+ 133              		.cfi_def_cfa_offset 0
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 7
+
+
+ 134 0062 7047     		bx	lr
+ 135              	.L4:
+ 136              		.align	2
+ 137              	.L3:
+ 138 0064 00000000 		.word	prvTaskExitError
+ 139              		.cfi_endproc
+ 140              	.LFE5:
+ 142              		.section	.text.prvTaskExitError,"ax",%progbits
+ 143              		.align	1
+ 144              		.syntax unified
+ 145              		.thumb
+ 146              		.thumb_func
+ 147              		.fpu fpv4-sp-d16
+ 149              	prvTaskExitError:
+ 150              	.LFB6:
+ 219:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 220:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 221:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static void prvTaskExitError( void )
+ 222:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 151              		.loc 1 222 1
+ 152              		.cfi_startproc
+ 153              		@ args = 0, pretend = 0, frame = 16
+ 154              		@ frame_needed = 1, uses_anonymous_args = 0
+ 155              		@ link register save eliminated.
+ 156 0000 80B4     		push	{r7}
+ 157              	.LCFI6:
+ 158              		.cfi_def_cfa_offset 4
+ 159              		.cfi_offset 7, -4
+ 160 0002 85B0     		sub	sp, sp, #20
+ 161              	.LCFI7:
+ 162              		.cfi_def_cfa_offset 24
+ 163 0004 00AF     		add	r7, sp, #0
+ 164              	.LCFI8:
+ 165              		.cfi_def_cfa_register 7
+ 223:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     volatile uint32_t ulDummy = 0;
+ 166              		.loc 1 223 23
+ 167 0006 0023     		movs	r3, #0
+ 168 0008 7B60     		str	r3, [r7, #4]
+ 224:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 225:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* A function that implements a task must not exit or attempt to return to
+ 226:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * its caller as there is nothing to return to.  If a task wants to exit it
+ 227:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * should instead call vTaskDelete( NULL ).
+ 228:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      *
+ 229:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * Artificially force an assert() to be triggered if configASSERT() is
+ 230:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * defined, then stop here so application writers can catch the error. */
+ 231:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     configASSERT( uxCriticalNesting == ~0UL );
+ 169              		.loc 1 231 5
+ 170 000a 124B     		ldr	r3, .L9
+ 171 000c 1B68     		ldr	r3, [r3]
+ 172 000e B3F1FF3F 		cmp	r3, #-1
+ 173 0012 0AD0     		beq	.L6
+ 174              	.LBB31:
+ 175              	.LBB32:
+ 176              		.file 2 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h"
+   1:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*
+   2:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * FreeRTOS Kernel V10.4.6
+   3:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 8
+
+
+   4:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   5:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * SPDX-License-Identifier: MIT
+   6:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   7:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * this software and associated documentation files (the "Software"), to deal in
+   9:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software without restriction, including without limitation the rights to
+  10:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * subject to the following conditions:
+  13:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  14:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * The above copyright notice and this permission notice shall be included in all
+  15:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * copies or substantial portions of the Software.
+  16:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  17:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  24:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * https://www.FreeRTOS.org
+  25:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * https://github.com/FreeRTOS
+  26:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  27:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  28:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  29:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  30:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef PORTMACRO_H
+  31:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define PORTMACRO_H
+  32:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  33:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifdef __cplusplus
+  34:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         extern "C" {
+  35:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+  36:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  37:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------
+  38:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Port specific definitions.
+  39:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  40:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * The settings in this file configure FreeRTOS correctly for the
+  41:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * given hardware and compiler.
+  42:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  43:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * These settings should not be altered.
+  44:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *-----------------------------------------------------------
+  45:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  46:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  47:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Type definitions. */
+  48:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portCHAR          char
+  49:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portFLOAT         float
+  50:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDOUBLE        double
+  51:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portLONG          long
+  52:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSHORT         short
+  53:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSTACK_TYPE    uint32_t
+  54:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portBASE_TYPE     long
+  55:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  56:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef portSTACK_TYPE   StackType_t;
+  57:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef long             BaseType_t;
+  58:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef unsigned long    UBaseType_t;
+  59:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  60:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #if ( configUSE_16_BIT_TICKS == 1 )
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 9
+
+
+  61:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         typedef uint16_t     TickType_t;
+  62:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portMAX_DELAY              ( TickType_t ) 0xffff
+  63:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #else
+  64:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         typedef uint32_t     TickType_t;
+  65:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portMAX_DELAY              ( TickType_t ) 0xffffffffUL
+  66:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  67:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* 32-bit tick type on a 32-bit architecture, so reads of the tick count do
+  68:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * not need to be guarded with a critical section. */
+  69:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portTICK_TYPE_IS_ATOMIC    1
+  70:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+  71:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  72:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  73:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specifics. */
+  74:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSTACK_GROWTH      ( -1 )
+  75:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTICK_PERIOD_MS    ( ( TickType_t ) 1000 / configTICK_RATE_HZ )
+  76:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portBYTE_ALIGNMENT    8
+  77:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDONT_DISCARD      __attribute__( ( used ) )
+  78:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  79:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  80:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Scheduler utilities. */
+  81:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portYIELD()                                 \
+  82:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {                                                   \
+  83:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Set a PendSV to request a context switch. */ \
+  84:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT; \
+  85:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****                                                         \
+  86:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Barriers are normally not required but do ensure the code is completely \
+  87:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****          * within the specified behaviour for the architecture. */ \
+  88:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "dsb" ::: "memory" );                     \
+  89:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "isb" );                                  \
+  90:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+  91:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  92:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNVIC_INT_CTRL_REG     ( *( ( volatile uint32_t * ) 0xe000ed04 ) )
+  93:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )
+  94:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portEND_SWITCHING_ISR( xSwitchRequired )    do { if( xSwitchRequired != pdFALSE ) portY
+  95:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portYIELD_FROM_ISR( x )                     portEND_SWITCHING_ISR( x )
+  96:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  97:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  98:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Critical section management. */
+  99:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortEnterCritical( void );
+ 100:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortExitCritical( void );
+ 101:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSET_INTERRUPT_MASK_FROM_ISR()         ulPortRaiseBASEPRI()
+ 102:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portCLEAR_INTERRUPT_MASK_FROM_ISR( x )    vPortSetBASEPRI( x )
+ 103:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDISABLE_INTERRUPTS()                  vPortRaiseBASEPRI()
+ 104:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portENABLE_INTERRUPTS()                   vPortSetBASEPRI( 0 )
+ 105:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portENTER_CRITICAL()                      vPortEnterCritical()
+ 106:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portEXIT_CRITICAL()                       vPortExitCritical()
+ 107:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 108:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 109:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 110:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Task function macros as described on the FreeRTOS.org WEB site.  These are
+ 111:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * not necessary for to use this port.  They are defined so the common demo files
+ 112:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * (which build with all the ports) will build. */
+ 113:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParamete
+ 114:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTASK_FUNCTION( vFunction, pvParameters )          void vFunction( void * pvParamete
+ 115:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 116:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 117:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Tickless idle/low power functionality. */
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 10
+
+
+ 118:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef portSUPPRESS_TICKS_AND_SLEEP
+ 119:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
+ 120:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime )    vPortSuppressTicksAndSleep( xE
+ 121:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 122:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 123:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 124:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specific optimisations. */
+ 125:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
+ 126:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define configUSE_PORT_OPTIMISED_TASK_SELECTION    1
+ 127:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 128:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 129:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+ 130:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 131:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Generic helper function. */
+ 132:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t 
+ 133:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 134:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             uint8_t ucReturn;
+ 135:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 136:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
+ 137:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 138:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             return ucReturn;
+ 139:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 140:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 141:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Check the configuration. */
+ 142:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #if ( configMAX_PRIORITIES > 32 )
+ 143:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             #error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIO
+ 144:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #endif
+ 145:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 146:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Store/clear the ready priorities in a bit map. */
+ 147:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities )    ( uxReadyPriorities )
+ 148:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities )     ( uxReadyPriorities )
+ 149:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 150:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 151:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 152:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities )    uxTopPriority = ( 3
+ 153:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 154:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+ 155:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 156:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 157:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 158:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifdef configASSERT
+ 159:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         void vPortValidateInterruptPriority( void );
+ 160:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portASSERT_IF_INTERRUPT_PRIORITY_INVALID()    vPortValidateInterruptPriority()
+ 161:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 162:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 163:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* portNOP() is not required by this port. */
+ 164:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNOP()
+ 165:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 166:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portINLINE              __inline
+ 167:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 168:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef portFORCE_INLINE
+ 169:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portFORCE_INLINE    inline __attribute__( ( always_inline ) )
+ 170:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 171:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 172:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
+ 173:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 174:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulCurrentInterrupt;
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 11
+
+
+ 175:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         BaseType_t xReturn;
+ 176:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 177:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Obtain the number of the currently executing interrupt. */
+ 178:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
+ 179:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 180:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         if( ulCurrentInterrupt == 0 )
+ 181:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 182:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             xReturn = pdFALSE;
+ 183:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 184:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         else
+ 185:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 186:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             xReturn = pdTRUE;
+ 187:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 188:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 189:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         return xReturn;
+ 190:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 191:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 192:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 193:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 194:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static void vPortRaiseBASEPRI( void )
+ 195:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 196:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulNewBASEPRI;
+ 197:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 177              		.loc 2 198 9
+ 178              		.syntax unified
+ 179              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 180 0014 4FF05003 			mov r3, #80												
+ 181 0018 83F31188 		msr basepri, r3											
+ 182 001c BFF36F8F 		isb														
+ 183 0020 BFF34F8F 		dsb														
+ 184              	
+ 185              	@ 0 "" 2
+ 186              		.thumb
+ 187              		.syntax unified
+ 188 0024 FB60     		str	r3, [r7, #12]
+ 199:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 200:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mov %0, %1												\n"\
+ 201:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %0											\n"\
+ 202:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	isb														\n"\
+ 203:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	dsb														\n"\
+ 204:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             : "=r" ( ulNewBASEPRI ) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY ) : "memory"
+ 205:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 189              		.loc 2 206 5
+ 190 0026 00BF     		nop
+ 191              	.L7:
+ 192              	.LBE32:
+ 193              	.LBE31:
+ 194              		.loc 1 231 5 discriminator 1
+ 195 0028 FEE7     		b	.L7
+ 196              	.L6:
+ 197              	.LBB33:
+ 198              	.LBB34:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 199              		.loc 2 198 9
+ 200              		.syntax unified
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 12
+
+
+ 201              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 202 002a 4FF05003 			mov r3, #80												
+ 203 002e 83F31188 		msr basepri, r3											
+ 204 0032 BFF36F8F 		isb														
+ 205 0036 BFF34F8F 		dsb														
+ 206              	
+ 207              	@ 0 "" 2
+ 208              		.thumb
+ 209              		.syntax unified
+ 210 003a BB60     		str	r3, [r7, #8]
+ 211              		.loc 2 206 5
+ 212 003c 00BF     		nop
+ 213              	.LBE34:
+ 214              	.LBE33:
+ 232:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portDISABLE_INTERRUPTS();
+ 233:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 234:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     while( ulDummy == 0 )
+ 215              		.loc 1 234 10
+ 216 003e 00BF     		nop
+ 217              	.L8:
+ 218              		.loc 1 234 20 discriminator 1
+ 219 0040 7B68     		ldr	r3, [r7, #4]
+ 220              		.loc 1 234 10 discriminator 1
+ 221 0042 002B     		cmp	r3, #0
+ 222 0044 FCD0     		beq	.L8
+ 235:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     {
+ 236:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* This file calls prvTaskExitError() after the scheduler has been
+ 237:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * started to remove a compiler warning about the function being defined
+ 238:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * but never called.  ulDummy is used purely to quieten other warnings
+ 239:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * about code appearing after this function is called - making ulDummy
+ 240:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * volatile makes the compiler think the function could return and
+ 241:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * therefore not output an 'unreachable code' warning for code that appears
+ 242:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * after it. */
+ 243:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     }
+ 244:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 223              		.loc 1 244 1
+ 224 0046 00BF     		nop
+ 225 0048 00BF     		nop
+ 226 004a 1437     		adds	r7, r7, #20
+ 227              	.LCFI9:
+ 228              		.cfi_def_cfa_offset 4
+ 229 004c BD46     		mov	sp, r7
+ 230              	.LCFI10:
+ 231              		.cfi_def_cfa_register 13
+ 232              		@ sp needed
+ 233 004e 5DF8047B 		ldr	r7, [sp], #4
+ 234              	.LCFI11:
+ 235              		.cfi_restore 7
+ 236              		.cfi_def_cfa_offset 0
+ 237 0052 7047     		bx	lr
+ 238              	.L10:
+ 239              		.align	2
+ 240              	.L9:
+ 241 0054 00000000 		.word	uxCriticalNesting
+ 242              		.cfi_endproc
+ 243              	.LFE6:
+ 245              		.section	.text.SVC_Handler,"ax",%progbits
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 13
+
+
+ 246              		.align	1
+ 247              		.global	SVC_Handler
+ 248              		.syntax unified
+ 249              		.thumb
+ 250              		.thumb_func
+ 251              		.fpu fpv4-sp-d16
+ 253              	SVC_Handler:
+ 254              	.LFB7:
+ 245:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 246:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 247:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void vPortSVCHandler( void )
+ 248:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 255              		.loc 1 248 1
+ 256              		.cfi_startproc
+ 257              		@ Naked Function: prologue and epilogue provided by programmer.
+ 258              		@ args = 0, pretend = 0, frame = 0
+ 259              		@ frame_needed = 1, uses_anonymous_args = 0
+ 249:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     __asm volatile (
+ 260              		.loc 1 249 5
+ 261              		.syntax unified
+ 262              	@ 249 "./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c" 1
+ 263 0000 074B     			ldr	r3, pxCurrentTCBConst2		
+ 264 0002 1968     		ldr r1, [r3]					
+ 265 0004 0868     		ldr r0, [r1]					
+ 266 0006 B0E8F04F 		ldmia r0!, {r4-r11, r14}		
+ 267 000a 80F30988 		msr psp, r0						
+ 268 000e BFF36F8F 		isb								
+ 269 0012 4FF00000 		mov r0, #0 						
+ 270 0016 80F31188 		msr	basepri, r0					
+ 271 001a 7047     		bx r14							
+ 272              										
+ 273 001c AFF30080 		.align 4						
+ 274 0020 00000000 	pxCurrentTCBConst2: .word pxCurrentTCB				
+ 275              	
+ 276              	@ 0 "" 2
+ 250:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr	r3, pxCurrentTCBConst2		\n"/* Restore the context. */
+ 251:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr r1, [r3]					\n"/* Use pxCurrentTCBConst to get the pxCurrentTCB address. */
+ 252:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr r0, [r1]					\n"/* The first item in pxCurrentTCB is the task top of stack. */
+ 253:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldmia r0!, {r4-r11, r14}		\n"/* Pop the registers that are not automatically saved on exc
+ 254:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	msr psp, r0						\n"/* Restore the task stack pointer. */
+ 255:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	isb								\n"
+ 256:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	mov r0, #0 						\n"
+ 257:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	msr	basepri, r0					\n"
+ 258:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	bx r14							\n"
+ 259:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "									\n"
+ 260:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	.align 4						\n"
+ 261:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "pxCurrentTCBConst2: .word pxCurrentTCB				\n"
+ 262:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         );
+ 263:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 277              		.loc 1 263 1
+ 278              		.thumb
+ 279              		.syntax unified
+ 280 0024 00BF     		nop
+ 281              		.cfi_endproc
+ 282              	.LFE7:
+ 284 0026 00BF     		.section	.text.prvPortStartFirstTask,"ax",%progbits
+ 285              		.align	1
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 14
+
+
+ 286              		.syntax unified
+ 287              		.thumb
+ 288              		.thumb_func
+ 289              		.fpu fpv4-sp-d16
+ 291              	prvPortStartFirstTask:
+ 292              	.LFB8:
+ 264:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 265:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 266:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static void prvPortStartFirstTask( void )
+ 267:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 293              		.loc 1 267 1
+ 294              		.cfi_startproc
+ 295              		@ Naked Function: prologue and epilogue provided by programmer.
+ 296              		@ args = 0, pretend = 0, frame = 0
+ 297              		@ frame_needed = 1, uses_anonymous_args = 0
+ 268:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Start the first task.  This also clears the bit that indicates the FPU is
+ 269:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * in use in case the FPU was used before the scheduler was started - which
+ 270:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * would otherwise result in the unnecessary leaving of space in the SVC stack
+ 271:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * for lazy saving of FPU registers. */
+ 272:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     __asm volatile (
+ 298              		.loc 1 272 5
+ 299              		.syntax unified
+ 300              	@ 272 "./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c" 1
+ 301 0000 0848     		 ldr r0, =0xE000ED08 	
+ 302 0002 0068     	 ldr r0, [r0] 			
+ 303 0004 0068     	 ldr r0, [r0] 			
+ 304 0006 80F30888 	 msr msp, r0			
+ 305 000a 4FF00000 	 mov r0, #0			
+ 306 000e 80F31488 	 msr control, r0		
+ 307 0012 62B6     	 cpsie i				
+ 308 0014 61B6     	 cpsie f				
+ 309 0016 BFF34F8F 	 dsb					
+ 310 001a BFF36F8F 	 isb					
+ 311 001e 00DF     	 svc 0					
+ 312 0020 00BF     	 nop					
+ 313 0022 000008ED 	 .ltorg				
+ 313      00E0
+ 314              	
+ 315              	@ 0 "" 2
+ 273:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " ldr r0, =0xE000ED08 	\n"/* Use the NVIC offset register to locate the stack. */
+ 274:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " ldr r0, [r0] 			\n"
+ 275:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " ldr r0, [r0] 			\n"
+ 276:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " msr msp, r0			\n"/* Set the msp back to the start of the stack. */
+ 277:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " mov r0, #0			\n"/* Clear the bit that indicates the FPU is in use, see comment above. */
+ 278:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " msr control, r0		\n"
+ 279:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " cpsie i				\n"/* Globally enable interrupts. */
+ 280:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " cpsie f				\n"
+ 281:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " dsb					\n"
+ 282:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " isb					\n"
+ 283:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " svc 0					\n"/* System call to start first task. */
+ 284:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " nop					\n"
+ 285:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         " .ltorg				\n"
+ 286:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         );
+ 287:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 316              		.loc 1 287 1
+ 317              		.thumb
+ 318              		.syntax unified
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 15
+
+
+ 319 0028 00BF     		nop
+ 320              		.cfi_endproc
+ 321              	.LFE8:
+ 323 002a 00BF     		.section	.text.xPortStartScheduler,"ax",%progbits
+ 324              		.align	1
+ 325              		.global	xPortStartScheduler
+ 326              		.syntax unified
+ 327              		.thumb
+ 328              		.thumb_func
+ 329              		.fpu fpv4-sp-d16
+ 331              	xPortStartScheduler:
+ 332              	.LFB9:
+ 288:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 289:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 290:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 291:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * See header file for description.
+ 292:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 293:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** BaseType_t xPortStartScheduler( void )
+ 294:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 333              		.loc 1 294 1
+ 334              		.cfi_startproc
+ 335              		@ args = 0, pretend = 0, frame = 24
+ 336              		@ frame_needed = 1, uses_anonymous_args = 0
+ 337 0000 80B5     		push	{r7, lr}
+ 338              	.LCFI12:
+ 339              		.cfi_def_cfa_offset 8
+ 340              		.cfi_offset 7, -8
+ 341              		.cfi_offset 14, -4
+ 342 0002 86B0     		sub	sp, sp, #24
+ 343              	.LCFI13:
+ 344              		.cfi_def_cfa_offset 32
+ 345 0004 00AF     		add	r7, sp, #0
+ 346              	.LCFI14:
+ 347              		.cfi_def_cfa_register 7
+ 295:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to 0.
+ 296:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * See https://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html */
+ 297:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     configASSERT( configMAX_SYSCALL_INTERRUPT_PRIORITY );
+ 298:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 299:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* This port can be used on all revisions of the Cortex-M7 core other than
+ 300:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * the r0p1 parts.  r0p1 parts should use the port from the
+ 301:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * /source/portable/GCC/ARM_CM7/r0p1 directory. */
+ 302:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p1_ID );
+ 348              		.loc 1 302 5
+ 349 0006 464B     		ldr	r3, .L23
+ 350 0008 1B68     		ldr	r3, [r3]
+ 351 000a 464A     		ldr	r2, .L23+4
+ 352 000c 9342     		cmp	r3, r2
+ 353 000e 0AD1     		bne	.L14
+ 354              	.LBB35:
+ 355              	.LBB36:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 356              		.loc 2 198 9
+ 357              		.syntax unified
+ 358              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 359 0010 4FF05003 			mov r3, #80												
+ 360 0014 83F31188 		msr basepri, r3											
+ 361 0018 BFF36F8F 		isb														
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 16
+
+
+ 362 001c BFF34F8F 		dsb														
+ 363              	
+ 364              	@ 0 "" 2
+ 365              		.thumb
+ 366              		.syntax unified
+ 367 0020 3B61     		str	r3, [r7, #16]
+ 368              		.loc 2 206 5
+ 369 0022 00BF     		nop
+ 370              	.L15:
+ 371              	.LBE36:
+ 372              	.LBE35:
+ 373              		.loc 1 302 5 discriminator 2
+ 374 0024 FEE7     		b	.L15
+ 375              	.L14:
+ 303:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
+ 376              		.loc 1 303 5
+ 377 0026 3E4B     		ldr	r3, .L23
+ 378 0028 1B68     		ldr	r3, [r3]
+ 379 002a 3F4A     		ldr	r2, .L23+8
+ 380 002c 9342     		cmp	r3, r2
+ 381 002e 0AD1     		bne	.L16
+ 382              	.LBB37:
+ 383              	.LBB38:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 384              		.loc 2 198 9
+ 385              		.syntax unified
+ 386              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 387 0030 4FF05003 			mov r3, #80												
+ 388 0034 83F31188 		msr basepri, r3											
+ 389 0038 BFF36F8F 		isb														
+ 390 003c BFF34F8F 		dsb														
+ 391              	
+ 392              	@ 0 "" 2
+ 393              		.thumb
+ 394              		.syntax unified
+ 395 0040 FB60     		str	r3, [r7, #12]
+ 396              		.loc 2 206 5
+ 397 0042 00BF     		nop
+ 398              	.L17:
+ 399              	.LBE38:
+ 400              	.LBE37:
+ 401              		.loc 1 303 5 discriminator 3
+ 402 0044 FEE7     		b	.L17
+ 403              	.L16:
+ 404              	.LBB39:
+ 304:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 305:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #if ( configASSERT_DEFINED == 1 )
+ 306:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 307:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             volatile uint32_t ulOriginalPriority;
+ 308:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             volatile uint8_t * const pucFirstUserPriorityRegister = ( volatile uint8_t * const ) ( 
+ 405              		.loc 1 308 38
+ 406 0046 394B     		ldr	r3, .L23+12
+ 407 0048 7B61     		str	r3, [r7, #20]
+ 309:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             volatile uint8_t ucMaxPriorityValue;
+ 310:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 311:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Determine the maximum priority from which ISR safe FreeRTOS API
+ 312:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * functions can be called.  ISR safe functions are those that end in
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 17
+
+
+ 313:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * "FromISR".  FreeRTOS maintains separate thread and ISR API functions to
+ 314:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * ensure interrupt entry is as fast and simple as possible.
+ 315:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              *
+ 316:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * Save the interrupt priority value that is about to be clobbered. */
+ 317:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulOriginalPriority = *pucFirstUserPriorityRegister;
+ 408              		.loc 1 317 34
+ 409 004a 7B69     		ldr	r3, [r7, #20]
+ 410 004c 1B78     		ldrb	r3, [r3]
+ 411 004e DBB2     		uxtb	r3, r3
+ 412              		.loc 1 317 32
+ 413 0050 7B60     		str	r3, [r7, #4]
+ 318:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 319:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Determine the number of priority bits available.  First write to all
+ 320:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * possible bits. */
+ 321:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             *pucFirstUserPriorityRegister = portMAX_8_BIT_VALUE;
+ 414              		.loc 1 321 43
+ 415 0052 7B69     		ldr	r3, [r7, #20]
+ 416 0054 FF22     		movs	r2, #255
+ 417 0056 1A70     		strb	r2, [r3]
+ 322:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 323:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Read the value back to see how many bits stuck. */
+ 324:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ucMaxPriorityValue = *pucFirstUserPriorityRegister;
+ 418              		.loc 1 324 34
+ 419 0058 7B69     		ldr	r3, [r7, #20]
+ 420 005a 1B78     		ldrb	r3, [r3]
+ 421 005c DBB2     		uxtb	r3, r3
+ 422              		.loc 1 324 32
+ 423 005e FB70     		strb	r3, [r7, #3]
+ 325:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 326:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Use the same mask on the maximum system call priority. */
+ 327:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ucMaxSysCallPriority = configMAX_SYSCALL_INTERRUPT_PRIORITY & ucMaxPriorityValue;
+ 424              		.loc 1 327 73
+ 425 0060 FB78     		ldrb	r3, [r7, #3]
+ 426 0062 DBB2     		uxtb	r3, r3
+ 427 0064 03F05003 		and	r3, r3, #80
+ 428 0068 DAB2     		uxtb	r2, r3
+ 429              		.loc 1 327 34
+ 430 006a 314B     		ldr	r3, .L23+16
+ 431 006c 1A70     		strb	r2, [r3]
+ 328:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 329:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Calculate the maximum acceptable priority group value for the number
+ 330:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * of bits read back. */
+ 331:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulMaxPRIGROUPValue = portMAX_PRIGROUP_BITS;
+ 432              		.loc 1 331 32
+ 433 006e 314B     		ldr	r3, .L23+20
+ 434 0070 0722     		movs	r2, #7
+ 435 0072 1A60     		str	r2, [r3]
+ 332:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 333:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             while( ( ucMaxPriorityValue & portTOP_BIT_OF_BYTE ) == portTOP_BIT_OF_BYTE )
+ 436              		.loc 1 333 18
+ 437 0074 09E0     		b	.L18
+ 438              	.L19:
+ 334:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             {
+ 335:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 ulMaxPRIGROUPValue--;
+ 439              		.loc 1 335 35
+ 440 0076 2F4B     		ldr	r3, .L23+20
+ 441 0078 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 18
+
+
+ 442 007a 013B     		subs	r3, r3, #1
+ 443 007c 2D4A     		ldr	r2, .L23+20
+ 444 007e 1360     		str	r3, [r2]
+ 336:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 ucMaxPriorityValue <<= ( uint8_t ) 0x01;
+ 445              		.loc 1 336 36
+ 446 0080 FB78     		ldrb	r3, [r7, #3]
+ 447 0082 DBB2     		uxtb	r3, r3
+ 448 0084 5B00     		lsls	r3, r3, #1
+ 449 0086 DBB2     		uxtb	r3, r3
+ 450 0088 FB70     		strb	r3, [r7, #3]
+ 451              	.L18:
+ 333:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             {
+ 452              		.loc 1 333 41
+ 453 008a FB78     		ldrb	r3, [r7, #3]
+ 454 008c DBB2     		uxtb	r3, r3
+ 455 008e 03F08003 		and	r3, r3, #128
+ 333:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             {
+ 456              		.loc 1 333 18
+ 457 0092 802B     		cmp	r3, #128
+ 458 0094 EFD0     		beq	.L19
+ 337:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             }
+ 338:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 339:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             #ifdef __NVIC_PRIO_BITS
+ 340:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 {
+ 341:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                     /* Check the CMSIS configuration that defines the number of
+ 342:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                      * priority bits matches the number of priority bits actually queried
+ 343:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                      * from the hardware. */
+ 344:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                     configASSERT( ( portMAX_PRIGROUP_BITS - ulMaxPRIGROUPValue ) == __NVIC_PRIO_BIT
+ 345:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 }
+ 346:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             #endif
+ 347:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 348:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             #ifdef configPRIO_BITS
+ 349:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 {
+ 350:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                     /* Check the FreeRTOS configuration that defines the number of
+ 351:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                      * priority bits matches the number of priority bits actually queried
+ 352:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                      * from the hardware. */
+ 353:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                     configASSERT( ( portMAX_PRIGROUP_BITS - ulMaxPRIGROUPValue ) == configPRIO_BITS
+ 459              		.loc 1 353 21
+ 460 0096 274B     		ldr	r3, .L23+20
+ 461 0098 1B68     		ldr	r3, [r3]
+ 462 009a C3F10703 		rsb	r3, r3, #7
+ 463 009e 042B     		cmp	r3, #4
+ 464 00a0 0AD0     		beq	.L20
+ 465              	.LBB40:
+ 466              	.LBB41:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 467              		.loc 2 198 9
+ 468              		.syntax unified
+ 469              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 470 00a2 4FF05003 			mov r3, #80												
+ 471 00a6 83F31188 		msr basepri, r3											
+ 472 00aa BFF36F8F 		isb														
+ 473 00ae BFF34F8F 		dsb														
+ 474              	
+ 475              	@ 0 "" 2
+ 476              		.thumb
+ 477              		.syntax unified
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 19
+
+
+ 478 00b2 BB60     		str	r3, [r7, #8]
+ 479              		.loc 2 206 5
+ 480 00b4 00BF     		nop
+ 481              	.L21:
+ 482              	.LBE41:
+ 483              	.LBE40:
+ 484              		.loc 1 353 21 discriminator 4
+ 485 00b6 FEE7     		b	.L21
+ 486              	.L20:
+ 354:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 }
+ 355:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             #endif
+ 356:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 357:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Shift the priority group value back to its position within the AIRCR
+ 358:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * register. */
+ 359:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulMaxPRIGROUPValue <<= portPRIGROUP_SHIFT;
+ 487              		.loc 1 359 32
+ 488 00b8 1E4B     		ldr	r3, .L23+20
+ 489 00ba 1B68     		ldr	r3, [r3]
+ 490 00bc 1B02     		lsls	r3, r3, #8
+ 491 00be 1D4A     		ldr	r2, .L23+20
+ 492 00c0 1360     		str	r3, [r2]
+ 360:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulMaxPRIGROUPValue &= portPRIORITY_GROUP_MASK;
+ 493              		.loc 1 360 32
+ 494 00c2 1C4B     		ldr	r3, .L23+20
+ 495 00c4 1B68     		ldr	r3, [r3]
+ 496 00c6 03F4E063 		and	r3, r3, #1792
+ 497 00ca 1A4A     		ldr	r2, .L23+20
+ 498 00cc 1360     		str	r3, [r2]
+ 361:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 362:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Restore the clobbered interrupt priority register to its original
+ 363:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * value. */
+ 364:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             *pucFirstUserPriorityRegister = ulOriginalPriority;
+ 499              		.loc 1 364 43
+ 500 00ce 7B68     		ldr	r3, [r7, #4]
+ 501 00d0 DAB2     		uxtb	r2, r3
+ 502 00d2 7B69     		ldr	r3, [r7, #20]
+ 503 00d4 1A70     		strb	r2, [r3]
+ 504              	.LBE39:
+ 365:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 366:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #endif /* configASSERT_DEFINED */
+ 367:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 368:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Make PendSV and SysTick the lowest priority interrupts. */
+ 369:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR3_REG |= portNVIC_PENDSV_PRI;
+ 505              		.loc 1 369 24
+ 506 00d6 184B     		ldr	r3, .L23+24
+ 507 00d8 1B68     		ldr	r3, [r3]
+ 508 00da 174A     		ldr	r2, .L23+24
+ 509 00dc 43F47003 		orr	r3, r3, #15728640
+ 510 00e0 1360     		str	r3, [r2]
+ 370:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR3_REG |= portNVIC_SYSTICK_PRI;
+ 511              		.loc 1 370 24
+ 512 00e2 154B     		ldr	r3, .L23+24
+ 513 00e4 1B68     		ldr	r3, [r3]
+ 514 00e6 144A     		ldr	r2, .L23+24
+ 515 00e8 43F07043 		orr	r3, r3, #-268435456
+ 516 00ec 1360     		str	r3, [r2]
+ 371:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 20
+
+
+ 372:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Start the timer that generates the tick ISR.  Interrupts are disabled
+ 373:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * here already. */
+ 374:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     vPortSetupTimerInterrupt();
+ 517              		.loc 1 374 5
+ 518 00ee FFF7FEFF 		bl	vPortSetupTimerInterrupt
+ 375:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 376:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Initialise the critical nesting count ready for the first task. */
+ 377:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     uxCriticalNesting = 0;
+ 519              		.loc 1 377 23
+ 520 00f2 124B     		ldr	r3, .L23+28
+ 521 00f4 0022     		movs	r2, #0
+ 522 00f6 1A60     		str	r2, [r3]
+ 378:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 379:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Ensure the VFP is enabled - it should be anyway. */
+ 380:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     vPortEnableVFP();
+ 523              		.loc 1 380 5
+ 524 00f8 FFF7FEFF 		bl	vPortEnableVFP
+ 381:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 382:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Lazy save always. */
+ 383:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     *( portFPCCR ) |= portASPEN_AND_LSPEN_BITS;
+ 525              		.loc 1 383 20
+ 526 00fc 104B     		ldr	r3, .L23+32
+ 527 00fe 1B68     		ldr	r3, [r3]
+ 528 0100 0F4A     		ldr	r2, .L23+32
+ 529 0102 43F04043 		orr	r3, r3, #-1073741824
+ 530 0106 1360     		str	r3, [r2]
+ 384:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 385:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Start the first task. */
+ 386:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     prvPortStartFirstTask();
+ 531              		.loc 1 386 5
+ 532 0108 FFF7FEFF 		bl	prvPortStartFirstTask
+ 387:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 388:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Should never get here as the tasks will now be executing!  Call the task
+ 389:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * exit error function to prevent compiler warnings about a static function
+ 390:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * not being called in the case that the application writer overrides this
+ 391:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * functionality by defining configTASK_RETURN_ADDRESS.  Call
+ 392:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * vTaskSwitchContext() so link time optimisation does not remove the
+ 393:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * symbol. */
+ 394:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     vTaskSwitchContext();
+ 533              		.loc 1 394 5
+ 534 010c FFF7FEFF 		bl	vTaskSwitchContext
+ 395:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     prvTaskExitError();
+ 535              		.loc 1 395 5
+ 536 0110 FFF7FEFF 		bl	prvTaskExitError
+ 396:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 397:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Should not get here! */
+ 398:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     return 0;
+ 537              		.loc 1 398 12
+ 538 0114 0023     		movs	r3, #0
+ 399:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 539              		.loc 1 399 1
+ 540 0116 1846     		mov	r0, r3
+ 541 0118 1837     		adds	r7, r7, #24
+ 542              	.LCFI15:
+ 543              		.cfi_def_cfa_offset 8
+ 544 011a BD46     		mov	sp, r7
+ 545              	.LCFI16:
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 21
+
+
+ 546              		.cfi_def_cfa_register 13
+ 547              		@ sp needed
+ 548 011c 80BD     		pop	{r7, pc}
+ 549              	.L24:
+ 550 011e 00BF     		.align	2
+ 551              	.L23:
+ 552 0120 00ED00E0 		.word	-536810240
+ 553 0124 71C20F41 		.word	1091551857
+ 554 0128 70C20F41 		.word	1091551856
+ 555 012c 00E400E0 		.word	-536812544
+ 556 0130 00000000 		.word	ucMaxSysCallPriority
+ 557 0134 00000000 		.word	ulMaxPRIGROUPValue
+ 558 0138 20ED00E0 		.word	-536810208
+ 559 013c 00000000 		.word	uxCriticalNesting
+ 560 0140 34EF00E0 		.word	-536809676
+ 561              		.cfi_endproc
+ 562              	.LFE9:
+ 564              		.section	.text.vPortEndScheduler,"ax",%progbits
+ 565              		.align	1
+ 566              		.global	vPortEndScheduler
+ 567              		.syntax unified
+ 568              		.thumb
+ 569              		.thumb_func
+ 570              		.fpu fpv4-sp-d16
+ 572              	vPortEndScheduler:
+ 573              	.LFB10:
+ 400:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 401:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 402:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void vPortEndScheduler( void )
+ 403:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 574              		.loc 1 403 1
+ 575              		.cfi_startproc
+ 576              		@ args = 0, pretend = 0, frame = 8
+ 577              		@ frame_needed = 1, uses_anonymous_args = 0
+ 578              		@ link register save eliminated.
+ 579 0000 80B4     		push	{r7}
+ 580              	.LCFI17:
+ 581              		.cfi_def_cfa_offset 4
+ 582              		.cfi_offset 7, -4
+ 583 0002 83B0     		sub	sp, sp, #12
+ 584              	.LCFI18:
+ 585              		.cfi_def_cfa_offset 16
+ 586 0004 00AF     		add	r7, sp, #0
+ 587              	.LCFI19:
+ 588              		.cfi_def_cfa_register 7
+ 404:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Not implemented in ports where there is nothing to return to.
+ 405:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * Artificially force an assert. */
+ 406:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     configASSERT( uxCriticalNesting == 1000UL );
+ 589              		.loc 1 406 5
+ 590 0006 0B4B     		ldr	r3, .L29
+ 591 0008 1B68     		ldr	r3, [r3]
+ 592 000a B3F57A7F 		cmp	r3, #1000
+ 593 000e 0AD0     		beq	.L28
+ 594              	.LBB42:
+ 595              	.LBB43:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 596              		.loc 2 198 9
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 22
+
+
+ 597              		.syntax unified
+ 598              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 599 0010 4FF05003 			mov r3, #80												
+ 600 0014 83F31188 		msr basepri, r3											
+ 601 0018 BFF36F8F 		isb														
+ 602 001c BFF34F8F 		dsb														
+ 603              	
+ 604              	@ 0 "" 2
+ 605              		.thumb
+ 606              		.syntax unified
+ 607 0020 7B60     		str	r3, [r7, #4]
+ 608              		.loc 2 206 5
+ 609 0022 00BF     		nop
+ 610              	.L27:
+ 611              	.LBE43:
+ 612              	.LBE42:
+ 613              		.loc 1 406 5 discriminator 1
+ 614 0024 FEE7     		b	.L27
+ 615              	.L28:
+ 407:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 616              		.loc 1 407 1
+ 617 0026 00BF     		nop
+ 618 0028 0C37     		adds	r7, r7, #12
+ 619              	.LCFI20:
+ 620              		.cfi_def_cfa_offset 4
+ 621 002a BD46     		mov	sp, r7
+ 622              	.LCFI21:
+ 623              		.cfi_def_cfa_register 13
+ 624              		@ sp needed
+ 625 002c 5DF8047B 		ldr	r7, [sp], #4
+ 626              	.LCFI22:
+ 627              		.cfi_restore 7
+ 628              		.cfi_def_cfa_offset 0
+ 629 0030 7047     		bx	lr
+ 630              	.L30:
+ 631 0032 00BF     		.align	2
+ 632              	.L29:
+ 633 0034 00000000 		.word	uxCriticalNesting
+ 634              		.cfi_endproc
+ 635              	.LFE10:
+ 637              		.section	.text.vPortEnterCritical,"ax",%progbits
+ 638              		.align	1
+ 639              		.global	vPortEnterCritical
+ 640              		.syntax unified
+ 641              		.thumb
+ 642              		.thumb_func
+ 643              		.fpu fpv4-sp-d16
+ 645              	vPortEnterCritical:
+ 646              	.LFB11:
+ 408:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 409:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 410:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void vPortEnterCritical( void )
+ 411:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 647              		.loc 1 411 1
+ 648              		.cfi_startproc
+ 649              		@ args = 0, pretend = 0, frame = 8
+ 650              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 23
+
+
+ 651              		@ link register save eliminated.
+ 652 0000 80B4     		push	{r7}
+ 653              	.LCFI23:
+ 654              		.cfi_def_cfa_offset 4
+ 655              		.cfi_offset 7, -4
+ 656 0002 83B0     		sub	sp, sp, #12
+ 657              	.LCFI24:
+ 658              		.cfi_def_cfa_offset 16
+ 659 0004 00AF     		add	r7, sp, #0
+ 660              	.LCFI25:
+ 661              		.cfi_def_cfa_register 7
+ 662              	.LBB44:
+ 663              	.LBB45:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 664              		.loc 2 198 9
+ 665              		.syntax unified
+ 666              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 667 0006 4FF05003 			mov r3, #80												
+ 668 000a 83F31188 		msr basepri, r3											
+ 669 000e BFF36F8F 		isb														
+ 670 0012 BFF34F8F 		dsb														
+ 671              	
+ 672              	@ 0 "" 2
+ 673              		.thumb
+ 674              		.syntax unified
+ 675 0016 7B60     		str	r3, [r7, #4]
+ 676              		.loc 2 206 5
+ 677 0018 00BF     		nop
+ 678              	.LBE45:
+ 679              	.LBE44:
+ 412:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portDISABLE_INTERRUPTS();
+ 413:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     uxCriticalNesting++;
+ 680              		.loc 1 413 22
+ 681 001a 0F4B     		ldr	r3, .L35
+ 682 001c 1B68     		ldr	r3, [r3]
+ 683 001e 0133     		adds	r3, r3, #1
+ 684 0020 0D4A     		ldr	r2, .L35
+ 685 0022 1360     		str	r3, [r2]
+ 414:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 415:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* This is not the interrupt safe version of the enter critical function so
+ 416:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * assert() if it is being called from an interrupt context.  Only API
+ 417:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * functions that end in "FromISR" can be used in an interrupt.  Only assert if
+ 418:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * the critical nesting count is 1 to protect against recursive calls if the
+ 419:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * assert function also uses a critical section. */
+ 420:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     if( uxCriticalNesting == 1 )
+ 686              		.loc 1 420 27
+ 687 0024 0C4B     		ldr	r3, .L35
+ 688 0026 1B68     		ldr	r3, [r3]
+ 689              		.loc 1 420 7
+ 690 0028 012B     		cmp	r3, #1
+ 691 002a 0FD1     		bne	.L34
+ 421:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     {
+ 422:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         configASSERT( ( portNVIC_INT_CTRL_REG & portVECTACTIVE_MASK ) == 0 );
+ 692              		.loc 1 422 9
+ 693 002c 0B4B     		ldr	r3, .L35+4
+ 694 002e 1B68     		ldr	r3, [r3]
+ 695 0030 DBB2     		uxtb	r3, r3
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 24
+
+
+ 696 0032 002B     		cmp	r3, #0
+ 697 0034 0AD0     		beq	.L34
+ 698              	.LBB46:
+ 699              	.LBB47:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 700              		.loc 2 198 9
+ 701              		.syntax unified
+ 702              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 703 0036 4FF05003 			mov r3, #80												
+ 704 003a 83F31188 		msr basepri, r3											
+ 705 003e BFF36F8F 		isb														
+ 706 0042 BFF34F8F 		dsb														
+ 707              	
+ 708              	@ 0 "" 2
+ 709              		.thumb
+ 710              		.syntax unified
+ 711 0046 3B60     		str	r3, [r7]
+ 712              		.loc 2 206 5
+ 713 0048 00BF     		nop
+ 714              	.L33:
+ 715              	.LBE47:
+ 716              	.LBE46:
+ 717              		.loc 1 422 9 discriminator 1
+ 718 004a FEE7     		b	.L33
+ 719              	.L34:
+ 423:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     }
+ 424:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 720              		.loc 1 424 1
+ 721 004c 00BF     		nop
+ 722 004e 0C37     		adds	r7, r7, #12
+ 723              	.LCFI26:
+ 724              		.cfi_def_cfa_offset 4
+ 725 0050 BD46     		mov	sp, r7
+ 726              	.LCFI27:
+ 727              		.cfi_def_cfa_register 13
+ 728              		@ sp needed
+ 729 0052 5DF8047B 		ldr	r7, [sp], #4
+ 730              	.LCFI28:
+ 731              		.cfi_restore 7
+ 732              		.cfi_def_cfa_offset 0
+ 733 0056 7047     		bx	lr
+ 734              	.L36:
+ 735              		.align	2
+ 736              	.L35:
+ 737 0058 00000000 		.word	uxCriticalNesting
+ 738 005c 04ED00E0 		.word	-536810236
+ 739              		.cfi_endproc
+ 740              	.LFE11:
+ 742              		.section	.text.vPortExitCritical,"ax",%progbits
+ 743              		.align	1
+ 744              		.global	vPortExitCritical
+ 745              		.syntax unified
+ 746              		.thumb
+ 747              		.thumb_func
+ 748              		.fpu fpv4-sp-d16
+ 750              	vPortExitCritical:
+ 751              	.LFB12:
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 25
+
+
+ 425:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 426:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 427:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void vPortExitCritical( void )
+ 428:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 752              		.loc 1 428 1
+ 753              		.cfi_startproc
+ 754              		@ args = 0, pretend = 0, frame = 8
+ 755              		@ frame_needed = 1, uses_anonymous_args = 0
+ 756              		@ link register save eliminated.
+ 757 0000 80B4     		push	{r7}
+ 758              	.LCFI29:
+ 759              		.cfi_def_cfa_offset 4
+ 760              		.cfi_offset 7, -4
+ 761 0002 83B0     		sub	sp, sp, #12
+ 762              	.LCFI30:
+ 763              		.cfi_def_cfa_offset 16
+ 764 0004 00AF     		add	r7, sp, #0
+ 765              	.LCFI31:
+ 766              		.cfi_def_cfa_register 7
+ 429:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     configASSERT( uxCriticalNesting );
+ 767              		.loc 1 429 5
+ 768 0006 124B     		ldr	r3, .L42
+ 769 0008 1B68     		ldr	r3, [r3]
+ 770 000a 002B     		cmp	r3, #0
+ 771 000c 0AD1     		bne	.L38
+ 772              	.LBB48:
+ 773              	.LBB49:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 774              		.loc 2 198 9
+ 775              		.syntax unified
+ 776              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 777 000e 4FF05003 			mov r3, #80												
+ 778 0012 83F31188 		msr basepri, r3											
+ 779 0016 BFF36F8F 		isb														
+ 780 001a BFF34F8F 		dsb														
+ 781              	
+ 782              	@ 0 "" 2
+ 783              		.thumb
+ 784              		.syntax unified
+ 785 001e 7B60     		str	r3, [r7, #4]
+ 786              		.loc 2 206 5
+ 787 0020 00BF     		nop
+ 788              	.L39:
+ 789              	.LBE49:
+ 790              	.LBE48:
+ 791              		.loc 1 429 5 discriminator 1
+ 792 0022 FEE7     		b	.L39
+ 793              	.L38:
+ 430:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     uxCriticalNesting--;
+ 794              		.loc 1 430 22
+ 795 0024 0A4B     		ldr	r3, .L42
+ 796 0026 1B68     		ldr	r3, [r3]
+ 797 0028 013B     		subs	r3, r3, #1
+ 798 002a 094A     		ldr	r2, .L42
+ 799 002c 1360     		str	r3, [r2]
+ 431:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 432:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     if( uxCriticalNesting == 0 )
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 26
+
+
+ 800              		.loc 1 432 27
+ 801 002e 084B     		ldr	r3, .L42
+ 802 0030 1B68     		ldr	r3, [r3]
+ 803              		.loc 1 432 7
+ 804 0032 002B     		cmp	r3, #0
+ 805 0034 05D1     		bne	.L41
+ 806 0036 0023     		movs	r3, #0
+ 807 0038 3B60     		str	r3, [r7]
+ 808              	.LBB50:
+ 809              	.LBB51:
+ 207:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 208:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 209:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 210:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static uint32_t ulPortRaiseBASEPRI( void )
+ 211:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 212:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulOriginalBASEPRI, ulNewBASEPRI;
+ 213:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 214:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 215:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 216:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mrs %0, basepri											\n"\
+ 217:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mov %1, %2												\n"\
+ 218:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %1											\n"\
+ 219:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	isb														\n"\
+ 220:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	dsb														\n"\
+ 221:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             : "=r" ( ulOriginalBASEPRI ), "=r" ( ulNewBASEPRI ) : "i" ( configMAX_SYSCALL_INTERRUPT
+ 222:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 223:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 224:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* This return will not be reached but is necessary to prevent compiler
+ 225:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****          * warnings. */
+ 226:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         return ulOriginalBASEPRI;
+ 227:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 228:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 229:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 230:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static void vPortSetBASEPRI( uint32_t ulNewMaskValue )
+ 231:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 232:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 810              		.loc 2 232 9
+ 811 003a 3B68     		ldr	r3, [r7]
+ 812              		.syntax unified
+ 813              	@ 232 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 814 003c 83F31188 			msr basepri, r3	
+ 815              	@ 0 "" 2
+ 233:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 234:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %0	"::"r" ( ulNewMaskValue ) : "memory"
+ 235:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 236:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 816              		.loc 2 236 5
+ 817              		.thumb
+ 818              		.syntax unified
+ 819 0040 00BF     		nop
+ 820              	.L41:
+ 821              	.LBE51:
+ 822              	.LBE50:
+ 433:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     {
+ 434:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         portENABLE_INTERRUPTS();
+ 435:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     }
+ 436:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 27
+
+
+ 823              		.loc 1 436 1
+ 824 0042 00BF     		nop
+ 825 0044 0C37     		adds	r7, r7, #12
+ 826              	.LCFI32:
+ 827              		.cfi_def_cfa_offset 4
+ 828 0046 BD46     		mov	sp, r7
+ 829              	.LCFI33:
+ 830              		.cfi_def_cfa_register 13
+ 831              		@ sp needed
+ 832 0048 5DF8047B 		ldr	r7, [sp], #4
+ 833              	.LCFI34:
+ 834              		.cfi_restore 7
+ 835              		.cfi_def_cfa_offset 0
+ 836 004c 7047     		bx	lr
+ 837              	.L43:
+ 838 004e 00BF     		.align	2
+ 839              	.L42:
+ 840 0050 00000000 		.word	uxCriticalNesting
+ 841              		.cfi_endproc
+ 842              	.LFE12:
+ 844              		.section	.text.PendSV_Handler,"ax",%progbits
+ 845              		.align	1
+ 846              		.global	PendSV_Handler
+ 847              		.syntax unified
+ 848              		.thumb
+ 849              		.thumb_func
+ 850              		.fpu fpv4-sp-d16
+ 852              	PendSV_Handler:
+ 853              	.LFB13:
+ 437:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 438:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 439:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void xPortPendSVHandler( void )
+ 440:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 854              		.loc 1 440 1
+ 855              		.cfi_startproc
+ 856              		@ Naked Function: prologue and epilogue provided by programmer.
+ 857              		@ args = 0, pretend = 0, frame = 0
+ 858              		@ frame_needed = 1, uses_anonymous_args = 0
+ 441:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* This is a naked function. */
+ 442:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 443:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     __asm volatile
+ 859              		.loc 1 443 5
+ 860              		.syntax unified
+ 861              	@ 443 "./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c" 1
+ 862 0000 EFF30980 			mrs r0, psp							
+ 863 0004 BFF36F8F 		isb									
+ 864              											
+ 865 0008 154B     		ldr	r3, pxCurrentTCBConst			
+ 866 000a 1A68     		ldr	r2, [r3]						
+ 867              											
+ 868 000c 1EF0100F 		tst r14, #0x10						
+ 869 0010 08BF     		it eq								
+ 870 0012 20ED108A 		vstmdbeq r0!, {s16-s31}				
+ 871              											
+ 872 0016 20E9F04F 		stmdb r0!, {r4-r11, r14}			
+ 873 001a 1060     		str r0, [r2]						
+ 874              											
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 28
+
+
+ 875 001c 2DE90900 		stmdb sp!, {r0, r3}					
+ 876 0020 4FF05000 		mov r0, #80 							
+ 877 0024 80F31188 		msr basepri, r0						
+ 878 0028 BFF34F8F 		dsb									
+ 879 002c BFF36F8F 		isb									
+ 880 0030 FFF7FEFF 		bl vTaskSwitchContext				
+ 881 0034 4FF00000 		mov r0, #0							
+ 882 0038 80F31188 		msr basepri, r0						
+ 883 003c 09BC     		ldmia sp!, {r0, r3}					
+ 884              											
+ 885 003e 1968     		ldr r1, [r3]						
+ 886 0040 0868     		ldr r0, [r1]						
+ 887              											
+ 888 0042 B0E8F04F 		ldmia r0!, {r4-r11, r14}			
+ 889              											
+ 890 0046 1EF0100F 		tst r14, #0x10						
+ 891 004a 08BF     		it eq								
+ 892 004c B0EC108A 		vldmiaeq r0!, {s16-s31}				
+ 893              											
+ 894 0050 80F30988 		msr psp, r0							
+ 895 0054 BFF36F8F 		isb									
+ 896              											
+ 897              											
+ 898 0058 7047     		bx r14								
+ 899              											
+ 900 005a 00BFAFF3 		.align 4							
+ 900      0080
+ 901 0060 00000000 	pxCurrentTCBConst: .word pxCurrentTCB	
+ 902              	
+ 903              	@ 0 "" 2
+ 444:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     (
+ 445:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	mrs r0, psp							\n"
+ 446:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	isb									\n"
+ 447:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 448:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr	r3, pxCurrentTCBConst			\n"/* Get the location of the current TCB. */
+ 449:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr	r2, [r3]						\n"
+ 450:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 451:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	tst r14, #0x10						\n"/* Is the task using the FPU context?  If so, push high vfp regist
+ 452:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	it eq								\n"
+ 453:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	vstmdbeq r0!, {s16-s31}				\n"
+ 454:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 455:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	stmdb r0!, {r4-r11, r14}			\n"/* Save the core registers. */
+ 456:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	str r0, [r2]						\n"/* Save the new top of stack into the first member of the TCB. */
+ 457:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 458:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	stmdb sp!, {r0, r3}					\n"
+ 459:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	mov r0, %0 							\n"
+ 460:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	msr basepri, r0						\n"
+ 461:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	dsb									\n"
+ 462:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	isb									\n"
+ 463:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	bl vTaskSwitchContext				\n"
+ 464:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	mov r0, #0							\n"
+ 465:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	msr basepri, r0						\n"
+ 466:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldmia sp!, {r0, r3}					\n"
+ 467:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 468:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr r1, [r3]						\n"/* The first item in pxCurrentTCB is the task top of stack. */
+ 469:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr r0, [r1]						\n"
+ 470:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 29
+
+
+ 471:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldmia r0!, {r4-r11, r14}			\n"/* Pop the core registers. */
+ 472:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 473:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	tst r14, #0x10						\n"/* Is the task using the FPU context?  If so, pop the high vfp reg
+ 474:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	it eq								\n"
+ 475:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	vldmiaeq r0!, {s16-s31}				\n"
+ 476:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 477:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	msr psp, r0							\n"
+ 478:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	isb									\n"
+ 479:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 480:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         #ifdef WORKAROUND_PMU_CM001 /* XMC4000 specific errata workaround. */
+ 481:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             #if WORKAROUND_PMU_CM001 == 1
+ 482:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 "			push { r14 }				\n"
+ 483:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 "			pop { pc }					\n"
+ 484:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             #endif
+ 485:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         #endif
+ 486:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 487:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	bx r14								\n"
+ 488:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "										\n"
+ 489:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	.align 4							\n"
+ 490:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "pxCurrentTCBConst: .word pxCurrentTCB	\n"
+ 491:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         ::"i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY )
+ 492:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     );
+ 493:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 904              		.loc 1 493 1
+ 905              		.thumb
+ 906              		.syntax unified
+ 907 0064 00BF     		nop
+ 908              		.cfi_endproc
+ 909              	.LFE13:
+ 911 0066 00BF     		.section	.text.SysTick_Handler,"ax",%progbits
+ 912              		.align	1
+ 913              		.global	SysTick_Handler
+ 914              		.syntax unified
+ 915              		.thumb
+ 916              		.thumb_func
+ 917              		.fpu fpv4-sp-d16
+ 919              	SysTick_Handler:
+ 920              	.LFB14:
+ 494:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 495:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 496:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** void xPortSysTickHandler( void )
+ 497:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 921              		.loc 1 497 1
+ 922              		.cfi_startproc
+ 923              		@ args = 0, pretend = 0, frame = 8
+ 924              		@ frame_needed = 1, uses_anonymous_args = 0
+ 925 0000 80B5     		push	{r7, lr}
+ 926              	.LCFI35:
+ 927              		.cfi_def_cfa_offset 8
+ 928              		.cfi_offset 7, -8
+ 929              		.cfi_offset 14, -4
+ 930 0002 82B0     		sub	sp, sp, #8
+ 931              	.LCFI36:
+ 932              		.cfi_def_cfa_offset 16
+ 933 0004 00AF     		add	r7, sp, #0
+ 934              	.LCFI37:
+ 935              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 30
+
+
+ 936              	.LBB52:
+ 937              	.LBB53:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 938              		.loc 2 198 9
+ 939              		.syntax unified
+ 940              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 941 0006 4FF05003 			mov r3, #80												
+ 942 000a 83F31188 		msr basepri, r3											
+ 943 000e BFF36F8F 		isb														
+ 944 0012 BFF34F8F 		dsb														
+ 945              	
+ 946              	@ 0 "" 2
+ 947              		.thumb
+ 948              		.syntax unified
+ 949 0016 7B60     		str	r3, [r7, #4]
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 950              		.loc 2 206 5
+ 951 0018 00BF     		nop
+ 952              	.LBE53:
+ 953              	.LBE52:
+ 498:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* The SysTick runs at the lowest interrupt priority, so when this interrupt
+ 499:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * executes all interrupts must be unmasked.  There is therefore no need to
+ 500:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * save and then restore the interrupt mask value as its value is already
+ 501:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****      * known. */
+ 502:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portDISABLE_INTERRUPTS();
+ 503:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     {
+ 504:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Increment the RTOS tick. */
+ 505:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         if( xTaskIncrementTick() != pdFALSE )
+ 954              		.loc 1 505 13
+ 955 001a FFF7FEFF 		bl	xTaskIncrementTick
+ 956 001e 0346     		mov	r3, r0
+ 957              		.loc 1 505 11
+ 958 0020 002B     		cmp	r3, #0
+ 959 0022 03D0     		beq	.L46
+ 506:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 507:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* A context switch is required.  Context switching is performed in
+ 508:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * the PendSV interrupt.  Pend the PendSV interrupt. */
+ 509:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
+ 960              		.loc 1 509 13
+ 961 0024 064B     		ldr	r3, .L47
+ 962              		.loc 1 509 35
+ 963 0026 4FF08052 		mov	r2, #268435456
+ 964 002a 1A60     		str	r2, [r3]
+ 965              	.L46:
+ 966 002c 0023     		movs	r3, #0
+ 967 002e 3B60     		str	r3, [r7]
+ 968              	.LBB54:
+ 969              	.LBB55:
+ 232:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 970              		.loc 2 232 9
+ 971 0030 3B68     		ldr	r3, [r7]
+ 972              		.syntax unified
+ 973              	@ 232 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 974 0032 83F31188 			msr basepri, r3	
+ 975              	@ 0 "" 2
+ 976              		.loc 2 236 5
+ 977              		.thumb
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 31
+
+
+ 978              		.syntax unified
+ 979 0036 00BF     		nop
+ 980              	.LBE55:
+ 981              	.LBE54:
+ 510:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 511:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     }
+ 512:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portENABLE_INTERRUPTS();
+ 513:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 982              		.loc 1 513 1
+ 983 0038 00BF     		nop
+ 984 003a 0837     		adds	r7, r7, #8
+ 985              	.LCFI38:
+ 986              		.cfi_def_cfa_offset 8
+ 987 003c BD46     		mov	sp, r7
+ 988              	.LCFI39:
+ 989              		.cfi_def_cfa_register 13
+ 990              		@ sp needed
+ 991 003e 80BD     		pop	{r7, pc}
+ 992              	.L48:
+ 993              		.align	2
+ 994              	.L47:
+ 995 0040 04ED00E0 		.word	-536810236
+ 996              		.cfi_endproc
+ 997              	.LFE14:
+ 999              		.section	.text.vPortSetupTimerInterrupt,"ax",%progbits
+ 1000              		.align	1
+ 1001              		.weak	vPortSetupTimerInterrupt
+ 1002              		.syntax unified
+ 1003              		.thumb
+ 1004              		.thumb_func
+ 1005              		.fpu fpv4-sp-d16
+ 1007              	vPortSetupTimerInterrupt:
+ 1008              	.LFB15:
+ 514:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 515:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 516:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #if ( configUSE_TICKLESS_IDLE == 1 )
+ 517:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 518:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     __attribute__( ( weak ) ) void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime )
+ 519:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     {
+ 520:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         uint32_t ulReloadValue, ulCompleteTickPeriods, ulCompletedSysTickDecrements;
+ 521:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         TickType_t xModifiableIdleTime;
+ 522:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 523:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Make sure the SysTick reload value does not overflow the counter. */
+ 524:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         if( xExpectedIdleTime > xMaximumPossibleSuppressedTicks )
+ 525:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 526:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             xExpectedIdleTime = xMaximumPossibleSuppressedTicks;
+ 527:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 528:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 529:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Stop the SysTick momentarily.  The time the SysTick is stopped for
+ 530:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * is accounted for as best it can be, but using the tickless mode will
+ 531:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * inevitably result in some tiny drift of the time maintained by the
+ 532:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * kernel with respect to calendar time. */
+ 533:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         portNVIC_SYSTICK_CTRL_REG &= ~portNVIC_SYSTICK_ENABLE_BIT;
+ 534:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 535:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Calculate the reload value required to wait xExpectedIdleTime
+ 536:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * tick periods.  -1 is used because this code will execute part way
+ 537:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * through one of the tick periods. */
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 32
+
+
+ 538:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         ulReloadValue = portNVIC_SYSTICK_CURRENT_VALUE_REG + ( ulTimerCountsForOneTick * ( xExpecte
+ 539:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 540:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         if( ulReloadValue > ulStoppedTimerCompensation )
+ 541:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 542:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulReloadValue -= ulStoppedTimerCompensation;
+ 543:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 544:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 545:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Enter a critical section but don't use the taskENTER_CRITICAL()
+ 546:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * method as that will mask interrupts that should exit sleep mode. */
+ 547:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "cpsid i" ::: "memory" );
+ 548:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "dsb" );
+ 549:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "isb" );
+ 550:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 551:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* If a context switch is pending or a task is waiting for the scheduler
+ 552:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * to be unsuspended then abandon the low power entry. */
+ 553:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         if( eTaskConfirmSleepModeStatus() == eAbortSleep )
+ 554:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 555:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Restart from whatever is left in the count register to complete
+ 556:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * this tick period. */
+ 557:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_LOAD_REG = portNVIC_SYSTICK_CURRENT_VALUE_REG;
+ 558:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 559:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick. */
+ 560:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG |= portNVIC_SYSTICK_ENABLE_BIT;
+ 561:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 562:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Reset the reload register to the value required for normal tick
+ 563:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * periods. */
+ 564:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
+ 565:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 566:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Re-enable interrupts - see comments above the cpsid instruction()
+ 567:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * above. */
+ 568:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
+ 569:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 570:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         else
+ 571:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 572:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Set the new reload value. */
+ 573:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_LOAD_REG = ulReloadValue;
+ 574:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 575:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Clear the SysTick count flag and set the count value back to
+ 576:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * zero. */
+ 577:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 578:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 579:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick. */
+ 580:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG |= portNVIC_SYSTICK_ENABLE_BIT;
+ 581:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 582:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Sleep until something happens.  configPRE_SLEEP_PROCESSING() can
+ 583:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * set its parameter to 0 to indicate that its implementation contains
+ 584:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * its own wait for interrupt or wait for event instruction, and so wfi
+ 585:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * should not be executed again.  However, the original expected idle
+ 586:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * time variable must remain unmodified, so a copy is taken. */
+ 587:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             xModifiableIdleTime = xExpectedIdleTime;
+ 588:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             configPRE_SLEEP_PROCESSING( xModifiableIdleTime );
+ 589:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 590:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             if( xModifiableIdleTime > 0 )
+ 591:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             {
+ 592:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "dsb" ::: "memory" );
+ 593:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "wfi" );
+ 594:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "isb" );
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 33
+
+
+ 595:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             }
+ 596:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 597:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             configPOST_SLEEP_PROCESSING( xExpectedIdleTime );
+ 598:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 599:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Re-enable interrupts to allow the interrupt that brought the MCU
+ 600:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * out of sleep mode to execute immediately.  see comments above
+ 601:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * __disable_interrupt() call above. */
+ 602:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
+ 603:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "dsb" );
+ 604:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "isb" );
+ 605:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 606:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Disable interrupts again because the clock is about to be stopped
+ 607:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * and interrupts that execute while the clock is stopped will increase
+ 608:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * any slippage between the time maintained by the RTOS and calendar
+ 609:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * time. */
+ 610:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsid i" ::: "memory" );
+ 611:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "dsb" );
+ 612:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "isb" );
+ 613:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 614:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Disable the SysTick clock without reading the
+ 615:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * portNVIC_SYSTICK_CTRL_REG register to ensure the
+ 616:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * portNVIC_SYSTICK_COUNT_FLAG_BIT is not cleared if it is set.  Again,
+ 617:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * the time the SysTick is stopped for is accounted for as best it can
+ 618:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * be, but using the tickless mode will inevitably result in some tiny
+ 619:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * drift of the time maintained by the kernel with respect to calendar
+ 620:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * time*/
+ 621:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT );
+ 622:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 623:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Determine if the SysTick clock has already counted to zero and
+ 624:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * been set back to the current reload value (the reload back being
+ 625:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * correct for the entire expected idle time) or if the SysTick is yet
+ 626:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * to count to zero (in which case an interrupt other than the SysTick
+ 627:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * must have brought the system out of sleep mode). */
+ 628:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             if( ( portNVIC_SYSTICK_CTRL_REG & portNVIC_SYSTICK_COUNT_FLAG_BIT ) != 0 )
+ 629:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             {
+ 630:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 uint32_t ulCalculatedLoadValue;
+ 631:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 632:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 /* The tick interrupt is already pending, and the SysTick count
+ 633:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * reloaded with ulReloadValue.  Reset the
+ 634:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * portNVIC_SYSTICK_LOAD_REG with whatever remains of this tick
+ 635:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * period. */
+ 636:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL ) - ( ulReloadValue - portN
+ 637:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 638:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 /* Don't allow a tiny value, or values that have somehow
+ 639:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * underflowed because the post sleep hook did something
+ 640:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * that took too long. */
+ 641:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 if( ( ulCalculatedLoadValue < ulStoppedTimerCompensation ) || ( ulCalculatedLoadVal
+ 642:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 {
+ 643:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                     ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL );
+ 644:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 }
+ 645:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 646:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulCalculatedLoadValue;
+ 647:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 648:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 /* As the pending tick will be processed as soon as this
+ 649:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * function exits, the tick value maintained by the tick is stepped
+ 650:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * forward by one less than the time spent waiting. */
+ 651:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 ulCompleteTickPeriods = xExpectedIdleTime - 1UL;
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 34
+
+
+ 652:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             }
+ 653:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             else
+ 654:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             {
+ 655:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 /* Something other than the tick interrupt ended the sleep.
+ 656:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * Work out how long the sleep lasted rounded to complete tick
+ 657:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * periods (not the ulReload value which accounted for part
+ 658:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * ticks). */
+ 659:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 ulCompletedSysTickDecrements = ( xExpectedIdleTime * ulTimerCountsForOneTick ) - po
+ 660:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 661:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 /* How many complete tick periods passed while the processor
+ 662:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * was waiting? */
+ 663:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 ulCompleteTickPeriods = ulCompletedSysTickDecrements / ulTimerCountsForOneTick;
+ 664:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 665:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 /* The reload value is set to whatever fraction of a single tick
+ 666:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                  * period remains. */
+ 667:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ( ( ulCompleteTickPeriods + 1UL ) * ulTimerCountsForOne
+ 668:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             }
+ 669:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 670:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick so it runs from portNVIC_SYSTICK_LOAD_REG
+ 671:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * again, then set portNVIC_SYSTICK_LOAD_REG back to its standard
+ 672:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * value. */
+ 673:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 674:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG |= portNVIC_SYSTICK_ENABLE_BIT;
+ 675:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             vTaskStepTick( ulCompleteTickPeriods );
+ 676:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
+ 677:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 678:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Exit with interrupts enabled. */
+ 679:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
+ 680:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 681:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     }
+ 682:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 683:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #endif /* #if configUSE_TICKLESS_IDLE */
+ 684:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 685:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 686:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*
+ 687:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * Setup the systick timer to generate the tick interrupts at the required
+ 688:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  * frequency.
+ 689:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****  */
+ 690:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** __attribute__( ( weak ) ) void vPortSetupTimerInterrupt( void )
+ 691:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 1009              		.loc 1 691 1
+ 1010              		.cfi_startproc
+ 1011              		@ args = 0, pretend = 0, frame = 0
+ 1012              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1013              		@ link register save eliminated.
+ 1014 0000 80B4     		push	{r7}
+ 1015              	.LCFI40:
+ 1016              		.cfi_def_cfa_offset 4
+ 1017              		.cfi_offset 7, -4
+ 1018 0002 00AF     		add	r7, sp, #0
+ 1019              	.LCFI41:
+ 1020              		.cfi_def_cfa_register 7
+ 692:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Calculate the constants required to configure the tick interrupt. */
+ 693:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #if ( configUSE_TICKLESS_IDLE == 1 )
+ 694:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 695:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulTimerCountsForOneTick = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ );
+ 696:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             xMaximumPossibleSuppressedTicks = portMAX_24_BIT_NUMBER / ulTimerCountsForOneTick;
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 35
+
+
+ 697:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ulStoppedTimerCompensation = portMISSED_COUNTS_FACTOR / ( configCPU_CLOCK_HZ / configSY
+ 698:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 699:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     #endif /* configUSE_TICKLESS_IDLE */
+ 700:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 701:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Stop and clear the SysTick. */
+ 702:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = 0UL;
+ 1021              		.loc 1 702 5
+ 1022 0004 0B4B     		ldr	r3, .L50
+ 1023              		.loc 1 702 31
+ 1024 0006 0022     		movs	r2, #0
+ 1025 0008 1A60     		str	r2, [r3]
+ 703:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 1026              		.loc 1 703 5
+ 1027 000a 0B4B     		ldr	r3, .L50+4
+ 1028              		.loc 1 703 40
+ 1029 000c 0022     		movs	r2, #0
+ 1030 000e 1A60     		str	r2, [r3]
+ 704:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 705:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     /* Configure SysTick to interrupt at the requested rate. */
+ 706:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_LOAD_REG = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ ) - 1UL;
+ 1031              		.loc 1 706 58
+ 1032 0010 0A4B     		ldr	r3, .L50+8
+ 1033 0012 1B68     		ldr	r3, [r3]
+ 1034 0014 0A4A     		ldr	r2, .L50+12
+ 1035 0016 A2FB0323 		umull	r2, r3, r2, r3
+ 1036 001a 9B09     		lsrs	r3, r3, #6
+ 1037              		.loc 1 706 5
+ 1038 001c 094A     		ldr	r2, .L50+16
+ 1039              		.loc 1 706 81
+ 1040 001e 013B     		subs	r3, r3, #1
+ 1041              		.loc 1 706 31
+ 1042 0020 1360     		str	r3, [r2]
+ 707:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT | portNVIC_SY
+ 1043              		.loc 1 707 5
+ 1044 0022 044B     		ldr	r3, .L50
+ 1045              		.loc 1 707 31
+ 1046 0024 0722     		movs	r2, #7
+ 1047 0026 1A60     		str	r2, [r3]
+ 708:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 1048              		.loc 1 708 1
+ 1049 0028 00BF     		nop
+ 1050 002a BD46     		mov	sp, r7
+ 1051              	.LCFI42:
+ 1052              		.cfi_def_cfa_register 13
+ 1053              		@ sp needed
+ 1054 002c 5DF8047B 		ldr	r7, [sp], #4
+ 1055              	.LCFI43:
+ 1056              		.cfi_restore 7
+ 1057              		.cfi_def_cfa_offset 0
+ 1058 0030 7047     		bx	lr
+ 1059              	.L51:
+ 1060 0032 00BF     		.align	2
+ 1061              	.L50:
+ 1062 0034 10E000E0 		.word	-536813552
+ 1063 0038 18E000E0 		.word	-536813544
+ 1064 003c 00000000 		.word	SystemCoreClock
+ 1065 0040 D34D6210 		.word	274877907
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 36
+
+
+ 1066 0044 14E000E0 		.word	-536813548
+ 1067              		.cfi_endproc
+ 1068              	.LFE15:
+ 1070              		.section	.text.vPortEnableVFP,"ax",%progbits
+ 1071              		.align	1
+ 1072              		.syntax unified
+ 1073              		.thumb
+ 1074              		.thumb_func
+ 1075              		.fpu fpv4-sp-d16
+ 1077              	vPortEnableVFP:
+ 1078              	.LFB16:
+ 709:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 710:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 711:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /* This is a naked function. */
+ 712:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** static void vPortEnableVFP( void )
+ 713:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** {
+ 1079              		.loc 1 713 1
+ 1080              		.cfi_startproc
+ 1081              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1082              		@ args = 0, pretend = 0, frame = 0
+ 1083              		@ frame_needed = 1, uses_anonymous_args = 0
+ 714:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     __asm volatile
+ 1084              		.loc 1 714 5
+ 1085              		.syntax unified
+ 1086              	@ 714 "./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c" 1
+ 1087 0000 DFF80C00 			ldr.w r0, =0xE000ED88		
+ 1088 0004 0168     		ldr r1, [r0]				
+ 1089              									
+ 1090 0006 41F47001 		orr r1, r1, #( 0xf << 20 )	
+ 1091 000a 0160     		str r1, [r0]				
+ 1092 000c 7047     		bx r14						
+ 1093 000e 000088ED 		.ltorg						
+ 1093      00E0
+ 1094              	
+ 1095              	@ 0 "" 2
+ 715:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     (
+ 716:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr.w r0, =0xE000ED88		\n"/* The FPU enable bits are in the CPACR. */
+ 717:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	ldr r1, [r0]				\n"
+ 718:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "								\n"
+ 719:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	orr r1, r1, #( 0xf << 20 )	\n"/* Enable CP10 and CP11 coprocessors, then save back. */
+ 720:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	str r1, [r0]				\n"
+ 721:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	bx r14						\n"
+ 722:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         "	.ltorg						\n"
+ 723:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     );
+ 724:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** }
+ 1096              		.loc 1 724 1
+ 1097              		.thumb
+ 1098              		.syntax unified
+ 1099 0014 00BF     		nop
+ 1100              		.cfi_endproc
+ 1101              	.LFE16:
+ 1103 0016 00BF     		.section	.text.vPortValidateInterruptPriority,"ax",%progbits
+ 1104              		.align	1
+ 1105              		.global	vPortValidateInterruptPriority
+ 1106              		.syntax unified
+ 1107              		.thumb
+ 1108              		.thumb_func
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 37
+
+
+ 1109              		.fpu fpv4-sp-d16
+ 1111              	vPortValidateInterruptPriority:
+ 1112              	.LFB17:
+ 725:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 726:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 727:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** #if ( configASSERT_DEFINED == 1 )
+ 728:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 729:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     void vPortValidateInterruptPriority( void )
+ 730:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     {
+ 1113              		.loc 1 730 5
+ 1114              		.cfi_startproc
+ 1115              		@ args = 0, pretend = 0, frame = 16
+ 1116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1117              		@ link register save eliminated.
+ 1118 0000 80B4     		push	{r7}
+ 1119              	.LCFI44:
+ 1120              		.cfi_def_cfa_offset 4
+ 1121              		.cfi_offset 7, -4
+ 1122 0002 85B0     		sub	sp, sp, #20
+ 1123              	.LCFI45:
+ 1124              		.cfi_def_cfa_offset 24
+ 1125 0004 00AF     		add	r7, sp, #0
+ 1126              	.LCFI46:
+ 1127              		.cfi_def_cfa_register 7
+ 731:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         uint32_t ulCurrentInterrupt;
+ 732:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         uint8_t ucCurrentPriority;
+ 733:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 734:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Obtain the number of the currently executing interrupt. */
+ 735:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
+ 1128              		.loc 1 735 9
+ 1129              		.syntax unified
+ 1130              	@ 735 "./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c" 1
+ 1131 0006 EFF30583 		mrs r3, ipsr
+ 1132              	@ 0 "" 2
+ 1133              		.thumb
+ 1134              		.syntax unified
+ 1135 000a FB60     		str	r3, [r7, #12]
+ 736:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 737:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Is the interrupt number a user defined interrupt? */
+ 738:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         if( ulCurrentInterrupt >= portFIRST_USER_INTERRUPT_NUMBER )
+ 1136              		.loc 1 738 11
+ 1137 000c FB68     		ldr	r3, [r7, #12]
+ 1138 000e 0F2B     		cmp	r3, #15
+ 1139 0010 14D9     		bls	.L54
+ 739:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         {
+ 740:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* Look up the interrupt's priority. */
+ 741:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             ucCurrentPriority = pcInterruptPriorityRegisters[ ulCurrentInterrupt ];
+ 1140              		.loc 1 741 61
+ 1141 0012 174A     		ldr	r2, .L59
+ 1142 0014 FB68     		ldr	r3, [r7, #12]
+ 1143 0016 1344     		add	r3, r3, r2
+ 1144              		.loc 1 741 31
+ 1145 0018 1B78     		ldrb	r3, [r3]
+ 1146 001a FB72     		strb	r3, [r7, #11]
+ 742:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 743:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             /* The following assertion will fail if a service routine (ISR) for
+ 744:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * an interrupt that has been assigned a priority above
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 38
+
+
+ 745:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY calls an ISR safe FreeRTOS API
+ 746:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * function.  ISR safe FreeRTOS API functions must *only* be called
+ 747:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * from interrupts that have been assigned a priority at or below
+ 748:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 749:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              *
+ 750:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * Numerically low interrupt priority numbers represent logically high
+ 751:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * interrupt priorities, therefore the priority of the interrupt must
+ 752:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * be set to a value equal to or numerically *higher* than
+ 753:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 754:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              *
+ 755:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * Interrupts that	use the FreeRTOS API must not be left at their
+ 756:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * default priority of	zero as that is the highest possible priority,
+ 757:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * which is guaranteed to be above configMAX_SYSCALL_INTERRUPT_PRIORITY,
+ 758:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * and	therefore also guaranteed to be invalid.
+ 759:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              *
+ 760:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * FreeRTOS maintains separate thread and ISR API functions to ensure
+ 761:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * interrupt entry is as fast and simple as possible.
+ 762:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              *
+ 763:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * The following links provide detailed information:
+ 764:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * https://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html
+ 765:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****              * https://www.FreeRTOS.org/FAQHelp.html */
+ 766:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****             configASSERT( ucCurrentPriority >= ucMaxSysCallPriority );
+ 1147              		.loc 1 766 13
+ 1148 001c 154B     		ldr	r3, .L59+4
+ 1149 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1150 0020 FA7A     		ldrb	r2, [r7, #11]	@ zero_extendqisi2
+ 1151 0022 9A42     		cmp	r2, r3
+ 1152 0024 0AD2     		bcs	.L54
+ 1153              	.LBB56:
+ 1154              	.LBB57:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 1155              		.loc 2 198 9
+ 1156              		.syntax unified
+ 1157              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 1158 0026 4FF05003 			mov r3, #80												
+ 1159 002a 83F31188 		msr basepri, r3											
+ 1160 002e BFF36F8F 		isb														
+ 1161 0032 BFF34F8F 		dsb														
+ 1162              	
+ 1163              	@ 0 "" 2
+ 1164              		.thumb
+ 1165              		.syntax unified
+ 1166 0036 7B60     		str	r3, [r7, #4]
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 1167              		.loc 2 206 5
+ 1168 0038 00BF     		nop
+ 1169              	.L55:
+ 1170              	.LBE57:
+ 1171              	.LBE56:
+ 1172              		.loc 1 766 13 discriminator 1
+ 1173 003a FEE7     		b	.L55
+ 1174              	.L54:
+ 767:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         }
+ 768:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c **** 
+ 769:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         /* Priority grouping:  The interrupt controller (NVIC) allows the bits
+ 770:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * that define each interrupt's priority to be split between bits that
+ 771:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * define the interrupt's pre-emption priority bits and bits that define
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 39
+
+
+ 772:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * the interrupt's sub-priority.  For simplicity all bits must be defined
+ 773:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * to be pre-emption priority bits.  The following assertion will fail if
+ 774:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * this is not the case (if some bits represent a sub-priority).
+ 775:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          *
+ 776:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * If the application only uses CMSIS libraries for interrupt
+ 777:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * configuration then the correct setting can be achieved on all Cortex-M
+ 778:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * devices by calling NVIC_SetPriorityGrouping( 0 ); before starting the
+ 779:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * scheduler.  Note however that some vendor specific peripheral libraries
+ 780:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * assume a non-zero priority group setting, in which cases using a value
+ 781:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****          * of zero will result in unpredictable behaviour. */
+ 782:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****         configASSERT( ( portAIRCR_REG & portPRIORITY_GROUP_MASK ) <= ulMaxPRIGROUPValue );
+ 1175              		.loc 1 782 9
+ 1176 003c 0E4B     		ldr	r3, .L59+8
+ 1177 003e 1B68     		ldr	r3, [r3]
+ 1178 0040 03F4E062 		and	r2, r3, #1792
+ 1179 0044 0D4B     		ldr	r3, .L59+12
+ 1180 0046 1B68     		ldr	r3, [r3]
+ 1181 0048 9A42     		cmp	r2, r3
+ 1182 004a 0AD9     		bls	.L58
+ 1183              	.LBB58:
+ 1184              	.LBB59:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 1185              		.loc 2 198 9
+ 1186              		.syntax unified
+ 1187              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 1188 004c 4FF05003 			mov r3, #80												
+ 1189 0050 83F31188 		msr basepri, r3											
+ 1190 0054 BFF36F8F 		isb														
+ 1191 0058 BFF34F8F 		dsb														
+ 1192              	
+ 1193              	@ 0 "" 2
+ 1194              		.thumb
+ 1195              		.syntax unified
+ 1196 005c 3B60     		str	r3, [r7]
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 1197              		.loc 2 206 5
+ 1198 005e 00BF     		nop
+ 1199              	.L57:
+ 1200              	.LBE59:
+ 1201              	.LBE58:
+ 1202              		.loc 1 782 9 discriminator 2
+ 1203 0060 FEE7     		b	.L57
+ 1204              	.L58:
+ 783:./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/port.c ****     }
+ 1205              		.loc 1 783 5
+ 1206 0062 00BF     		nop
+ 1207 0064 1437     		adds	r7, r7, #20
+ 1208              	.LCFI47:
+ 1209              		.cfi_def_cfa_offset 4
+ 1210 0066 BD46     		mov	sp, r7
+ 1211              	.LCFI48:
+ 1212              		.cfi_def_cfa_register 13
+ 1213              		@ sp needed
+ 1214 0068 5DF8047B 		ldr	r7, [sp], #4
+ 1215              	.LCFI49:
+ 1216              		.cfi_restore 7
+ 1217              		.cfi_def_cfa_offset 0
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 40
+
+
+ 1218 006c 7047     		bx	lr
+ 1219              	.L60:
+ 1220 006e 00BF     		.align	2
+ 1221              	.L59:
+ 1222 0070 F0E300E0 		.word	-536812560
+ 1223 0074 00000000 		.word	ucMaxSysCallPriority
+ 1224 0078 0CED00E0 		.word	-536810228
+ 1225 007c 00000000 		.word	ulMaxPRIGROUPValue
+ 1226              		.cfi_endproc
+ 1227              	.LFE17:
+ 1229              		.text
+ 1230              	.Letext0:
+ 1231              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\arm-none-eabi\\include\\
+ 1232              		.file 4 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\arm-none-eabi\\include\\
+ 1233              		.file 5 "Drivers/FreeRTOS/include/projdefs.h"
+ 1234              		.file 6 "Drivers/FreeRTOS/include/FreeRTOSConfig.h"
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 41
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 port.c
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:18     .data.uxCriticalNesting:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:21     .data.uxCriticalNesting:00000000 uxCriticalNesting
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:26     .bss.ucMaxSysCallPriority:00000000 ucMaxSysCallPriority
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:27     .bss.ucMaxSysCallPriority:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:29     .bss.ulMaxPRIGROUPValue:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:32     .bss.ulMaxPRIGROUPValue:00000000 ulMaxPRIGROUPValue
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:35     .rodata.pcInterruptPriorityRegisters:00000000 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:38     .rodata.pcInterruptPriorityRegisters:00000000 pcInterruptPriorityRegisters
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:41     .text.pxPortInitialiseStack:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:49     .text.pxPortInitialiseStack:00000000 pxPortInitialiseStack
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:138    .text.pxPortInitialiseStack:00000064 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:149    .text.prvTaskExitError:00000000 prvTaskExitError
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:143    .text.prvTaskExitError:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:241    .text.prvTaskExitError:00000054 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:246    .text.SVC_Handler:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:253    .text.SVC_Handler:00000000 SVC_Handler
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:274    .text.SVC_Handler:00000020 pxCurrentTCBConst2
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:274    .text.SVC_Handler:00000020 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:280    .text.SVC_Handler:00000024 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:285    .text.prvPortStartFirstTask:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:291    .text.prvPortStartFirstTask:00000000 prvPortStartFirstTask
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:313    .text.prvPortStartFirstTask:00000022 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:313    .text.prvPortStartFirstTask:00000024 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:319    .text.prvPortStartFirstTask:00000028 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:324    .text.xPortStartScheduler:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:331    .text.xPortStartScheduler:00000000 xPortStartScheduler
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1007   .text.vPortSetupTimerInterrupt:00000000 vPortSetupTimerInterrupt
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1077   .text.vPortEnableVFP:00000000 vPortEnableVFP
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:552    .text.xPortStartScheduler:00000120 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:565    .text.vPortEndScheduler:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:572    .text.vPortEndScheduler:00000000 vPortEndScheduler
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:633    .text.vPortEndScheduler:00000034 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:638    .text.vPortEnterCritical:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:645    .text.vPortEnterCritical:00000000 vPortEnterCritical
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:737    .text.vPortEnterCritical:00000058 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:743    .text.vPortExitCritical:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:750    .text.vPortExitCritical:00000000 vPortExitCritical
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:840    .text.vPortExitCritical:00000050 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:845    .text.PendSV_Handler:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:852    .text.PendSV_Handler:00000000 PendSV_Handler
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:901    .text.PendSV_Handler:00000060 pxCurrentTCBConst
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:901    .text.PendSV_Handler:00000060 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:907    .text.PendSV_Handler:00000064 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:912    .text.SysTick_Handler:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:919    .text.SysTick_Handler:00000000 SysTick_Handler
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:995    .text.SysTick_Handler:00000040 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1000   .text.vPortSetupTimerInterrupt:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1062   .text.vPortSetupTimerInterrupt:00000034 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1071   .text.vPortEnableVFP:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1093   .text.vPortEnableVFP:0000000e $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1093   .text.vPortEnableVFP:00000010 $d
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1099   .text.vPortEnableVFP:00000014 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1104   .text.vPortValidateInterruptPriority:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1111   .text.vPortValidateInterruptPriority:00000000 vPortValidateInterruptPriority
+C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s:1222   .text.vPortValidateInterruptPriority:00000070 $d
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccGsTQne.s 			page 42
+
+
+
+UNDEFINED SYMBOLS
+pxCurrentTCB
+vTaskSwitchContext
+xTaskIncrementTick
+SystemCoreClock

@@ -1,0 +1,2722 @@
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"event_groups.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.xEventGroupCreate,"ax",%progbits
+  18              		.align	1
+  19              		.global	xEventGroupCreate
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	xEventGroupCreate:
+  27              	.LFB5:
+  28              		.file 1 "./Drivers/FreeRTOS/event_groups.c"
+   1:./Drivers/FreeRTOS/event_groups.c **** /*
+   2:./Drivers/FreeRTOS/event_groups.c ****  * FreeRTOS Kernel V10.4.6
+   3:./Drivers/FreeRTOS/event_groups.c ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:./Drivers/FreeRTOS/event_groups.c ****  *
+   5:./Drivers/FreeRTOS/event_groups.c ****  * SPDX-License-Identifier: MIT
+   6:./Drivers/FreeRTOS/event_groups.c ****  *
+   7:./Drivers/FreeRTOS/event_groups.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:./Drivers/FreeRTOS/event_groups.c ****  * this software and associated documentation files (the "Software"), to deal in
+   9:./Drivers/FreeRTOS/event_groups.c ****  * the Software without restriction, including without limitation the rights to
+  10:./Drivers/FreeRTOS/event_groups.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:./Drivers/FreeRTOS/event_groups.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:./Drivers/FreeRTOS/event_groups.c ****  * subject to the following conditions:
+  13:./Drivers/FreeRTOS/event_groups.c ****  *
+  14:./Drivers/FreeRTOS/event_groups.c ****  * The above copyright notice and this permission notice shall be included in all
+  15:./Drivers/FreeRTOS/event_groups.c ****  * copies or substantial portions of the Software.
+  16:./Drivers/FreeRTOS/event_groups.c ****  *
+  17:./Drivers/FreeRTOS/event_groups.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:./Drivers/FreeRTOS/event_groups.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:./Drivers/FreeRTOS/event_groups.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:./Drivers/FreeRTOS/event_groups.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:./Drivers/FreeRTOS/event_groups.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:./Drivers/FreeRTOS/event_groups.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:./Drivers/FreeRTOS/event_groups.c ****  *
+  24:./Drivers/FreeRTOS/event_groups.c ****  * https://www.FreeRTOS.org
+  25:./Drivers/FreeRTOS/event_groups.c ****  * https://github.com/FreeRTOS
+  26:./Drivers/FreeRTOS/event_groups.c ****  *
+  27:./Drivers/FreeRTOS/event_groups.c ****  */
+  28:./Drivers/FreeRTOS/event_groups.c **** 
+  29:./Drivers/FreeRTOS/event_groups.c **** /* Standard includes. */
+  30:./Drivers/FreeRTOS/event_groups.c **** #include <stdlib.h>
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 2
+
+
+  31:./Drivers/FreeRTOS/event_groups.c **** 
+  32:./Drivers/FreeRTOS/event_groups.c **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  33:./Drivers/FreeRTOS/event_groups.c ****  * all the API functions to use the MPU wrappers.  That should only be done when
+  34:./Drivers/FreeRTOS/event_groups.c ****  * task.h is included from an application file. */
+  35:./Drivers/FreeRTOS/event_groups.c **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  36:./Drivers/FreeRTOS/event_groups.c **** 
+  37:./Drivers/FreeRTOS/event_groups.c **** /* FreeRTOS includes. */
+  38:./Drivers/FreeRTOS/event_groups.c **** #include "FreeRTOS.h"
+  39:./Drivers/FreeRTOS/event_groups.c **** #include "task.h"
+  40:./Drivers/FreeRTOS/event_groups.c **** #include "timers.h"
+  41:./Drivers/FreeRTOS/event_groups.c **** #include "event_groups.h"
+  42:./Drivers/FreeRTOS/event_groups.c **** 
+  43:./Drivers/FreeRTOS/event_groups.c **** /* Lint e961, e750 and e9021 are suppressed as a MISRA exception justified
+  44:./Drivers/FreeRTOS/event_groups.c ****  * because the MPU ports require MPU_WRAPPERS_INCLUDED_FROM_API_FILE to be defined
+  45:./Drivers/FreeRTOS/event_groups.c ****  * for the header files above, but not in this file, in order to generate the
+  46:./Drivers/FreeRTOS/event_groups.c ****  * correct privileged Vs unprivileged linkage and placement. */
+  47:./Drivers/FreeRTOS/event_groups.c **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE /*lint !e961 !e750 !e9021 See comment above. */
+  48:./Drivers/FreeRTOS/event_groups.c **** 
+  49:./Drivers/FreeRTOS/event_groups.c **** /* The following bit fields convey control information in a task's event list
+  50:./Drivers/FreeRTOS/event_groups.c ****  * item value.  It is important they don't clash with the
+  51:./Drivers/FreeRTOS/event_groups.c ****  * taskEVENT_LIST_ITEM_VALUE_IN_USE definition. */
+  52:./Drivers/FreeRTOS/event_groups.c **** #if configUSE_16_BIT_TICKS == 1
+  53:./Drivers/FreeRTOS/event_groups.c ****     #define eventCLEAR_EVENTS_ON_EXIT_BIT    0x0100U
+  54:./Drivers/FreeRTOS/event_groups.c ****     #define eventUNBLOCKED_DUE_TO_BIT_SET    0x0200U
+  55:./Drivers/FreeRTOS/event_groups.c ****     #define eventWAIT_FOR_ALL_BITS           0x0400U
+  56:./Drivers/FreeRTOS/event_groups.c ****     #define eventEVENT_BITS_CONTROL_BYTES    0xff00U
+  57:./Drivers/FreeRTOS/event_groups.c **** #else
+  58:./Drivers/FreeRTOS/event_groups.c ****     #define eventCLEAR_EVENTS_ON_EXIT_BIT    0x01000000UL
+  59:./Drivers/FreeRTOS/event_groups.c ****     #define eventUNBLOCKED_DUE_TO_BIT_SET    0x02000000UL
+  60:./Drivers/FreeRTOS/event_groups.c ****     #define eventWAIT_FOR_ALL_BITS           0x04000000UL
+  61:./Drivers/FreeRTOS/event_groups.c ****     #define eventEVENT_BITS_CONTROL_BYTES    0xff000000UL
+  62:./Drivers/FreeRTOS/event_groups.c **** #endif
+  63:./Drivers/FreeRTOS/event_groups.c **** 
+  64:./Drivers/FreeRTOS/event_groups.c **** typedef struct EventGroupDef_t
+  65:./Drivers/FreeRTOS/event_groups.c **** {
+  66:./Drivers/FreeRTOS/event_groups.c ****     EventBits_t uxEventBits;
+  67:./Drivers/FreeRTOS/event_groups.c ****     List_t xTasksWaitingForBits; /*< List of tasks waiting for a bit to be set. */
+  68:./Drivers/FreeRTOS/event_groups.c **** 
+  69:./Drivers/FreeRTOS/event_groups.c ****     #if ( configUSE_TRACE_FACILITY == 1 )
+  70:./Drivers/FreeRTOS/event_groups.c ****         UBaseType_t uxEventGroupNumber;
+  71:./Drivers/FreeRTOS/event_groups.c ****     #endif
+  72:./Drivers/FreeRTOS/event_groups.c **** 
+  73:./Drivers/FreeRTOS/event_groups.c ****     #if ( ( configSUPPORT_STATIC_ALLOCATION == 1 ) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) )
+  74:./Drivers/FreeRTOS/event_groups.c ****         uint8_t ucStaticallyAllocated; /*< Set to pdTRUE if the event group is statically allocated
+  75:./Drivers/FreeRTOS/event_groups.c ****     #endif
+  76:./Drivers/FreeRTOS/event_groups.c **** } EventGroup_t;
+  77:./Drivers/FreeRTOS/event_groups.c **** 
+  78:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+  79:./Drivers/FreeRTOS/event_groups.c **** 
+  80:./Drivers/FreeRTOS/event_groups.c **** /*
+  81:./Drivers/FreeRTOS/event_groups.c ****  * Test the bits set in uxCurrentEventBits to see if the wait condition is met.
+  82:./Drivers/FreeRTOS/event_groups.c ****  * The wait condition is defined by xWaitForAllBits.  If xWaitForAllBits is
+  83:./Drivers/FreeRTOS/event_groups.c ****  * pdTRUE then the wait condition is met if all the bits set in uxBitsToWaitFor
+  84:./Drivers/FreeRTOS/event_groups.c ****  * are also set in uxCurrentEventBits.  If xWaitForAllBits is pdFALSE then the
+  85:./Drivers/FreeRTOS/event_groups.c ****  * wait condition is met if any of the bits set in uxBitsToWait for are also set
+  86:./Drivers/FreeRTOS/event_groups.c ****  * in uxCurrentEventBits.
+  87:./Drivers/FreeRTOS/event_groups.c ****  */
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 3
+
+
+  88:./Drivers/FreeRTOS/event_groups.c **** static BaseType_t prvTestWaitCondition( const EventBits_t uxCurrentEventBits,
+  89:./Drivers/FreeRTOS/event_groups.c ****                                         const EventBits_t uxBitsToWaitFor,
+  90:./Drivers/FreeRTOS/event_groups.c ****                                         const BaseType_t xWaitForAllBits ) PRIVILEGED_FUNCTION;
+  91:./Drivers/FreeRTOS/event_groups.c **** 
+  92:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+  93:./Drivers/FreeRTOS/event_groups.c **** 
+  94:./Drivers/FreeRTOS/event_groups.c **** #if ( configSUPPORT_STATIC_ALLOCATION == 1 )
+  95:./Drivers/FreeRTOS/event_groups.c **** 
+  96:./Drivers/FreeRTOS/event_groups.c ****     EventGroupHandle_t xEventGroupCreateStatic( StaticEventGroup_t * pxEventGroupBuffer )
+  97:./Drivers/FreeRTOS/event_groups.c ****     {
+  98:./Drivers/FreeRTOS/event_groups.c ****         EventGroup_t * pxEventBits;
+  99:./Drivers/FreeRTOS/event_groups.c **** 
+ 100:./Drivers/FreeRTOS/event_groups.c ****         /* A StaticEventGroup_t object must be provided. */
+ 101:./Drivers/FreeRTOS/event_groups.c ****         configASSERT( pxEventGroupBuffer );
+ 102:./Drivers/FreeRTOS/event_groups.c **** 
+ 103:./Drivers/FreeRTOS/event_groups.c ****         #if ( configASSERT_DEFINED == 1 )
+ 104:./Drivers/FreeRTOS/event_groups.c ****             {
+ 105:./Drivers/FreeRTOS/event_groups.c ****                 /* Sanity check that the size of the structure used to declare a
+ 106:./Drivers/FreeRTOS/event_groups.c ****                  * variable of type StaticEventGroup_t equals the size of the real
+ 107:./Drivers/FreeRTOS/event_groups.c ****                  * event group structure. */
+ 108:./Drivers/FreeRTOS/event_groups.c ****                 volatile size_t xSize = sizeof( StaticEventGroup_t );
+ 109:./Drivers/FreeRTOS/event_groups.c ****                 configASSERT( xSize == sizeof( EventGroup_t ) );
+ 110:./Drivers/FreeRTOS/event_groups.c ****             } /*lint !e529 xSize is referenced if configASSERT() is defined. */
+ 111:./Drivers/FreeRTOS/event_groups.c ****         #endif /* configASSERT_DEFINED */
+ 112:./Drivers/FreeRTOS/event_groups.c **** 
+ 113:./Drivers/FreeRTOS/event_groups.c ****         /* The user has provided a statically allocated event group - use it. */
+ 114:./Drivers/FreeRTOS/event_groups.c ****         pxEventBits = ( EventGroup_t * ) pxEventGroupBuffer; /*lint !e740 !e9087 EventGroup_t and S
+ 115:./Drivers/FreeRTOS/event_groups.c **** 
+ 116:./Drivers/FreeRTOS/event_groups.c ****         if( pxEventBits != NULL )
+ 117:./Drivers/FreeRTOS/event_groups.c ****         {
+ 118:./Drivers/FreeRTOS/event_groups.c ****             pxEventBits->uxEventBits = 0;
+ 119:./Drivers/FreeRTOS/event_groups.c ****             vListInitialise( &( pxEventBits->xTasksWaitingForBits ) );
+ 120:./Drivers/FreeRTOS/event_groups.c **** 
+ 121:./Drivers/FreeRTOS/event_groups.c ****             #if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
+ 122:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 123:./Drivers/FreeRTOS/event_groups.c ****                     /* Both static and dynamic allocation can be used, so note that
+ 124:./Drivers/FreeRTOS/event_groups.c ****                      * this event group was created statically in case the event group
+ 125:./Drivers/FreeRTOS/event_groups.c ****                      * is later deleted. */
+ 126:./Drivers/FreeRTOS/event_groups.c ****                     pxEventBits->ucStaticallyAllocated = pdTRUE;
+ 127:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 128:./Drivers/FreeRTOS/event_groups.c ****             #endif /* configSUPPORT_DYNAMIC_ALLOCATION */
+ 129:./Drivers/FreeRTOS/event_groups.c **** 
+ 130:./Drivers/FreeRTOS/event_groups.c ****             traceEVENT_GROUP_CREATE( pxEventBits );
+ 131:./Drivers/FreeRTOS/event_groups.c ****         }
+ 132:./Drivers/FreeRTOS/event_groups.c ****         else
+ 133:./Drivers/FreeRTOS/event_groups.c ****         {
+ 134:./Drivers/FreeRTOS/event_groups.c ****             /* xEventGroupCreateStatic should only ever be called with
+ 135:./Drivers/FreeRTOS/event_groups.c ****              * pxEventGroupBuffer pointing to a pre-allocated (compile time
+ 136:./Drivers/FreeRTOS/event_groups.c ****              * allocated) StaticEventGroup_t variable. */
+ 137:./Drivers/FreeRTOS/event_groups.c ****             traceEVENT_GROUP_CREATE_FAILED();
+ 138:./Drivers/FreeRTOS/event_groups.c ****         }
+ 139:./Drivers/FreeRTOS/event_groups.c **** 
+ 140:./Drivers/FreeRTOS/event_groups.c ****         return pxEventBits;
+ 141:./Drivers/FreeRTOS/event_groups.c ****     }
+ 142:./Drivers/FreeRTOS/event_groups.c **** 
+ 143:./Drivers/FreeRTOS/event_groups.c **** #endif /* configSUPPORT_STATIC_ALLOCATION */
+ 144:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 4
+
+
+ 145:./Drivers/FreeRTOS/event_groups.c **** 
+ 146:./Drivers/FreeRTOS/event_groups.c **** #if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
+ 147:./Drivers/FreeRTOS/event_groups.c **** 
+ 148:./Drivers/FreeRTOS/event_groups.c ****     EventGroupHandle_t xEventGroupCreate( void )
+ 149:./Drivers/FreeRTOS/event_groups.c ****     {
+  29              		.loc 1 149 5
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 82B0     		sub	sp, sp, #8
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 16
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+ 150:./Drivers/FreeRTOS/event_groups.c ****         EventGroup_t * pxEventBits;
+ 151:./Drivers/FreeRTOS/event_groups.c **** 
+ 152:./Drivers/FreeRTOS/event_groups.c ****         /* Allocate the event group.  Justification for MISRA deviation as
+ 153:./Drivers/FreeRTOS/event_groups.c ****          * follows:  pvPortMalloc() always ensures returned memory blocks are
+ 154:./Drivers/FreeRTOS/event_groups.c ****          * aligned per the requirements of the MCU stack.  In this case
+ 155:./Drivers/FreeRTOS/event_groups.c ****          * pvPortMalloc() must return a pointer that is guaranteed to meet the
+ 156:./Drivers/FreeRTOS/event_groups.c ****          * alignment requirements of the EventGroup_t structure - which (if you
+ 157:./Drivers/FreeRTOS/event_groups.c ****          * follow it through) is the alignment requirements of the TickType_t type
+ 158:./Drivers/FreeRTOS/event_groups.c ****          * (EventBits_t being of TickType_t itself).  Therefore, whenever the
+ 159:./Drivers/FreeRTOS/event_groups.c ****          * stack alignment requirements are greater than or equal to the
+ 160:./Drivers/FreeRTOS/event_groups.c ****          * TickType_t alignment requirements the cast is safe.  In other cases,
+ 161:./Drivers/FreeRTOS/event_groups.c ****          * where the natural word size of the architecture is less than
+ 162:./Drivers/FreeRTOS/event_groups.c ****          * sizeof( TickType_t ), the TickType_t variables will be accessed in two
+ 163:./Drivers/FreeRTOS/event_groups.c ****          * or more reads operations, and the alignment requirements is only that
+ 164:./Drivers/FreeRTOS/event_groups.c ****          * of each individual read. */
+ 165:./Drivers/FreeRTOS/event_groups.c ****         pxEventBits = ( EventGroup_t * ) pvPortMalloc( sizeof( EventGroup_t ) ); /*lint !e9087 !e90
+  44              		.loc 1 165 42
+  45 0006 1C20     		movs	r0, #28
+  46 0008 FFF7FEFF 		bl	pvPortMalloc
+  47 000c 7860     		str	r0, [r7, #4]
+ 166:./Drivers/FreeRTOS/event_groups.c **** 
+ 167:./Drivers/FreeRTOS/event_groups.c ****         if( pxEventBits != NULL )
+  48              		.loc 1 167 11
+  49 000e 7B68     		ldr	r3, [r7, #4]
+  50 0010 002B     		cmp	r3, #0
+  51 0012 07D0     		beq	.L2
+ 168:./Drivers/FreeRTOS/event_groups.c ****         {
+ 169:./Drivers/FreeRTOS/event_groups.c ****             pxEventBits->uxEventBits = 0;
+  52              		.loc 1 169 38
+  53 0014 7B68     		ldr	r3, [r7, #4]
+  54 0016 0022     		movs	r2, #0
+  55 0018 1A60     		str	r2, [r3]
+ 170:./Drivers/FreeRTOS/event_groups.c ****             vListInitialise( &( pxEventBits->xTasksWaitingForBits ) );
+  56              		.loc 1 170 13
+  57 001a 7B68     		ldr	r3, [r7, #4]
+  58 001c 0433     		adds	r3, r3, #4
+  59 001e 1846     		mov	r0, r3
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 5
+
+
+  60 0020 FFF7FEFF 		bl	vListInitialise
+  61              	.L2:
+ 171:./Drivers/FreeRTOS/event_groups.c **** 
+ 172:./Drivers/FreeRTOS/event_groups.c ****             #if ( configSUPPORT_STATIC_ALLOCATION == 1 )
+ 173:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 174:./Drivers/FreeRTOS/event_groups.c ****                     /* Both static and dynamic allocation can be used, so note this
+ 175:./Drivers/FreeRTOS/event_groups.c ****                      * event group was allocated statically in case the event group is
+ 176:./Drivers/FreeRTOS/event_groups.c ****                      * later deleted. */
+ 177:./Drivers/FreeRTOS/event_groups.c ****                     pxEventBits->ucStaticallyAllocated = pdFALSE;
+ 178:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 179:./Drivers/FreeRTOS/event_groups.c ****             #endif /* configSUPPORT_STATIC_ALLOCATION */
+ 180:./Drivers/FreeRTOS/event_groups.c **** 
+ 181:./Drivers/FreeRTOS/event_groups.c ****             traceEVENT_GROUP_CREATE( pxEventBits );
+ 182:./Drivers/FreeRTOS/event_groups.c ****         }
+ 183:./Drivers/FreeRTOS/event_groups.c ****         else
+ 184:./Drivers/FreeRTOS/event_groups.c ****         {
+ 185:./Drivers/FreeRTOS/event_groups.c ****             traceEVENT_GROUP_CREATE_FAILED(); /*lint !e9063 Else branch only exists to allow tracin
+ 186:./Drivers/FreeRTOS/event_groups.c ****         }
+ 187:./Drivers/FreeRTOS/event_groups.c **** 
+ 188:./Drivers/FreeRTOS/event_groups.c ****         return pxEventBits;
+  62              		.loc 1 188 16
+  63 0024 7B68     		ldr	r3, [r7, #4]
+ 189:./Drivers/FreeRTOS/event_groups.c ****     }
+  64              		.loc 1 189 5
+  65 0026 1846     		mov	r0, r3
+  66 0028 0837     		adds	r7, r7, #8
+  67              	.LCFI3:
+  68              		.cfi_def_cfa_offset 8
+  69 002a BD46     		mov	sp, r7
+  70              	.LCFI4:
+  71              		.cfi_def_cfa_register 13
+  72              		@ sp needed
+  73 002c 80BD     		pop	{r7, pc}
+  74              		.cfi_endproc
+  75              	.LFE5:
+  77              		.section	.text.xEventGroupSync,"ax",%progbits
+  78              		.align	1
+  79              		.global	xEventGroupSync
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  83              		.fpu fpv4-sp-d16
+  85              	xEventGroupSync:
+  86              	.LFB6:
+ 190:./Drivers/FreeRTOS/event_groups.c **** 
+ 191:./Drivers/FreeRTOS/event_groups.c **** #endif /* configSUPPORT_DYNAMIC_ALLOCATION */
+ 192:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 193:./Drivers/FreeRTOS/event_groups.c **** 
+ 194:./Drivers/FreeRTOS/event_groups.c **** EventBits_t xEventGroupSync( EventGroupHandle_t xEventGroup,
+ 195:./Drivers/FreeRTOS/event_groups.c ****                              const EventBits_t uxBitsToSet,
+ 196:./Drivers/FreeRTOS/event_groups.c ****                              const EventBits_t uxBitsToWaitFor,
+ 197:./Drivers/FreeRTOS/event_groups.c ****                              TickType_t xTicksToWait )
+ 198:./Drivers/FreeRTOS/event_groups.c **** {
+  87              		.loc 1 198 1
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 48
+  90              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 6
+
+
+  91 0000 80B5     		push	{r7, lr}
+  92              	.LCFI5:
+  93              		.cfi_def_cfa_offset 8
+  94              		.cfi_offset 7, -8
+  95              		.cfi_offset 14, -4
+  96 0002 8CB0     		sub	sp, sp, #48
+  97              	.LCFI6:
+  98              		.cfi_def_cfa_offset 56
+  99 0004 00AF     		add	r7, sp, #0
+ 100              	.LCFI7:
+ 101              		.cfi_def_cfa_register 7
+ 102 0006 F860     		str	r0, [r7, #12]
+ 103 0008 B960     		str	r1, [r7, #8]
+ 104 000a 7A60     		str	r2, [r7, #4]
+ 105 000c 3B60     		str	r3, [r7]
+ 199:./Drivers/FreeRTOS/event_groups.c ****     EventBits_t uxOriginalBitValue, uxReturn;
+ 200:./Drivers/FreeRTOS/event_groups.c ****     EventGroup_t * pxEventBits = xEventGroup;
+ 106              		.loc 1 200 20
+ 107 000e FB68     		ldr	r3, [r7, #12]
+ 108 0010 BB62     		str	r3, [r7, #40]
+ 201:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xAlreadyYielded;
+ 202:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xTimeoutOccurred = pdFALSE;
+ 109              		.loc 1 202 16
+ 110 0012 0023     		movs	r3, #0
+ 111 0014 7B62     		str	r3, [r7, #36]
+ 203:./Drivers/FreeRTOS/event_groups.c **** 
+ 204:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( ( uxBitsToWaitFor & eventEVENT_BITS_CONTROL_BYTES ) == 0 );
+ 112              		.loc 1 204 5
+ 113 0016 7B68     		ldr	r3, [r7, #4]
+ 114 0018 03F07F43 		and	r3, r3, #-16777216
+ 115 001c 002B     		cmp	r3, #0
+ 116 001e 0AD0     		beq	.L5
+ 117              	.LBB33:
+ 118              	.LBB34:
+ 119              		.file 2 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h"
+   1:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*
+   2:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * FreeRTOS Kernel V10.4.6
+   3:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   5:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * SPDX-License-Identifier: MIT
+   6:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   7:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * this software and associated documentation files (the "Software"), to deal in
+   9:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software without restriction, including without limitation the rights to
+  10:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * subject to the following conditions:
+  13:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  14:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * The above copyright notice and this permission notice shall be included in all
+  15:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * copies or substantial portions of the Software.
+  16:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  17:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 7
+
+
+  23:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  24:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * https://www.FreeRTOS.org
+  25:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * https://github.com/FreeRTOS
+  26:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  27:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  28:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  29:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  30:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef PORTMACRO_H
+  31:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define PORTMACRO_H
+  32:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  33:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifdef __cplusplus
+  34:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         extern "C" {
+  35:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+  36:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  37:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------
+  38:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * Port specific definitions.
+  39:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  40:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * The settings in this file configure FreeRTOS correctly for the
+  41:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * given hardware and compiler.
+  42:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  43:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * These settings should not be altered.
+  44:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  *-----------------------------------------------------------
+  45:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  46:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  47:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Type definitions. */
+  48:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portCHAR          char
+  49:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portFLOAT         float
+  50:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDOUBLE        double
+  51:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portLONG          long
+  52:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSHORT         short
+  53:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSTACK_TYPE    uint32_t
+  54:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portBASE_TYPE     long
+  55:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  56:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef portSTACK_TYPE   StackType_t;
+  57:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef long             BaseType_t;
+  58:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     typedef unsigned long    UBaseType_t;
+  59:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  60:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #if ( configUSE_16_BIT_TICKS == 1 )
+  61:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         typedef uint16_t     TickType_t;
+  62:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portMAX_DELAY              ( TickType_t ) 0xffff
+  63:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #else
+  64:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         typedef uint32_t     TickType_t;
+  65:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portMAX_DELAY              ( TickType_t ) 0xffffffffUL
+  66:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  67:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* 32-bit tick type on a 32-bit architecture, so reads of the tick count do
+  68:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * not need to be guarded with a critical section. */
+  69:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portTICK_TYPE_IS_ATOMIC    1
+  70:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+  71:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  72:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  73:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specifics. */
+  74:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSTACK_GROWTH      ( -1 )
+  75:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTICK_PERIOD_MS    ( ( TickType_t ) 1000 / configTICK_RATE_HZ )
+  76:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portBYTE_ALIGNMENT    8
+  77:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDONT_DISCARD      __attribute__( ( used ) )
+  78:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  79:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 8
+
+
+  80:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Scheduler utilities. */
+  81:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portYIELD()                                 \
+  82:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {                                                   \
+  83:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Set a PendSV to request a context switch. */ \
+  84:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT; \
+  85:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****                                                         \
+  86:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Barriers are normally not required but do ensure the code is completely \
+  87:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****          * within the specified behaviour for the architecture. */ \
+  88:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "dsb" ::: "memory" );                     \
+  89:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "isb" );                                  \
+  90:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+  91:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  92:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNVIC_INT_CTRL_REG     ( *( ( volatile uint32_t * ) 0xe000ed04 ) )
+  93:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )
+  94:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portEND_SWITCHING_ISR( xSwitchRequired )    do { if( xSwitchRequired != pdFALSE ) portY
+  95:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portYIELD_FROM_ISR( x )                     portEND_SWITCHING_ISR( x )
+  96:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  97:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+  98:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Critical section management. */
+  99:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortEnterCritical( void );
+ 100:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortExitCritical( void );
+ 101:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSET_INTERRUPT_MASK_FROM_ISR()         ulPortRaiseBASEPRI()
+ 102:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portCLEAR_INTERRUPT_MASK_FROM_ISR( x )    vPortSetBASEPRI( x )
+ 103:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portDISABLE_INTERRUPTS()                  vPortRaiseBASEPRI()
+ 104:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portENABLE_INTERRUPTS()                   vPortSetBASEPRI( 0 )
+ 105:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portENTER_CRITICAL()                      vPortEnterCritical()
+ 106:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portEXIT_CRITICAL()                       vPortExitCritical()
+ 107:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 108:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 109:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 110:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Task function macros as described on the FreeRTOS.org WEB site.  These are
+ 111:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * not necessary for to use this port.  They are defined so the common demo files
+ 112:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****  * (which build with all the ports) will build. */
+ 113:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParamete
+ 114:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTASK_FUNCTION( vFunction, pvParameters )          void vFunction( void * pvParamete
+ 115:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 116:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 117:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Tickless idle/low power functionality. */
+ 118:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef portSUPPRESS_TICKS_AND_SLEEP
+ 119:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
+ 120:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime )    vPortSuppressTicksAndSleep( xE
+ 121:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 122:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 123:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 124:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specific optimisations. */
+ 125:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
+ 126:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define configUSE_PORT_OPTIMISED_TASK_SELECTION    1
+ 127:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 128:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 129:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+ 130:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 131:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Generic helper function. */
+ 132:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t 
+ 133:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 134:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             uint8_t ucReturn;
+ 135:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 136:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 9
+
+
+ 137:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 138:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             return ucReturn;
+ 139:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 140:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 141:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Check the configuration. */
+ 142:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #if ( configMAX_PRIORITIES > 32 )
+ 143:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             #error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIO
+ 144:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #endif
+ 145:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 146:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* Store/clear the ready priorities in a bit map. */
+ 147:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities )    ( uxReadyPriorities )
+ 148:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities )     ( uxReadyPriorities )
+ 149:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 150:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 151:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 152:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities )    uxTopPriority = ( 3
+ 153:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 154:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+ 155:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 156:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 157:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 158:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifdef configASSERT
+ 159:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         void vPortValidateInterruptPriority( void );
+ 160:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portASSERT_IF_INTERRUPT_PRIORITY_INVALID()    vPortValidateInterruptPriority()
+ 161:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 162:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 163:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /* portNOP() is not required by this port. */
+ 164:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portNOP()
+ 165:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 166:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #define portINLINE              __inline
+ 167:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 168:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #ifndef portFORCE_INLINE
+ 169:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         #define portFORCE_INLINE    inline __attribute__( ( always_inline ) )
+ 170:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 171:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 172:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
+ 173:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 174:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulCurrentInterrupt;
+ 175:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         BaseType_t xReturn;
+ 176:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 177:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* Obtain the number of the currently executing interrupt. */
+ 178:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
+ 179:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 180:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         if( ulCurrentInterrupt == 0 )
+ 181:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 182:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             xReturn = pdFALSE;
+ 183:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 184:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         else
+ 185:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         {
+ 186:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             xReturn = pdTRUE;
+ 187:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         }
+ 188:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 189:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         return xReturn;
+ 190:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 191:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 192:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 193:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 10
+
+
+ 194:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static void vPortRaiseBASEPRI( void )
+ 195:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 196:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulNewBASEPRI;
+ 197:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 120              		.loc 2 198 9
+ 121              		.syntax unified
+ 122              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 123 0020 4FF05003 			mov r3, #80												
+ 124 0024 83F31188 		msr basepri, r3											
+ 125 0028 BFF36F8F 		isb														
+ 126 002c BFF34F8F 		dsb														
+ 127              	
+ 128              	@ 0 "" 2
+ 129              		.thumb
+ 130              		.syntax unified
+ 131 0030 BB61     		str	r3, [r7, #24]
+ 199:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 200:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mov %0, %1												\n"\
+ 201:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %0											\n"\
+ 202:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	isb														\n"\
+ 203:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	dsb														\n"\
+ 204:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             : "=r" ( ulNewBASEPRI ) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY ) : "memory"
+ 205:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 132              		.loc 2 206 5
+ 133 0032 00BF     		nop
+ 134              	.L6:
+ 135              	.LBE34:
+ 136              	.LBE33:
+ 137              		.loc 1 204 5 discriminator 1
+ 138 0034 FEE7     		b	.L6
+ 139              	.L5:
+ 205:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( uxBitsToWaitFor != 0 );
+ 140              		.loc 1 205 5
+ 141 0036 7B68     		ldr	r3, [r7, #4]
+ 142 0038 002B     		cmp	r3, #0
+ 143 003a 0AD1     		bne	.L7
+ 144              	.LBB35:
+ 145              	.LBB36:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 146              		.loc 2 198 9
+ 147              		.syntax unified
+ 148              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 149 003c 4FF05003 			mov r3, #80												
+ 150 0040 83F31188 		msr basepri, r3											
+ 151 0044 BFF36F8F 		isb														
+ 152 0048 BFF34F8F 		dsb														
+ 153              	
+ 154              	@ 0 "" 2
+ 155              		.thumb
+ 156              		.syntax unified
+ 157 004c 7B61     		str	r3, [r7, #20]
+ 158              		.loc 2 206 5
+ 159 004e 00BF     		nop
+ 160              	.L8:
+ 161              	.LBE36:
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 11
+
+
+ 162              	.LBE35:
+ 163              		.loc 1 205 5 discriminator 2
+ 164 0050 FEE7     		b	.L8
+ 165              	.L7:
+ 206:./Drivers/FreeRTOS/event_groups.c ****     #if ( ( INCLUDE_xTaskGetSchedulerState == 1 ) || ( configUSE_TIMERS == 1 ) )
+ 207:./Drivers/FreeRTOS/event_groups.c ****         {
+ 208:./Drivers/FreeRTOS/event_groups.c ****             configASSERT( !( ( xTaskGetSchedulerState() == taskSCHEDULER_SUSPENDED ) && ( xTicksToW
+ 166              		.loc 1 208 13
+ 167 0052 FFF7FEFF 		bl	xTaskGetSchedulerState
+ 168 0056 0346     		mov	r3, r0
+ 169 0058 002B     		cmp	r3, #0
+ 170 005a 02D1     		bne	.L9
+ 171              		.loc 1 208 13 is_stmt 0 discriminator 2
+ 172 005c 3B68     		ldr	r3, [r7]
+ 173 005e 002B     		cmp	r3, #0
+ 174 0060 01D1     		bne	.L10
+ 175              	.L9:
+ 176              		.loc 1 208 13 discriminator 3
+ 177 0062 0123     		movs	r3, #1
+ 178 0064 00E0     		b	.L11
+ 179              	.L10:
+ 180              		.loc 1 208 13 discriminator 4
+ 181 0066 0023     		movs	r3, #0
+ 182              	.L11:
+ 183              		.loc 1 208 13 discriminator 6
+ 184 0068 002B     		cmp	r3, #0
+ 185 006a 0AD1     		bne	.L12
+ 186              	.LBB37:
+ 187              	.LBB38:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 188              		.loc 2 198 9 is_stmt 1
+ 189              		.syntax unified
+ 190              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 191 006c 4FF05003 			mov r3, #80												
+ 192 0070 83F31188 		msr basepri, r3											
+ 193 0074 BFF36F8F 		isb														
+ 194 0078 BFF34F8F 		dsb														
+ 195              	
+ 196              	@ 0 "" 2
+ 197              		.thumb
+ 198              		.syntax unified
+ 199 007c 3B61     		str	r3, [r7, #16]
+ 200              		.loc 2 206 5
+ 201 007e 00BF     		nop
+ 202              	.L13:
+ 203              	.LBE38:
+ 204              	.LBE37:
+ 205              		.loc 1 208 13 discriminator 3
+ 206 0080 FEE7     		b	.L13
+ 207              	.L12:
+ 209:./Drivers/FreeRTOS/event_groups.c ****         }
+ 210:./Drivers/FreeRTOS/event_groups.c ****     #endif
+ 211:./Drivers/FreeRTOS/event_groups.c **** 
+ 212:./Drivers/FreeRTOS/event_groups.c ****     vTaskSuspendAll();
+ 208              		.loc 1 212 5
+ 209 0082 FFF7FEFF 		bl	vTaskSuspendAll
+ 213:./Drivers/FreeRTOS/event_groups.c ****     {
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 12
+
+
+ 214:./Drivers/FreeRTOS/event_groups.c ****         uxOriginalBitValue = pxEventBits->uxEventBits;
+ 210              		.loc 1 214 28
+ 211 0086 BB6A     		ldr	r3, [r7, #40]
+ 212 0088 1B68     		ldr	r3, [r3]
+ 213 008a 3B62     		str	r3, [r7, #32]
+ 215:./Drivers/FreeRTOS/event_groups.c **** 
+ 216:./Drivers/FreeRTOS/event_groups.c ****         ( void ) xEventGroupSetBits( xEventGroup, uxBitsToSet );
+ 214              		.loc 1 216 18
+ 215 008c B968     		ldr	r1, [r7, #8]
+ 216 008e F868     		ldr	r0, [r7, #12]
+ 217 0090 FFF7FEFF 		bl	xEventGroupSetBits
+ 217:./Drivers/FreeRTOS/event_groups.c **** 
+ 218:./Drivers/FreeRTOS/event_groups.c ****         if( ( ( uxOriginalBitValue | uxBitsToSet ) & uxBitsToWaitFor ) == uxBitsToWaitFor )
+ 218              		.loc 1 218 36
+ 219 0094 3A6A     		ldr	r2, [r7, #32]
+ 220 0096 BB68     		ldr	r3, [r7, #8]
+ 221 0098 1A43     		orrs	r2, r2, r3
+ 222              		.loc 1 218 52
+ 223 009a 7B68     		ldr	r3, [r7, #4]
+ 224 009c 1340     		ands	r3, r3, r2
+ 225              		.loc 1 218 11
+ 226 009e 7A68     		ldr	r2, [r7, #4]
+ 227 00a0 9A42     		cmp	r2, r3
+ 228 00a2 0DD1     		bne	.L14
+ 219:./Drivers/FreeRTOS/event_groups.c ****         {
+ 220:./Drivers/FreeRTOS/event_groups.c ****             /* All the rendezvous bits are now set - no need to block. */
+ 221:./Drivers/FreeRTOS/event_groups.c ****             uxReturn = ( uxOriginalBitValue | uxBitsToSet );
+ 229              		.loc 1 221 22
+ 230 00a4 3A6A     		ldr	r2, [r7, #32]
+ 231 00a6 BB68     		ldr	r3, [r7, #8]
+ 232 00a8 1343     		orrs	r3, r3, r2
+ 233 00aa FB62     		str	r3, [r7, #44]
+ 222:./Drivers/FreeRTOS/event_groups.c **** 
+ 223:./Drivers/FreeRTOS/event_groups.c ****             /* Rendezvous always clear the bits.  They will have been cleared
+ 224:./Drivers/FreeRTOS/event_groups.c ****              * already unless this is the only task in the rendezvous. */
+ 225:./Drivers/FreeRTOS/event_groups.c ****             pxEventBits->uxEventBits &= ~uxBitsToWaitFor;
+ 234              		.loc 1 225 38
+ 235 00ac BB6A     		ldr	r3, [r7, #40]
+ 236 00ae 1A68     		ldr	r2, [r3]
+ 237              		.loc 1 225 41
+ 238 00b0 7B68     		ldr	r3, [r7, #4]
+ 239 00b2 DB43     		mvns	r3, r3
+ 240              		.loc 1 225 38
+ 241 00b4 1A40     		ands	r2, r2, r3
+ 242 00b6 BB6A     		ldr	r3, [r7, #40]
+ 243 00b8 1A60     		str	r2, [r3]
+ 226:./Drivers/FreeRTOS/event_groups.c **** 
+ 227:./Drivers/FreeRTOS/event_groups.c ****             xTicksToWait = 0;
+ 244              		.loc 1 227 26
+ 245 00ba 0023     		movs	r3, #0
+ 246 00bc 3B60     		str	r3, [r7]
+ 247 00be 13E0     		b	.L15
+ 248              	.L14:
+ 228:./Drivers/FreeRTOS/event_groups.c ****         }
+ 229:./Drivers/FreeRTOS/event_groups.c ****         else
+ 230:./Drivers/FreeRTOS/event_groups.c ****         {
+ 231:./Drivers/FreeRTOS/event_groups.c ****             if( xTicksToWait != ( TickType_t ) 0 )
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 13
+
+
+ 249              		.loc 1 231 15
+ 250 00c0 3B68     		ldr	r3, [r7]
+ 251 00c2 002B     		cmp	r3, #0
+ 252 00c4 0BD0     		beq	.L16
+ 232:./Drivers/FreeRTOS/event_groups.c ****             {
+ 233:./Drivers/FreeRTOS/event_groups.c ****                 traceEVENT_GROUP_SYNC_BLOCK( xEventGroup, uxBitsToSet, uxBitsToWaitFor );
+ 234:./Drivers/FreeRTOS/event_groups.c **** 
+ 235:./Drivers/FreeRTOS/event_groups.c ****                 /* Store the bits that the calling task is waiting for in the
+ 236:./Drivers/FreeRTOS/event_groups.c ****                  * task's event list item so the kernel knows when a match is
+ 237:./Drivers/FreeRTOS/event_groups.c ****                  * found.  Then enter the blocked state. */
+ 238:./Drivers/FreeRTOS/event_groups.c ****                 vTaskPlaceOnUnorderedEventList( &( pxEventBits->xTasksWaitingForBits ), ( uxBitsToW
+ 253              		.loc 1 238 17
+ 254 00c6 BB6A     		ldr	r3, [r7, #40]
+ 255 00c8 181D     		adds	r0, r3, #4
+ 256 00ca 7B68     		ldr	r3, [r7, #4]
+ 257 00cc 43F0A063 		orr	r3, r3, #83886080
+ 258 00d0 3A68     		ldr	r2, [r7]
+ 259 00d2 1946     		mov	r1, r3
+ 260 00d4 FFF7FEFF 		bl	vTaskPlaceOnUnorderedEventList
+ 239:./Drivers/FreeRTOS/event_groups.c **** 
+ 240:./Drivers/FreeRTOS/event_groups.c ****                 /* This assignment is obsolete as uxReturn will get set after
+ 241:./Drivers/FreeRTOS/event_groups.c ****                  * the task unblocks, but some compilers mistakenly generate a
+ 242:./Drivers/FreeRTOS/event_groups.c ****                  * warning about uxReturn being returned without being set if the
+ 243:./Drivers/FreeRTOS/event_groups.c ****                  * assignment is omitted. */
+ 244:./Drivers/FreeRTOS/event_groups.c ****                 uxReturn = 0;
+ 261              		.loc 1 244 26
+ 262 00d8 0023     		movs	r3, #0
+ 263 00da FB62     		str	r3, [r7, #44]
+ 264 00dc 04E0     		b	.L15
+ 265              	.L16:
+ 245:./Drivers/FreeRTOS/event_groups.c ****             }
+ 246:./Drivers/FreeRTOS/event_groups.c ****             else
+ 247:./Drivers/FreeRTOS/event_groups.c ****             {
+ 248:./Drivers/FreeRTOS/event_groups.c ****                 /* The rendezvous bits were not set, but no block time was
+ 249:./Drivers/FreeRTOS/event_groups.c ****                  * specified - just return the current event bit value. */
+ 250:./Drivers/FreeRTOS/event_groups.c ****                 uxReturn = pxEventBits->uxEventBits;
+ 266              		.loc 1 250 26
+ 267 00de BB6A     		ldr	r3, [r7, #40]
+ 268 00e0 1B68     		ldr	r3, [r3]
+ 269 00e2 FB62     		str	r3, [r7, #44]
+ 251:./Drivers/FreeRTOS/event_groups.c ****                 xTimeoutOccurred = pdTRUE;
+ 270              		.loc 1 251 34
+ 271 00e4 0123     		movs	r3, #1
+ 272 00e6 7B62     		str	r3, [r7, #36]
+ 273              	.L15:
+ 252:./Drivers/FreeRTOS/event_groups.c ****             }
+ 253:./Drivers/FreeRTOS/event_groups.c ****         }
+ 254:./Drivers/FreeRTOS/event_groups.c ****     }
+ 255:./Drivers/FreeRTOS/event_groups.c ****     xAlreadyYielded = xTaskResumeAll();
+ 274              		.loc 1 255 23
+ 275 00e8 FFF7FEFF 		bl	xTaskResumeAll
+ 276 00ec F861     		str	r0, [r7, #28]
+ 256:./Drivers/FreeRTOS/event_groups.c **** 
+ 257:./Drivers/FreeRTOS/event_groups.c ****     if( xTicksToWait != ( TickType_t ) 0 )
+ 277              		.loc 1 257 7
+ 278 00ee 3B68     		ldr	r3, [r7]
+ 279 00f0 002B     		cmp	r3, #0
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 14
+
+
+ 280 00f2 2CD0     		beq	.L17
+ 258:./Drivers/FreeRTOS/event_groups.c ****     {
+ 259:./Drivers/FreeRTOS/event_groups.c ****         if( xAlreadyYielded == pdFALSE )
+ 281              		.loc 1 259 11
+ 282 00f4 FB69     		ldr	r3, [r7, #28]
+ 283 00f6 002B     		cmp	r3, #0
+ 284 00f8 07D1     		bne	.L18
+ 260:./Drivers/FreeRTOS/event_groups.c ****         {
+ 261:./Drivers/FreeRTOS/event_groups.c ****             portYIELD_WITHIN_API();
+ 285              		.loc 1 261 13
+ 286 00fa 174B     		ldr	r3, .L22
+ 287 00fc 4FF08052 		mov	r2, #268435456
+ 288 0100 1A60     		str	r2, [r3]
+ 289              		.syntax unified
+ 290              	@ 261 "./Drivers/FreeRTOS/event_groups.c" 1
+ 291 0102 BFF34F8F 		dsb
+ 292              	@ 0 "" 2
+ 293              	@ 261 "./Drivers/FreeRTOS/event_groups.c" 1
+ 294 0106 BFF36F8F 		isb
+ 295              	@ 0 "" 2
+ 296              		.thumb
+ 297              		.syntax unified
+ 298              	.L18:
+ 262:./Drivers/FreeRTOS/event_groups.c ****         }
+ 263:./Drivers/FreeRTOS/event_groups.c ****         else
+ 264:./Drivers/FreeRTOS/event_groups.c ****         {
+ 265:./Drivers/FreeRTOS/event_groups.c ****             mtCOVERAGE_TEST_MARKER();
+ 266:./Drivers/FreeRTOS/event_groups.c ****         }
+ 267:./Drivers/FreeRTOS/event_groups.c **** 
+ 268:./Drivers/FreeRTOS/event_groups.c ****         /* The task blocked to wait for its required bits to be set - at this
+ 269:./Drivers/FreeRTOS/event_groups.c ****          * point either the required bits were set or the block time expired.  If
+ 270:./Drivers/FreeRTOS/event_groups.c ****          * the required bits were set they will have been stored in the task's
+ 271:./Drivers/FreeRTOS/event_groups.c ****          * event list item, and they should now be retrieved then cleared. */
+ 272:./Drivers/FreeRTOS/event_groups.c ****         uxReturn = uxTaskResetEventItemValue();
+ 299              		.loc 1 272 20
+ 300 010a FFF7FEFF 		bl	uxTaskResetEventItemValue
+ 301 010e F862     		str	r0, [r7, #44]
+ 273:./Drivers/FreeRTOS/event_groups.c **** 
+ 274:./Drivers/FreeRTOS/event_groups.c ****         if( ( uxReturn & eventUNBLOCKED_DUE_TO_BIT_SET ) == ( EventBits_t ) 0 )
+ 302              		.loc 1 274 24
+ 303 0110 FB6A     		ldr	r3, [r7, #44]
+ 304 0112 03F00073 		and	r3, r3, #33554432
+ 305              		.loc 1 274 11
+ 306 0116 002B     		cmp	r3, #0
+ 307 0118 15D1     		bne	.L19
+ 275:./Drivers/FreeRTOS/event_groups.c ****         {
+ 276:./Drivers/FreeRTOS/event_groups.c ****             /* The task timed out, just return the current event bit value. */
+ 277:./Drivers/FreeRTOS/event_groups.c ****             taskENTER_CRITICAL();
+ 308              		.loc 1 277 13
+ 309 011a FFF7FEFF 		bl	vPortEnterCritical
+ 278:./Drivers/FreeRTOS/event_groups.c ****             {
+ 279:./Drivers/FreeRTOS/event_groups.c ****                 uxReturn = pxEventBits->uxEventBits;
+ 310              		.loc 1 279 26
+ 311 011e BB6A     		ldr	r3, [r7, #40]
+ 312 0120 1B68     		ldr	r3, [r3]
+ 313 0122 FB62     		str	r3, [r7, #44]
+ 280:./Drivers/FreeRTOS/event_groups.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 15
+
+
+ 281:./Drivers/FreeRTOS/event_groups.c ****                 /* Although the task got here because it timed out before the
+ 282:./Drivers/FreeRTOS/event_groups.c ****                  * bits it was waiting for were set, it is possible that since it
+ 283:./Drivers/FreeRTOS/event_groups.c ****                  * unblocked another task has set the bits.  If this is the case
+ 284:./Drivers/FreeRTOS/event_groups.c ****                  * then it needs to clear the bits before exiting. */
+ 285:./Drivers/FreeRTOS/event_groups.c ****                 if( ( uxReturn & uxBitsToWaitFor ) == uxBitsToWaitFor )
+ 314              		.loc 1 285 32
+ 315 0124 FA6A     		ldr	r2, [r7, #44]
+ 316 0126 7B68     		ldr	r3, [r7, #4]
+ 317 0128 1340     		ands	r3, r3, r2
+ 318              		.loc 1 285 19
+ 319 012a 7A68     		ldr	r2, [r7, #4]
+ 320 012c 9A42     		cmp	r2, r3
+ 321 012e 06D1     		bne	.L20
+ 286:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 287:./Drivers/FreeRTOS/event_groups.c ****                     pxEventBits->uxEventBits &= ~uxBitsToWaitFor;
+ 322              		.loc 1 287 46
+ 323 0130 BB6A     		ldr	r3, [r7, #40]
+ 324 0132 1A68     		ldr	r2, [r3]
+ 325              		.loc 1 287 49
+ 326 0134 7B68     		ldr	r3, [r7, #4]
+ 327 0136 DB43     		mvns	r3, r3
+ 328              		.loc 1 287 46
+ 329 0138 1A40     		ands	r2, r2, r3
+ 330 013a BB6A     		ldr	r3, [r7, #40]
+ 331 013c 1A60     		str	r2, [r3]
+ 332              	.L20:
+ 288:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 289:./Drivers/FreeRTOS/event_groups.c ****                 else
+ 290:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 291:./Drivers/FreeRTOS/event_groups.c ****                     mtCOVERAGE_TEST_MARKER();
+ 292:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 293:./Drivers/FreeRTOS/event_groups.c ****             }
+ 294:./Drivers/FreeRTOS/event_groups.c ****             taskEXIT_CRITICAL();
+ 333              		.loc 1 294 13
+ 334 013e FFF7FEFF 		bl	vPortExitCritical
+ 295:./Drivers/FreeRTOS/event_groups.c **** 
+ 296:./Drivers/FreeRTOS/event_groups.c ****             xTimeoutOccurred = pdTRUE;
+ 335              		.loc 1 296 30
+ 336 0142 0123     		movs	r3, #1
+ 337 0144 7B62     		str	r3, [r7, #36]
+ 338              	.L19:
+ 297:./Drivers/FreeRTOS/event_groups.c ****         }
+ 298:./Drivers/FreeRTOS/event_groups.c ****         else
+ 299:./Drivers/FreeRTOS/event_groups.c ****         {
+ 300:./Drivers/FreeRTOS/event_groups.c ****             /* The task unblocked because the bits were set. */
+ 301:./Drivers/FreeRTOS/event_groups.c ****         }
+ 302:./Drivers/FreeRTOS/event_groups.c **** 
+ 303:./Drivers/FreeRTOS/event_groups.c ****         /* Control bits might be set as the task had blocked should not be
+ 304:./Drivers/FreeRTOS/event_groups.c ****          * returned. */
+ 305:./Drivers/FreeRTOS/event_groups.c ****         uxReturn &= ~eventEVENT_BITS_CONTROL_BYTES;
+ 339              		.loc 1 305 18
+ 340 0146 FB6A     		ldr	r3, [r7, #44]
+ 341 0148 23F07F43 		bic	r3, r3, #-16777216
+ 342 014c FB62     		str	r3, [r7, #44]
+ 343              	.L17:
+ 306:./Drivers/FreeRTOS/event_groups.c ****     }
+ 307:./Drivers/FreeRTOS/event_groups.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 16
+
+
+ 308:./Drivers/FreeRTOS/event_groups.c ****     traceEVENT_GROUP_SYNC_END( xEventGroup, uxBitsToSet, uxBitsToWaitFor, xTimeoutOccurred );
+ 309:./Drivers/FreeRTOS/event_groups.c **** 
+ 310:./Drivers/FreeRTOS/event_groups.c ****     /* Prevent compiler warnings when trace macros are not used. */
+ 311:./Drivers/FreeRTOS/event_groups.c ****     ( void ) xTimeoutOccurred;
+ 312:./Drivers/FreeRTOS/event_groups.c **** 
+ 313:./Drivers/FreeRTOS/event_groups.c ****     return uxReturn;
+ 344              		.loc 1 313 12
+ 345 014e FB6A     		ldr	r3, [r7, #44]
+ 314:./Drivers/FreeRTOS/event_groups.c **** }
+ 346              		.loc 1 314 1
+ 347 0150 1846     		mov	r0, r3
+ 348 0152 3037     		adds	r7, r7, #48
+ 349              	.LCFI8:
+ 350              		.cfi_def_cfa_offset 8
+ 351 0154 BD46     		mov	sp, r7
+ 352              	.LCFI9:
+ 353              		.cfi_def_cfa_register 13
+ 354              		@ sp needed
+ 355 0156 80BD     		pop	{r7, pc}
+ 356              	.L23:
+ 357              		.align	2
+ 358              	.L22:
+ 359 0158 04ED00E0 		.word	-536810236
+ 360              		.cfi_endproc
+ 361              	.LFE6:
+ 363              		.section	.text.xEventGroupWaitBits,"ax",%progbits
+ 364              		.align	1
+ 365              		.global	xEventGroupWaitBits
+ 366              		.syntax unified
+ 367              		.thumb
+ 368              		.thumb_func
+ 369              		.fpu fpv4-sp-d16
+ 371              	xEventGroupWaitBits:
+ 372              	.LFB7:
+ 315:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 316:./Drivers/FreeRTOS/event_groups.c **** 
+ 317:./Drivers/FreeRTOS/event_groups.c **** EventBits_t xEventGroupWaitBits( EventGroupHandle_t xEventGroup,
+ 318:./Drivers/FreeRTOS/event_groups.c ****                                  const EventBits_t uxBitsToWaitFor,
+ 319:./Drivers/FreeRTOS/event_groups.c ****                                  const BaseType_t xClearOnExit,
+ 320:./Drivers/FreeRTOS/event_groups.c ****                                  const BaseType_t xWaitForAllBits,
+ 321:./Drivers/FreeRTOS/event_groups.c ****                                  TickType_t xTicksToWait )
+ 322:./Drivers/FreeRTOS/event_groups.c **** {
+ 373              		.loc 1 322 1
+ 374              		.cfi_startproc
+ 375              		@ args = 4, pretend = 0, frame = 64
+ 376              		@ frame_needed = 1, uses_anonymous_args = 0
+ 377 0000 80B5     		push	{r7, lr}
+ 378              	.LCFI10:
+ 379              		.cfi_def_cfa_offset 8
+ 380              		.cfi_offset 7, -8
+ 381              		.cfi_offset 14, -4
+ 382 0002 90B0     		sub	sp, sp, #64
+ 383              	.LCFI11:
+ 384              		.cfi_def_cfa_offset 72
+ 385 0004 00AF     		add	r7, sp, #0
+ 386              	.LCFI12:
+ 387              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 17
+
+
+ 388 0006 F860     		str	r0, [r7, #12]
+ 389 0008 B960     		str	r1, [r7, #8]
+ 390 000a 7A60     		str	r2, [r7, #4]
+ 391 000c 3B60     		str	r3, [r7]
+ 323:./Drivers/FreeRTOS/event_groups.c ****     EventGroup_t * pxEventBits = xEventGroup;
+ 392              		.loc 1 323 20
+ 393 000e FB68     		ldr	r3, [r7, #12]
+ 394 0010 7B63     		str	r3, [r7, #52]
+ 324:./Drivers/FreeRTOS/event_groups.c ****     EventBits_t uxReturn, uxControlBits = 0;
+ 395              		.loc 1 324 27
+ 396 0012 0023     		movs	r3, #0
+ 397 0014 BB63     		str	r3, [r7, #56]
+ 325:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xWaitConditionMet, xAlreadyYielded;
+ 326:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xTimeoutOccurred = pdFALSE;
+ 398              		.loc 1 326 16
+ 399 0016 0023     		movs	r3, #0
+ 400 0018 3B63     		str	r3, [r7, #48]
+ 327:./Drivers/FreeRTOS/event_groups.c **** 
+ 328:./Drivers/FreeRTOS/event_groups.c ****     /* Check the user is not attempting to wait on the bits used by the kernel
+ 329:./Drivers/FreeRTOS/event_groups.c ****      * itself, and that at least one bit is being requested. */
+ 330:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( xEventGroup );
+ 401              		.loc 1 330 5
+ 402 001a FB68     		ldr	r3, [r7, #12]
+ 403 001c 002B     		cmp	r3, #0
+ 404 001e 0AD1     		bne	.L25
+ 405              	.LBB39:
+ 406              	.LBB40:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 407              		.loc 2 198 9
+ 408              		.syntax unified
+ 409              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 410 0020 4FF05003 			mov r3, #80												
+ 411 0024 83F31188 		msr basepri, r3											
+ 412 0028 BFF36F8F 		isb														
+ 413 002c BFF34F8F 		dsb														
+ 414              	
+ 415              	@ 0 "" 2
+ 416              		.thumb
+ 417              		.syntax unified
+ 418 0030 3B62     		str	r3, [r7, #32]
+ 419              		.loc 2 206 5
+ 420 0032 00BF     		nop
+ 421              	.L26:
+ 422              	.LBE40:
+ 423              	.LBE39:
+ 424              		.loc 1 330 5 discriminator 1
+ 425 0034 FEE7     		b	.L26
+ 426              	.L25:
+ 331:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( ( uxBitsToWaitFor & eventEVENT_BITS_CONTROL_BYTES ) == 0 );
+ 427              		.loc 1 331 5
+ 428 0036 BB68     		ldr	r3, [r7, #8]
+ 429 0038 03F07F43 		and	r3, r3, #-16777216
+ 430 003c 002B     		cmp	r3, #0
+ 431 003e 0AD0     		beq	.L27
+ 432              	.LBB41:
+ 433              	.LBB42:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 18
+
+
+ 434              		.loc 2 198 9
+ 435              		.syntax unified
+ 436              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 437 0040 4FF05003 			mov r3, #80												
+ 438 0044 83F31188 		msr basepri, r3											
+ 439 0048 BFF36F8F 		isb														
+ 440 004c BFF34F8F 		dsb														
+ 441              	
+ 442              	@ 0 "" 2
+ 443              		.thumb
+ 444              		.syntax unified
+ 445 0050 FB61     		str	r3, [r7, #28]
+ 446              		.loc 2 206 5
+ 447 0052 00BF     		nop
+ 448              	.L28:
+ 449              	.LBE42:
+ 450              	.LBE41:
+ 451              		.loc 1 331 5 discriminator 2
+ 452 0054 FEE7     		b	.L28
+ 453              	.L27:
+ 332:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( uxBitsToWaitFor != 0 );
+ 454              		.loc 1 332 5
+ 455 0056 BB68     		ldr	r3, [r7, #8]
+ 456 0058 002B     		cmp	r3, #0
+ 457 005a 0AD1     		bne	.L29
+ 458              	.LBB43:
+ 459              	.LBB44:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 460              		.loc 2 198 9
+ 461              		.syntax unified
+ 462              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 463 005c 4FF05003 			mov r3, #80												
+ 464 0060 83F31188 		msr basepri, r3											
+ 465 0064 BFF36F8F 		isb														
+ 466 0068 BFF34F8F 		dsb														
+ 467              	
+ 468              	@ 0 "" 2
+ 469              		.thumb
+ 470              		.syntax unified
+ 471 006c BB61     		str	r3, [r7, #24]
+ 472              		.loc 2 206 5
+ 473 006e 00BF     		nop
+ 474              	.L30:
+ 475              	.LBE44:
+ 476              	.LBE43:
+ 477              		.loc 1 332 5 discriminator 3
+ 478 0070 FEE7     		b	.L30
+ 479              	.L29:
+ 333:./Drivers/FreeRTOS/event_groups.c ****     #if ( ( INCLUDE_xTaskGetSchedulerState == 1 ) || ( configUSE_TIMERS == 1 ) )
+ 334:./Drivers/FreeRTOS/event_groups.c ****         {
+ 335:./Drivers/FreeRTOS/event_groups.c ****             configASSERT( !( ( xTaskGetSchedulerState() == taskSCHEDULER_SUSPENDED ) && ( xTicksToW
+ 480              		.loc 1 335 13
+ 481 0072 FFF7FEFF 		bl	xTaskGetSchedulerState
+ 482 0076 0346     		mov	r3, r0
+ 483 0078 002B     		cmp	r3, #0
+ 484 007a 02D1     		bne	.L31
+ 485              		.loc 1 335 13 is_stmt 0 discriminator 2
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 19
+
+
+ 486 007c BB6C     		ldr	r3, [r7, #72]
+ 487 007e 002B     		cmp	r3, #0
+ 488 0080 01D1     		bne	.L32
+ 489              	.L31:
+ 490              		.loc 1 335 13 discriminator 3
+ 491 0082 0123     		movs	r3, #1
+ 492 0084 00E0     		b	.L33
+ 493              	.L32:
+ 494              		.loc 1 335 13 discriminator 4
+ 495 0086 0023     		movs	r3, #0
+ 496              	.L33:
+ 497              		.loc 1 335 13 discriminator 6
+ 498 0088 002B     		cmp	r3, #0
+ 499 008a 0AD1     		bne	.L34
+ 500              	.LBB45:
+ 501              	.LBB46:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 502              		.loc 2 198 9 is_stmt 1
+ 503              		.syntax unified
+ 504              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 505 008c 4FF05003 			mov r3, #80												
+ 506 0090 83F31188 		msr basepri, r3											
+ 507 0094 BFF36F8F 		isb														
+ 508 0098 BFF34F8F 		dsb														
+ 509              	
+ 510              	@ 0 "" 2
+ 511              		.thumb
+ 512              		.syntax unified
+ 513 009c 7B61     		str	r3, [r7, #20]
+ 514              		.loc 2 206 5
+ 515 009e 00BF     		nop
+ 516              	.L35:
+ 517              	.LBE46:
+ 518              	.LBE45:
+ 519              		.loc 1 335 13 discriminator 4
+ 520 00a0 FEE7     		b	.L35
+ 521              	.L34:
+ 336:./Drivers/FreeRTOS/event_groups.c ****         }
+ 337:./Drivers/FreeRTOS/event_groups.c ****     #endif
+ 338:./Drivers/FreeRTOS/event_groups.c **** 
+ 339:./Drivers/FreeRTOS/event_groups.c ****     vTaskSuspendAll();
+ 522              		.loc 1 339 5
+ 523 00a2 FFF7FEFF 		bl	vTaskSuspendAll
+ 524              	.LBB47:
+ 340:./Drivers/FreeRTOS/event_groups.c ****     {
+ 341:./Drivers/FreeRTOS/event_groups.c ****         const EventBits_t uxCurrentEventBits = pxEventBits->uxEventBits;
+ 525              		.loc 1 341 27
+ 526 00a6 7B6B     		ldr	r3, [r7, #52]
+ 527 00a8 1B68     		ldr	r3, [r3]
+ 528 00aa FB62     		str	r3, [r7, #44]
+ 342:./Drivers/FreeRTOS/event_groups.c **** 
+ 343:./Drivers/FreeRTOS/event_groups.c ****         /* Check to see if the wait condition is already met or not. */
+ 344:./Drivers/FreeRTOS/event_groups.c ****         xWaitConditionMet = prvTestWaitCondition( uxCurrentEventBits, uxBitsToWaitFor, xWaitForAllB
+ 529              		.loc 1 344 29
+ 530 00ac 3A68     		ldr	r2, [r7]
+ 531 00ae B968     		ldr	r1, [r7, #8]
+ 532 00b0 F86A     		ldr	r0, [r7, #44]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 20
+
+
+ 533 00b2 FFF7FEFF 		bl	prvTestWaitCondition
+ 534 00b6 B862     		str	r0, [r7, #40]
+ 345:./Drivers/FreeRTOS/event_groups.c **** 
+ 346:./Drivers/FreeRTOS/event_groups.c ****         if( xWaitConditionMet != pdFALSE )
+ 535              		.loc 1 346 11
+ 536 00b8 BB6A     		ldr	r3, [r7, #40]
+ 537 00ba 002B     		cmp	r3, #0
+ 538 00bc 0ED0     		beq	.L36
+ 347:./Drivers/FreeRTOS/event_groups.c ****         {
+ 348:./Drivers/FreeRTOS/event_groups.c ****             /* The wait condition has already been met so there is no need to
+ 349:./Drivers/FreeRTOS/event_groups.c ****              * block. */
+ 350:./Drivers/FreeRTOS/event_groups.c ****             uxReturn = uxCurrentEventBits;
+ 539              		.loc 1 350 22
+ 540 00be FB6A     		ldr	r3, [r7, #44]
+ 541 00c0 FB63     		str	r3, [r7, #60]
+ 351:./Drivers/FreeRTOS/event_groups.c ****             xTicksToWait = ( TickType_t ) 0;
+ 542              		.loc 1 351 26
+ 543 00c2 0023     		movs	r3, #0
+ 544 00c4 BB64     		str	r3, [r7, #72]
+ 352:./Drivers/FreeRTOS/event_groups.c **** 
+ 353:./Drivers/FreeRTOS/event_groups.c ****             /* Clear the wait bits if requested to do so. */
+ 354:./Drivers/FreeRTOS/event_groups.c ****             if( xClearOnExit != pdFALSE )
+ 545              		.loc 1 354 15
+ 546 00c6 7B68     		ldr	r3, [r7, #4]
+ 547 00c8 002B     		cmp	r3, #0
+ 548 00ca 28D0     		beq	.L37
+ 355:./Drivers/FreeRTOS/event_groups.c ****             {
+ 356:./Drivers/FreeRTOS/event_groups.c ****                 pxEventBits->uxEventBits &= ~uxBitsToWaitFor;
+ 549              		.loc 1 356 42
+ 550 00cc 7B6B     		ldr	r3, [r7, #52]
+ 551 00ce 1A68     		ldr	r2, [r3]
+ 552              		.loc 1 356 45
+ 553 00d0 BB68     		ldr	r3, [r7, #8]
+ 554 00d2 DB43     		mvns	r3, r3
+ 555              		.loc 1 356 42
+ 556 00d4 1A40     		ands	r2, r2, r3
+ 557 00d6 7B6B     		ldr	r3, [r7, #52]
+ 558 00d8 1A60     		str	r2, [r3]
+ 559 00da 20E0     		b	.L37
+ 560              	.L36:
+ 357:./Drivers/FreeRTOS/event_groups.c ****             }
+ 358:./Drivers/FreeRTOS/event_groups.c ****             else
+ 359:./Drivers/FreeRTOS/event_groups.c ****             {
+ 360:./Drivers/FreeRTOS/event_groups.c ****                 mtCOVERAGE_TEST_MARKER();
+ 361:./Drivers/FreeRTOS/event_groups.c ****             }
+ 362:./Drivers/FreeRTOS/event_groups.c ****         }
+ 363:./Drivers/FreeRTOS/event_groups.c ****         else if( xTicksToWait == ( TickType_t ) 0 )
+ 561              		.loc 1 363 16
+ 562 00dc BB6C     		ldr	r3, [r7, #72]
+ 563 00de 002B     		cmp	r3, #0
+ 564 00e0 04D1     		bne	.L38
+ 364:./Drivers/FreeRTOS/event_groups.c ****         {
+ 365:./Drivers/FreeRTOS/event_groups.c ****             /* The wait condition has not been met, but no block time was
+ 366:./Drivers/FreeRTOS/event_groups.c ****              * specified, so just return the current value. */
+ 367:./Drivers/FreeRTOS/event_groups.c ****             uxReturn = uxCurrentEventBits;
+ 565              		.loc 1 367 22
+ 566 00e2 FB6A     		ldr	r3, [r7, #44]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 21
+
+
+ 567 00e4 FB63     		str	r3, [r7, #60]
+ 368:./Drivers/FreeRTOS/event_groups.c ****             xTimeoutOccurred = pdTRUE;
+ 568              		.loc 1 368 30
+ 569 00e6 0123     		movs	r3, #1
+ 570 00e8 3B63     		str	r3, [r7, #48]
+ 571 00ea 18E0     		b	.L37
+ 572              	.L38:
+ 369:./Drivers/FreeRTOS/event_groups.c ****         }
+ 370:./Drivers/FreeRTOS/event_groups.c ****         else
+ 371:./Drivers/FreeRTOS/event_groups.c ****         {
+ 372:./Drivers/FreeRTOS/event_groups.c ****             /* The task is going to block to wait for its required bits to be
+ 373:./Drivers/FreeRTOS/event_groups.c ****              * set.  uxControlBits are used to remember the specified behaviour of
+ 374:./Drivers/FreeRTOS/event_groups.c ****              * this call to xEventGroupWaitBits() - for use when the event bits
+ 375:./Drivers/FreeRTOS/event_groups.c ****              * unblock the task. */
+ 376:./Drivers/FreeRTOS/event_groups.c ****             if( xClearOnExit != pdFALSE )
+ 573              		.loc 1 376 15
+ 574 00ec 7B68     		ldr	r3, [r7, #4]
+ 575 00ee 002B     		cmp	r3, #0
+ 576 00f0 03D0     		beq	.L39
+ 377:./Drivers/FreeRTOS/event_groups.c ****             {
+ 378:./Drivers/FreeRTOS/event_groups.c ****                 uxControlBits |= eventCLEAR_EVENTS_ON_EXIT_BIT;
+ 577              		.loc 1 378 31
+ 578 00f2 BB6B     		ldr	r3, [r7, #56]
+ 579 00f4 43F08073 		orr	r3, r3, #16777216
+ 580 00f8 BB63     		str	r3, [r7, #56]
+ 581              	.L39:
+ 379:./Drivers/FreeRTOS/event_groups.c ****             }
+ 380:./Drivers/FreeRTOS/event_groups.c ****             else
+ 381:./Drivers/FreeRTOS/event_groups.c ****             {
+ 382:./Drivers/FreeRTOS/event_groups.c ****                 mtCOVERAGE_TEST_MARKER();
+ 383:./Drivers/FreeRTOS/event_groups.c ****             }
+ 384:./Drivers/FreeRTOS/event_groups.c **** 
+ 385:./Drivers/FreeRTOS/event_groups.c ****             if( xWaitForAllBits != pdFALSE )
+ 582              		.loc 1 385 15
+ 583 00fa 3B68     		ldr	r3, [r7]
+ 584 00fc 002B     		cmp	r3, #0
+ 585 00fe 03D0     		beq	.L40
+ 386:./Drivers/FreeRTOS/event_groups.c ****             {
+ 387:./Drivers/FreeRTOS/event_groups.c ****                 uxControlBits |= eventWAIT_FOR_ALL_BITS;
+ 586              		.loc 1 387 31
+ 587 0100 BB6B     		ldr	r3, [r7, #56]
+ 588 0102 43F08063 		orr	r3, r3, #67108864
+ 589 0106 BB63     		str	r3, [r7, #56]
+ 590              	.L40:
+ 388:./Drivers/FreeRTOS/event_groups.c ****             }
+ 389:./Drivers/FreeRTOS/event_groups.c ****             else
+ 390:./Drivers/FreeRTOS/event_groups.c ****             {
+ 391:./Drivers/FreeRTOS/event_groups.c ****                 mtCOVERAGE_TEST_MARKER();
+ 392:./Drivers/FreeRTOS/event_groups.c ****             }
+ 393:./Drivers/FreeRTOS/event_groups.c **** 
+ 394:./Drivers/FreeRTOS/event_groups.c ****             /* Store the bits that the calling task is waiting for in the
+ 395:./Drivers/FreeRTOS/event_groups.c ****              * task's event list item so the kernel knows when a match is
+ 396:./Drivers/FreeRTOS/event_groups.c ****              * found.  Then enter the blocked state. */
+ 397:./Drivers/FreeRTOS/event_groups.c ****             vTaskPlaceOnUnorderedEventList( &( pxEventBits->xTasksWaitingForBits ), ( uxBitsToWaitF
+ 591              		.loc 1 397 13
+ 592 0108 7B6B     		ldr	r3, [r7, #52]
+ 593 010a 181D     		adds	r0, r3, #4
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 22
+
+
+ 594 010c BA68     		ldr	r2, [r7, #8]
+ 595 010e BB6B     		ldr	r3, [r7, #56]
+ 596 0110 1343     		orrs	r3, r3, r2
+ 597 0112 BA6C     		ldr	r2, [r7, #72]
+ 598 0114 1946     		mov	r1, r3
+ 599 0116 FFF7FEFF 		bl	vTaskPlaceOnUnorderedEventList
+ 398:./Drivers/FreeRTOS/event_groups.c **** 
+ 399:./Drivers/FreeRTOS/event_groups.c ****             /* This is obsolete as it will get set after the task unblocks, but
+ 400:./Drivers/FreeRTOS/event_groups.c ****              * some compilers mistakenly generate a warning about the variable
+ 401:./Drivers/FreeRTOS/event_groups.c ****              * being returned without being set if it is not done. */
+ 402:./Drivers/FreeRTOS/event_groups.c ****             uxReturn = 0;
+ 600              		.loc 1 402 22
+ 601 011a 0023     		movs	r3, #0
+ 602 011c FB63     		str	r3, [r7, #60]
+ 603              	.L37:
+ 604              	.LBE47:
+ 403:./Drivers/FreeRTOS/event_groups.c **** 
+ 404:./Drivers/FreeRTOS/event_groups.c ****             traceEVENT_GROUP_WAIT_BITS_BLOCK( xEventGroup, uxBitsToWaitFor );
+ 405:./Drivers/FreeRTOS/event_groups.c ****         }
+ 406:./Drivers/FreeRTOS/event_groups.c ****     }
+ 407:./Drivers/FreeRTOS/event_groups.c ****     xAlreadyYielded = xTaskResumeAll();
+ 605              		.loc 1 407 23
+ 606 011e FFF7FEFF 		bl	xTaskResumeAll
+ 607 0122 7862     		str	r0, [r7, #36]
+ 408:./Drivers/FreeRTOS/event_groups.c **** 
+ 409:./Drivers/FreeRTOS/event_groups.c ****     if( xTicksToWait != ( TickType_t ) 0 )
+ 608              		.loc 1 409 7
+ 609 0124 BB6C     		ldr	r3, [r7, #72]
+ 610 0126 002B     		cmp	r3, #0
+ 611 0128 31D0     		beq	.L41
+ 410:./Drivers/FreeRTOS/event_groups.c ****     {
+ 411:./Drivers/FreeRTOS/event_groups.c ****         if( xAlreadyYielded == pdFALSE )
+ 612              		.loc 1 411 11
+ 613 012a 7B6A     		ldr	r3, [r7, #36]
+ 614 012c 002B     		cmp	r3, #0
+ 615 012e 07D1     		bne	.L42
+ 412:./Drivers/FreeRTOS/event_groups.c ****         {
+ 413:./Drivers/FreeRTOS/event_groups.c ****             portYIELD_WITHIN_API();
+ 616              		.loc 1 413 13
+ 617 0130 194B     		ldr	r3, .L46
+ 618 0132 4FF08052 		mov	r2, #268435456
+ 619 0136 1A60     		str	r2, [r3]
+ 620              		.syntax unified
+ 621              	@ 413 "./Drivers/FreeRTOS/event_groups.c" 1
+ 622 0138 BFF34F8F 		dsb
+ 623              	@ 0 "" 2
+ 624              	@ 413 "./Drivers/FreeRTOS/event_groups.c" 1
+ 625 013c BFF36F8F 		isb
+ 626              	@ 0 "" 2
+ 627              		.thumb
+ 628              		.syntax unified
+ 629              	.L42:
+ 414:./Drivers/FreeRTOS/event_groups.c ****         }
+ 415:./Drivers/FreeRTOS/event_groups.c ****         else
+ 416:./Drivers/FreeRTOS/event_groups.c ****         {
+ 417:./Drivers/FreeRTOS/event_groups.c ****             mtCOVERAGE_TEST_MARKER();
+ 418:./Drivers/FreeRTOS/event_groups.c ****         }
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 23
+
+
+ 419:./Drivers/FreeRTOS/event_groups.c **** 
+ 420:./Drivers/FreeRTOS/event_groups.c ****         /* The task blocked to wait for its required bits to be set - at this
+ 421:./Drivers/FreeRTOS/event_groups.c ****          * point either the required bits were set or the block time expired.  If
+ 422:./Drivers/FreeRTOS/event_groups.c ****          * the required bits were set they will have been stored in the task's
+ 423:./Drivers/FreeRTOS/event_groups.c ****          * event list item, and they should now be retrieved then cleared. */
+ 424:./Drivers/FreeRTOS/event_groups.c ****         uxReturn = uxTaskResetEventItemValue();
+ 630              		.loc 1 424 20
+ 631 0140 FFF7FEFF 		bl	uxTaskResetEventItemValue
+ 632 0144 F863     		str	r0, [r7, #60]
+ 425:./Drivers/FreeRTOS/event_groups.c **** 
+ 426:./Drivers/FreeRTOS/event_groups.c ****         if( ( uxReturn & eventUNBLOCKED_DUE_TO_BIT_SET ) == ( EventBits_t ) 0 )
+ 633              		.loc 1 426 24
+ 634 0146 FB6B     		ldr	r3, [r7, #60]
+ 635 0148 03F00073 		and	r3, r3, #33554432
+ 636              		.loc 1 426 11
+ 637 014c 002B     		cmp	r3, #0
+ 638 014e 1AD1     		bne	.L43
+ 427:./Drivers/FreeRTOS/event_groups.c ****         {
+ 428:./Drivers/FreeRTOS/event_groups.c ****             taskENTER_CRITICAL();
+ 639              		.loc 1 428 13
+ 640 0150 FFF7FEFF 		bl	vPortEnterCritical
+ 429:./Drivers/FreeRTOS/event_groups.c ****             {
+ 430:./Drivers/FreeRTOS/event_groups.c ****                 /* The task timed out, just return the current event bit value. */
+ 431:./Drivers/FreeRTOS/event_groups.c ****                 uxReturn = pxEventBits->uxEventBits;
+ 641              		.loc 1 431 26
+ 642 0154 7B6B     		ldr	r3, [r7, #52]
+ 643 0156 1B68     		ldr	r3, [r3]
+ 644 0158 FB63     		str	r3, [r7, #60]
+ 432:./Drivers/FreeRTOS/event_groups.c **** 
+ 433:./Drivers/FreeRTOS/event_groups.c ****                 /* It is possible that the event bits were updated between this
+ 434:./Drivers/FreeRTOS/event_groups.c ****                  * task leaving the Blocked state and running again. */
+ 435:./Drivers/FreeRTOS/event_groups.c ****                 if( prvTestWaitCondition( uxReturn, uxBitsToWaitFor, xWaitForAllBits ) != pdFALSE )
+ 645              		.loc 1 435 21
+ 646 015a 3A68     		ldr	r2, [r7]
+ 647 015c B968     		ldr	r1, [r7, #8]
+ 648 015e F86B     		ldr	r0, [r7, #60]
+ 649 0160 FFF7FEFF 		bl	prvTestWaitCondition
+ 650 0164 0346     		mov	r3, r0
+ 651              		.loc 1 435 19
+ 652 0166 002B     		cmp	r3, #0
+ 653 0168 09D0     		beq	.L44
+ 436:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 437:./Drivers/FreeRTOS/event_groups.c ****                     if( xClearOnExit != pdFALSE )
+ 654              		.loc 1 437 23
+ 655 016a 7B68     		ldr	r3, [r7, #4]
+ 656 016c 002B     		cmp	r3, #0
+ 657 016e 06D0     		beq	.L44
+ 438:./Drivers/FreeRTOS/event_groups.c ****                     {
+ 439:./Drivers/FreeRTOS/event_groups.c ****                         pxEventBits->uxEventBits &= ~uxBitsToWaitFor;
+ 658              		.loc 1 439 50
+ 659 0170 7B6B     		ldr	r3, [r7, #52]
+ 660 0172 1A68     		ldr	r2, [r3]
+ 661              		.loc 1 439 53
+ 662 0174 BB68     		ldr	r3, [r7, #8]
+ 663 0176 DB43     		mvns	r3, r3
+ 664              		.loc 1 439 50
+ 665 0178 1A40     		ands	r2, r2, r3
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 24
+
+
+ 666 017a 7B6B     		ldr	r3, [r7, #52]
+ 667 017c 1A60     		str	r2, [r3]
+ 668              	.L44:
+ 440:./Drivers/FreeRTOS/event_groups.c ****                     }
+ 441:./Drivers/FreeRTOS/event_groups.c ****                     else
+ 442:./Drivers/FreeRTOS/event_groups.c ****                     {
+ 443:./Drivers/FreeRTOS/event_groups.c ****                         mtCOVERAGE_TEST_MARKER();
+ 444:./Drivers/FreeRTOS/event_groups.c ****                     }
+ 445:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 446:./Drivers/FreeRTOS/event_groups.c ****                 else
+ 447:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 448:./Drivers/FreeRTOS/event_groups.c ****                     mtCOVERAGE_TEST_MARKER();
+ 449:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 450:./Drivers/FreeRTOS/event_groups.c **** 
+ 451:./Drivers/FreeRTOS/event_groups.c ****                 xTimeoutOccurred = pdTRUE;
+ 669              		.loc 1 451 34
+ 670 017e 0123     		movs	r3, #1
+ 671 0180 3B63     		str	r3, [r7, #48]
+ 452:./Drivers/FreeRTOS/event_groups.c ****             }
+ 453:./Drivers/FreeRTOS/event_groups.c ****             taskEXIT_CRITICAL();
+ 672              		.loc 1 453 13
+ 673 0182 FFF7FEFF 		bl	vPortExitCritical
+ 674              	.L43:
+ 454:./Drivers/FreeRTOS/event_groups.c ****         }
+ 455:./Drivers/FreeRTOS/event_groups.c ****         else
+ 456:./Drivers/FreeRTOS/event_groups.c ****         {
+ 457:./Drivers/FreeRTOS/event_groups.c ****             /* The task unblocked because the bits were set. */
+ 458:./Drivers/FreeRTOS/event_groups.c ****         }
+ 459:./Drivers/FreeRTOS/event_groups.c **** 
+ 460:./Drivers/FreeRTOS/event_groups.c ****         /* The task blocked so control bits may have been set. */
+ 461:./Drivers/FreeRTOS/event_groups.c ****         uxReturn &= ~eventEVENT_BITS_CONTROL_BYTES;
+ 675              		.loc 1 461 18
+ 676 0186 FB6B     		ldr	r3, [r7, #60]
+ 677 0188 23F07F43 		bic	r3, r3, #-16777216
+ 678 018c FB63     		str	r3, [r7, #60]
+ 679              	.L41:
+ 462:./Drivers/FreeRTOS/event_groups.c ****     }
+ 463:./Drivers/FreeRTOS/event_groups.c **** 
+ 464:./Drivers/FreeRTOS/event_groups.c ****     traceEVENT_GROUP_WAIT_BITS_END( xEventGroup, uxBitsToWaitFor, xTimeoutOccurred );
+ 465:./Drivers/FreeRTOS/event_groups.c **** 
+ 466:./Drivers/FreeRTOS/event_groups.c ****     /* Prevent compiler warnings when trace macros are not used. */
+ 467:./Drivers/FreeRTOS/event_groups.c ****     ( void ) xTimeoutOccurred;
+ 468:./Drivers/FreeRTOS/event_groups.c **** 
+ 469:./Drivers/FreeRTOS/event_groups.c ****     return uxReturn;
+ 680              		.loc 1 469 12
+ 681 018e FB6B     		ldr	r3, [r7, #60]
+ 470:./Drivers/FreeRTOS/event_groups.c **** }
+ 682              		.loc 1 470 1
+ 683 0190 1846     		mov	r0, r3
+ 684 0192 4037     		adds	r7, r7, #64
+ 685              	.LCFI13:
+ 686              		.cfi_def_cfa_offset 8
+ 687 0194 BD46     		mov	sp, r7
+ 688              	.LCFI14:
+ 689              		.cfi_def_cfa_register 13
+ 690              		@ sp needed
+ 691 0196 80BD     		pop	{r7, pc}
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 25
+
+
+ 692              	.L47:
+ 693              		.align	2
+ 694              	.L46:
+ 695 0198 04ED00E0 		.word	-536810236
+ 696              		.cfi_endproc
+ 697              	.LFE7:
+ 699              		.section	.text.xEventGroupClearBits,"ax",%progbits
+ 700              		.align	1
+ 701              		.global	xEventGroupClearBits
+ 702              		.syntax unified
+ 703              		.thumb
+ 704              		.thumb_func
+ 705              		.fpu fpv4-sp-d16
+ 707              	xEventGroupClearBits:
+ 708              	.LFB8:
+ 471:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 472:./Drivers/FreeRTOS/event_groups.c **** 
+ 473:./Drivers/FreeRTOS/event_groups.c **** EventBits_t xEventGroupClearBits( EventGroupHandle_t xEventGroup,
+ 474:./Drivers/FreeRTOS/event_groups.c ****                                   const EventBits_t uxBitsToClear )
+ 475:./Drivers/FreeRTOS/event_groups.c **** {
+ 709              		.loc 1 475 1
+ 710              		.cfi_startproc
+ 711              		@ args = 0, pretend = 0, frame = 24
+ 712              		@ frame_needed = 1, uses_anonymous_args = 0
+ 713 0000 80B5     		push	{r7, lr}
+ 714              	.LCFI15:
+ 715              		.cfi_def_cfa_offset 8
+ 716              		.cfi_offset 7, -8
+ 717              		.cfi_offset 14, -4
+ 718 0002 86B0     		sub	sp, sp, #24
+ 719              	.LCFI16:
+ 720              		.cfi_def_cfa_offset 32
+ 721 0004 00AF     		add	r7, sp, #0
+ 722              	.LCFI17:
+ 723              		.cfi_def_cfa_register 7
+ 724 0006 7860     		str	r0, [r7, #4]
+ 725 0008 3960     		str	r1, [r7]
+ 476:./Drivers/FreeRTOS/event_groups.c ****     EventGroup_t * pxEventBits = xEventGroup;
+ 726              		.loc 1 476 20
+ 727 000a 7B68     		ldr	r3, [r7, #4]
+ 728 000c 7B61     		str	r3, [r7, #20]
+ 477:./Drivers/FreeRTOS/event_groups.c ****     EventBits_t uxReturn;
+ 478:./Drivers/FreeRTOS/event_groups.c **** 
+ 479:./Drivers/FreeRTOS/event_groups.c ****     /* Check the user is not attempting to clear the bits used by the kernel
+ 480:./Drivers/FreeRTOS/event_groups.c ****      * itself. */
+ 481:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( xEventGroup );
+ 729              		.loc 1 481 5
+ 730 000e 7B68     		ldr	r3, [r7, #4]
+ 731 0010 002B     		cmp	r3, #0
+ 732 0012 0AD1     		bne	.L49
+ 733              	.LBB48:
+ 734              	.LBB49:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 735              		.loc 2 198 9
+ 736              		.syntax unified
+ 737              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 738 0014 4FF05003 			mov r3, #80												
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 26
+
+
+ 739 0018 83F31188 		msr basepri, r3											
+ 740 001c BFF36F8F 		isb														
+ 741 0020 BFF34F8F 		dsb														
+ 742              	
+ 743              	@ 0 "" 2
+ 744              		.thumb
+ 745              		.syntax unified
+ 746 0024 FB60     		str	r3, [r7, #12]
+ 747              		.loc 2 206 5
+ 748 0026 00BF     		nop
+ 749              	.L50:
+ 750              	.LBE49:
+ 751              	.LBE48:
+ 752              		.loc 1 481 5 discriminator 1
+ 753 0028 FEE7     		b	.L50
+ 754              	.L49:
+ 482:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( ( uxBitsToClear & eventEVENT_BITS_CONTROL_BYTES ) == 0 );
+ 755              		.loc 1 482 5
+ 756 002a 3B68     		ldr	r3, [r7]
+ 757 002c 03F07F43 		and	r3, r3, #-16777216
+ 758 0030 002B     		cmp	r3, #0
+ 759 0032 0AD0     		beq	.L51
+ 760              	.LBB50:
+ 761              	.LBB51:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 762              		.loc 2 198 9
+ 763              		.syntax unified
+ 764              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 765 0034 4FF05003 			mov r3, #80												
+ 766 0038 83F31188 		msr basepri, r3											
+ 767 003c BFF36F8F 		isb														
+ 768 0040 BFF34F8F 		dsb														
+ 769              	
+ 770              	@ 0 "" 2
+ 771              		.thumb
+ 772              		.syntax unified
+ 773 0044 BB60     		str	r3, [r7, #8]
+ 774              		.loc 2 206 5
+ 775 0046 00BF     		nop
+ 776              	.L52:
+ 777              	.LBE51:
+ 778              	.LBE50:
+ 779              		.loc 1 482 5 discriminator 2
+ 780 0048 FEE7     		b	.L52
+ 781              	.L51:
+ 483:./Drivers/FreeRTOS/event_groups.c **** 
+ 484:./Drivers/FreeRTOS/event_groups.c ****     taskENTER_CRITICAL();
+ 782              		.loc 1 484 5
+ 783 004a FFF7FEFF 		bl	vPortEnterCritical
+ 485:./Drivers/FreeRTOS/event_groups.c ****     {
+ 486:./Drivers/FreeRTOS/event_groups.c ****         traceEVENT_GROUP_CLEAR_BITS( xEventGroup, uxBitsToClear );
+ 487:./Drivers/FreeRTOS/event_groups.c **** 
+ 488:./Drivers/FreeRTOS/event_groups.c ****         /* The value returned is the event group value prior to the bits being
+ 489:./Drivers/FreeRTOS/event_groups.c ****          * cleared. */
+ 490:./Drivers/FreeRTOS/event_groups.c ****         uxReturn = pxEventBits->uxEventBits;
+ 784              		.loc 1 490 18
+ 785 004e 7B69     		ldr	r3, [r7, #20]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 27
+
+
+ 786 0050 1B68     		ldr	r3, [r3]
+ 787 0052 3B61     		str	r3, [r7, #16]
+ 491:./Drivers/FreeRTOS/event_groups.c **** 
+ 492:./Drivers/FreeRTOS/event_groups.c ****         /* Clear the bits. */
+ 493:./Drivers/FreeRTOS/event_groups.c ****         pxEventBits->uxEventBits &= ~uxBitsToClear;
+ 788              		.loc 1 493 34
+ 789 0054 7B69     		ldr	r3, [r7, #20]
+ 790 0056 1A68     		ldr	r2, [r3]
+ 791              		.loc 1 493 37
+ 792 0058 3B68     		ldr	r3, [r7]
+ 793 005a DB43     		mvns	r3, r3
+ 794              		.loc 1 493 34
+ 795 005c 1A40     		ands	r2, r2, r3
+ 796 005e 7B69     		ldr	r3, [r7, #20]
+ 797 0060 1A60     		str	r2, [r3]
+ 494:./Drivers/FreeRTOS/event_groups.c ****     }
+ 495:./Drivers/FreeRTOS/event_groups.c ****     taskEXIT_CRITICAL();
+ 798              		.loc 1 495 5
+ 799 0062 FFF7FEFF 		bl	vPortExitCritical
+ 496:./Drivers/FreeRTOS/event_groups.c **** 
+ 497:./Drivers/FreeRTOS/event_groups.c ****     return uxReturn;
+ 800              		.loc 1 497 12
+ 801 0066 3B69     		ldr	r3, [r7, #16]
+ 498:./Drivers/FreeRTOS/event_groups.c **** }
+ 802              		.loc 1 498 1
+ 803 0068 1846     		mov	r0, r3
+ 804 006a 1837     		adds	r7, r7, #24
+ 805              	.LCFI18:
+ 806              		.cfi_def_cfa_offset 8
+ 807 006c BD46     		mov	sp, r7
+ 808              	.LCFI19:
+ 809              		.cfi_def_cfa_register 13
+ 810              		@ sp needed
+ 811 006e 80BD     		pop	{r7, pc}
+ 812              		.cfi_endproc
+ 813              	.LFE8:
+ 815              		.section	.text.xEventGroupGetBitsFromISR,"ax",%progbits
+ 816              		.align	1
+ 817              		.global	xEventGroupGetBitsFromISR
+ 818              		.syntax unified
+ 819              		.thumb
+ 820              		.thumb_func
+ 821              		.fpu fpv4-sp-d16
+ 823              	xEventGroupGetBitsFromISR:
+ 824              	.LFB9:
+ 499:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 500:./Drivers/FreeRTOS/event_groups.c **** 
+ 501:./Drivers/FreeRTOS/event_groups.c **** #if ( ( configUSE_TRACE_FACILITY == 1 ) && ( INCLUDE_xTimerPendFunctionCall == 1 ) && ( configUSE_T
+ 502:./Drivers/FreeRTOS/event_groups.c **** 
+ 503:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xEventGroupClearBitsFromISR( EventGroupHandle_t xEventGroup,
+ 504:./Drivers/FreeRTOS/event_groups.c ****                                             const EventBits_t uxBitsToClear )
+ 505:./Drivers/FreeRTOS/event_groups.c ****     {
+ 506:./Drivers/FreeRTOS/event_groups.c ****         BaseType_t xReturn;
+ 507:./Drivers/FreeRTOS/event_groups.c **** 
+ 508:./Drivers/FreeRTOS/event_groups.c ****         traceEVENT_GROUP_CLEAR_BITS_FROM_ISR( xEventGroup, uxBitsToClear );
+ 509:./Drivers/FreeRTOS/event_groups.c ****         xReturn = xTimerPendFunctionCallFromISR( vEventGroupClearBitsCallback, ( void * ) xEventGro
+ 510:./Drivers/FreeRTOS/event_groups.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 28
+
+
+ 511:./Drivers/FreeRTOS/event_groups.c ****         return xReturn;
+ 512:./Drivers/FreeRTOS/event_groups.c ****     }
+ 513:./Drivers/FreeRTOS/event_groups.c **** 
+ 514:./Drivers/FreeRTOS/event_groups.c **** #endif /* if ( ( configUSE_TRACE_FACILITY == 1 ) && ( INCLUDE_xTimerPendFunctionCall == 1 ) && ( co
+ 515:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 516:./Drivers/FreeRTOS/event_groups.c **** 
+ 517:./Drivers/FreeRTOS/event_groups.c **** EventBits_t xEventGroupGetBitsFromISR( EventGroupHandle_t xEventGroup )
+ 518:./Drivers/FreeRTOS/event_groups.c **** {
+ 825              		.loc 1 518 1
+ 826              		.cfi_startproc
+ 827              		@ args = 0, pretend = 0, frame = 32
+ 828              		@ frame_needed = 1, uses_anonymous_args = 0
+ 829              		@ link register save eliminated.
+ 830 0000 80B4     		push	{r7}
+ 831              	.LCFI20:
+ 832              		.cfi_def_cfa_offset 4
+ 833              		.cfi_offset 7, -4
+ 834 0002 89B0     		sub	sp, sp, #36
+ 835              	.LCFI21:
+ 836              		.cfi_def_cfa_offset 40
+ 837 0004 00AF     		add	r7, sp, #0
+ 838              	.LCFI22:
+ 839              		.cfi_def_cfa_register 7
+ 840 0006 7860     		str	r0, [r7, #4]
+ 519:./Drivers/FreeRTOS/event_groups.c ****     UBaseType_t uxSavedInterruptStatus;
+ 520:./Drivers/FreeRTOS/event_groups.c ****     EventGroup_t const * const pxEventBits = xEventGroup;
+ 841              		.loc 1 520 32
+ 842 0008 7B68     		ldr	r3, [r7, #4]
+ 843 000a FB61     		str	r3, [r7, #28]
+ 844              	.LBB52:
+ 845              	.LBB53:
+ 207:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 208:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 209:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 210:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static uint32_t ulPortRaiseBASEPRI( void )
+ 211:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 212:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         uint32_t ulOriginalBASEPRI, ulNewBASEPRI;
+ 213:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 214:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 846              		.loc 2 214 9
+ 847              		.syntax unified
+ 848              	@ 214 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 849 000c EFF31182 			mrs r2, basepri											
+ 850 0010 4FF05003 		mov r3, #80												
+ 851 0014 83F31188 		msr basepri, r3											
+ 852 0018 BFF36F8F 		isb														
+ 853 001c BFF34F8F 		dsb														
+ 854              	
+ 855              	@ 0 "" 2
+ 856              		.thumb
+ 857              		.syntax unified
+ 858 0020 FA60     		str	r2, [r7, #12]
+ 859 0022 BB60     		str	r3, [r7, #8]
+ 215:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 216:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mrs %0, basepri											\n"\
+ 217:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	mov %1, %2												\n"\
+ 218:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %1											\n"\
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 29
+
+
+ 219:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	isb														\n"\
+ 220:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	dsb														\n"\
+ 221:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             : "=r" ( ulOriginalBASEPRI ), "=r" ( ulNewBASEPRI ) : "i" ( configMAX_SYSCALL_INTERRUPT
+ 222:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 223:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 224:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         /* This return will not be reached but is necessary to prevent compiler
+ 225:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****          * warnings. */
+ 226:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         return ulOriginalBASEPRI;
+ 860              		.loc 2 226 16
+ 861 0024 FB68     		ldr	r3, [r7, #12]
+ 862              	.LBE53:
+ 863              	.LBE52:
+ 521:./Drivers/FreeRTOS/event_groups.c ****     EventBits_t uxReturn;
+ 522:./Drivers/FreeRTOS/event_groups.c **** 
+ 523:./Drivers/FreeRTOS/event_groups.c ****     uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
+ 864              		.loc 1 523 30
+ 865 0026 BB61     		str	r3, [r7, #24]
+ 524:./Drivers/FreeRTOS/event_groups.c ****     {
+ 525:./Drivers/FreeRTOS/event_groups.c ****         uxReturn = pxEventBits->uxEventBits;
+ 866              		.loc 1 525 18
+ 867 0028 FB69     		ldr	r3, [r7, #28]
+ 868 002a 1B68     		ldr	r3, [r3]
+ 869 002c 7B61     		str	r3, [r7, #20]
+ 870 002e BB69     		ldr	r3, [r7, #24]
+ 871 0030 3B61     		str	r3, [r7, #16]
+ 872              	.LBB54:
+ 873              	.LBB55:
+ 227:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 228:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 229:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 230:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     portFORCE_INLINE static void vPortSetBASEPRI( uint32_t ulNewMaskValue )
+ 231:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 232:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile
+ 874              		.loc 2 232 9
+ 875 0032 3B69     		ldr	r3, [r7, #16]
+ 876              		.syntax unified
+ 877              	@ 232 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 878 0034 83F31188 			msr basepri, r3	
+ 879              	@ 0 "" 2
+ 233:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 234:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****             "	msr basepri, %0	"::"r" ( ulNewMaskValue ) : "memory"
+ 235:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         );
+ 236:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 880              		.loc 2 236 5
+ 881              		.thumb
+ 882              		.syntax unified
+ 883 0038 00BF     		nop
+ 884              	.LBE55:
+ 885              	.LBE54:
+ 526:./Drivers/FreeRTOS/event_groups.c ****     }
+ 527:./Drivers/FreeRTOS/event_groups.c ****     portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
+ 528:./Drivers/FreeRTOS/event_groups.c **** 
+ 529:./Drivers/FreeRTOS/event_groups.c ****     return uxReturn;
+ 886              		.loc 1 529 12
+ 887 003a 7B69     		ldr	r3, [r7, #20]
+ 530:./Drivers/FreeRTOS/event_groups.c **** } /*lint !e818 EventGroupHandle_t is a typedef used in other functions to so can't be pointer to co
+ 888              		.loc 1 530 1
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 30
+
+
+ 889 003c 1846     		mov	r0, r3
+ 890 003e 2437     		adds	r7, r7, #36
+ 891              	.LCFI23:
+ 892              		.cfi_def_cfa_offset 4
+ 893 0040 BD46     		mov	sp, r7
+ 894              	.LCFI24:
+ 895              		.cfi_def_cfa_register 13
+ 896              		@ sp needed
+ 897 0042 5DF8047B 		ldr	r7, [sp], #4
+ 898              	.LCFI25:
+ 899              		.cfi_restore 7
+ 900              		.cfi_def_cfa_offset 0
+ 901 0046 7047     		bx	lr
+ 902              		.cfi_endproc
+ 903              	.LFE9:
+ 905              		.section	.text.xEventGroupSetBits,"ax",%progbits
+ 906              		.align	1
+ 907              		.global	xEventGroupSetBits
+ 908              		.syntax unified
+ 909              		.thumb
+ 910              		.thumb_func
+ 911              		.fpu fpv4-sp-d16
+ 913              	xEventGroupSetBits:
+ 914              	.LFB10:
+ 531:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 532:./Drivers/FreeRTOS/event_groups.c **** 
+ 533:./Drivers/FreeRTOS/event_groups.c **** EventBits_t xEventGroupSetBits( EventGroupHandle_t xEventGroup,
+ 534:./Drivers/FreeRTOS/event_groups.c ****                                 const EventBits_t uxBitsToSet )
+ 535:./Drivers/FreeRTOS/event_groups.c **** {
+ 915              		.loc 1 535 1
+ 916              		.cfi_startproc
+ 917              		@ args = 0, pretend = 0, frame = 56
+ 918              		@ frame_needed = 1, uses_anonymous_args = 0
+ 919 0000 80B5     		push	{r7, lr}
+ 920              	.LCFI26:
+ 921              		.cfi_def_cfa_offset 8
+ 922              		.cfi_offset 7, -8
+ 923              		.cfi_offset 14, -4
+ 924 0002 8EB0     		sub	sp, sp, #56
+ 925              	.LCFI27:
+ 926              		.cfi_def_cfa_offset 64
+ 927 0004 00AF     		add	r7, sp, #0
+ 928              	.LCFI28:
+ 929              		.cfi_def_cfa_register 7
+ 930 0006 7860     		str	r0, [r7, #4]
+ 931 0008 3960     		str	r1, [r7]
+ 536:./Drivers/FreeRTOS/event_groups.c ****     ListItem_t * pxListItem, * pxNext;
+ 537:./Drivers/FreeRTOS/event_groups.c ****     ListItem_t const * pxListEnd;
+ 538:./Drivers/FreeRTOS/event_groups.c ****     List_t const * pxList;
+ 539:./Drivers/FreeRTOS/event_groups.c ****     EventBits_t uxBitsToClear = 0, uxBitsWaitedFor, uxControlBits;
+ 932              		.loc 1 539 17
+ 933 000a 0023     		movs	r3, #0
+ 934 000c 3B63     		str	r3, [r7, #48]
+ 540:./Drivers/FreeRTOS/event_groups.c ****     EventGroup_t * pxEventBits = xEventGroup;
+ 935              		.loc 1 540 20
+ 936 000e 7B68     		ldr	r3, [r7, #4]
+ 937 0010 BB62     		str	r3, [r7, #40]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 31
+
+
+ 541:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xMatchFound = pdFALSE;
+ 938              		.loc 1 541 16
+ 939 0012 0023     		movs	r3, #0
+ 940 0014 FB62     		str	r3, [r7, #44]
+ 542:./Drivers/FreeRTOS/event_groups.c **** 
+ 543:./Drivers/FreeRTOS/event_groups.c ****     /* Check the user is not attempting to set the bits used by the kernel
+ 544:./Drivers/FreeRTOS/event_groups.c ****      * itself. */
+ 545:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( xEventGroup );
+ 941              		.loc 1 545 5
+ 942 0016 7B68     		ldr	r3, [r7, #4]
+ 943 0018 002B     		cmp	r3, #0
+ 944 001a 0AD1     		bne	.L58
+ 945              	.LBB56:
+ 946              	.LBB57:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 947              		.loc 2 198 9
+ 948              		.syntax unified
+ 949              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 950 001c 4FF05003 			mov r3, #80												
+ 951 0020 83F31188 		msr basepri, r3											
+ 952 0024 BFF36F8F 		isb														
+ 953 0028 BFF34F8F 		dsb														
+ 954              	
+ 955              	@ 0 "" 2
+ 956              		.thumb
+ 957              		.syntax unified
+ 958 002c 3B61     		str	r3, [r7, #16]
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 959              		.loc 2 206 5
+ 960 002e 00BF     		nop
+ 961              	.L59:
+ 962              	.LBE57:
+ 963              	.LBE56:
+ 964              		.loc 1 545 5 discriminator 1
+ 965 0030 FEE7     		b	.L59
+ 966              	.L58:
+ 546:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( ( uxBitsToSet & eventEVENT_BITS_CONTROL_BYTES ) == 0 );
+ 967              		.loc 1 546 5
+ 968 0032 3B68     		ldr	r3, [r7]
+ 969 0034 03F07F43 		and	r3, r3, #-16777216
+ 970 0038 002B     		cmp	r3, #0
+ 971 003a 0AD0     		beq	.L60
+ 972              	.LBB58:
+ 973              	.LBB59:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 974              		.loc 2 198 9
+ 975              		.syntax unified
+ 976              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 977 003c 4FF05003 			mov r3, #80												
+ 978 0040 83F31188 		msr basepri, r3											
+ 979 0044 BFF36F8F 		isb														
+ 980 0048 BFF34F8F 		dsb														
+ 981              	
+ 982              	@ 0 "" 2
+ 983              		.thumb
+ 984              		.syntax unified
+ 985 004c FB60     		str	r3, [r7, #12]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 32
+
+
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 986              		.loc 2 206 5
+ 987 004e 00BF     		nop
+ 988              	.L61:
+ 989              	.LBE59:
+ 990              	.LBE58:
+ 991              		.loc 1 546 5 discriminator 2
+ 992 0050 FEE7     		b	.L61
+ 993              	.L60:
+ 547:./Drivers/FreeRTOS/event_groups.c **** 
+ 548:./Drivers/FreeRTOS/event_groups.c ****     pxList = &( pxEventBits->xTasksWaitingForBits );
+ 994              		.loc 1 548 12
+ 995 0052 BB6A     		ldr	r3, [r7, #40]
+ 996 0054 0433     		adds	r3, r3, #4
+ 997 0056 7B62     		str	r3, [r7, #36]
+ 549:./Drivers/FreeRTOS/event_groups.c ****     pxListEnd = listGET_END_MARKER( pxList ); /*lint !e826 !e740 !e9087 The mini list structure is 
+ 998              		.loc 1 549 15
+ 999 0058 7B6A     		ldr	r3, [r7, #36]
+ 1000 005a 0833     		adds	r3, r3, #8
+ 1001 005c 3B62     		str	r3, [r7, #32]
+ 550:./Drivers/FreeRTOS/event_groups.c ****     vTaskSuspendAll();
+ 1002              		.loc 1 550 5
+ 1003 005e FFF7FEFF 		bl	vTaskSuspendAll
+ 551:./Drivers/FreeRTOS/event_groups.c ****     {
+ 552:./Drivers/FreeRTOS/event_groups.c ****         traceEVENT_GROUP_SET_BITS( xEventGroup, uxBitsToSet );
+ 553:./Drivers/FreeRTOS/event_groups.c **** 
+ 554:./Drivers/FreeRTOS/event_groups.c ****         pxListItem = listGET_HEAD_ENTRY( pxList );
+ 1004              		.loc 1 554 20
+ 1005 0062 7B6A     		ldr	r3, [r7, #36]
+ 1006 0064 DB68     		ldr	r3, [r3, #12]
+ 1007 0066 7B63     		str	r3, [r7, #52]
+ 555:./Drivers/FreeRTOS/event_groups.c **** 
+ 556:./Drivers/FreeRTOS/event_groups.c ****         /* Set the bits. */
+ 557:./Drivers/FreeRTOS/event_groups.c ****         pxEventBits->uxEventBits |= uxBitsToSet;
+ 1008              		.loc 1 557 34
+ 1009 0068 BB6A     		ldr	r3, [r7, #40]
+ 1010 006a 1A68     		ldr	r2, [r3]
+ 1011 006c 3B68     		ldr	r3, [r7]
+ 1012 006e 1A43     		orrs	r2, r2, r3
+ 1013 0070 BB6A     		ldr	r3, [r7, #40]
+ 1014 0072 1A60     		str	r2, [r3]
+ 558:./Drivers/FreeRTOS/event_groups.c **** 
+ 559:./Drivers/FreeRTOS/event_groups.c ****         /* See if the new bit value should unblock any tasks. */
+ 560:./Drivers/FreeRTOS/event_groups.c ****         while( pxListItem != pxListEnd )
+ 1015              		.loc 1 560 14
+ 1016 0074 3CE0     		b	.L62
+ 1017              	.L67:
+ 561:./Drivers/FreeRTOS/event_groups.c ****         {
+ 562:./Drivers/FreeRTOS/event_groups.c ****             pxNext = listGET_NEXT( pxListItem );
+ 1018              		.loc 1 562 20
+ 1019 0076 7B6B     		ldr	r3, [r7, #52]
+ 1020 0078 5B68     		ldr	r3, [r3, #4]
+ 1021 007a FB61     		str	r3, [r7, #28]
+ 563:./Drivers/FreeRTOS/event_groups.c ****             uxBitsWaitedFor = listGET_LIST_ITEM_VALUE( pxListItem );
+ 1022              		.loc 1 563 29
+ 1023 007c 7B6B     		ldr	r3, [r7, #52]
+ 1024 007e 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 33
+
+
+ 1025 0080 BB61     		str	r3, [r7, #24]
+ 564:./Drivers/FreeRTOS/event_groups.c ****             xMatchFound = pdFALSE;
+ 1026              		.loc 1 564 25
+ 1027 0082 0023     		movs	r3, #0
+ 1028 0084 FB62     		str	r3, [r7, #44]
+ 565:./Drivers/FreeRTOS/event_groups.c **** 
+ 566:./Drivers/FreeRTOS/event_groups.c ****             /* Split the bits waited for from the control bits. */
+ 567:./Drivers/FreeRTOS/event_groups.c ****             uxControlBits = uxBitsWaitedFor & eventEVENT_BITS_CONTROL_BYTES;
+ 1029              		.loc 1 567 27
+ 1030 0086 BB69     		ldr	r3, [r7, #24]
+ 1031 0088 03F07F43 		and	r3, r3, #-16777216
+ 1032 008c 7B61     		str	r3, [r7, #20]
+ 568:./Drivers/FreeRTOS/event_groups.c ****             uxBitsWaitedFor &= ~eventEVENT_BITS_CONTROL_BYTES;
+ 1033              		.loc 1 568 29
+ 1034 008e BB69     		ldr	r3, [r7, #24]
+ 1035 0090 23F07F43 		bic	r3, r3, #-16777216
+ 1036 0094 BB61     		str	r3, [r7, #24]
+ 569:./Drivers/FreeRTOS/event_groups.c **** 
+ 570:./Drivers/FreeRTOS/event_groups.c ****             if( ( uxControlBits & eventWAIT_FOR_ALL_BITS ) == ( EventBits_t ) 0 )
+ 1037              		.loc 1 570 33
+ 1038 0096 7B69     		ldr	r3, [r7, #20]
+ 1039 0098 03F08063 		and	r3, r3, #67108864
+ 1040              		.loc 1 570 15
+ 1041 009c 002B     		cmp	r3, #0
+ 1042 009e 08D1     		bne	.L63
+ 571:./Drivers/FreeRTOS/event_groups.c ****             {
+ 572:./Drivers/FreeRTOS/event_groups.c ****                 /* Just looking for single bit being set. */
+ 573:./Drivers/FreeRTOS/event_groups.c ****                 if( ( uxBitsWaitedFor & pxEventBits->uxEventBits ) != ( EventBits_t ) 0 )
+ 1043              		.loc 1 573 52
+ 1044 00a0 BB6A     		ldr	r3, [r7, #40]
+ 1045 00a2 1A68     		ldr	r2, [r3]
+ 1046              		.loc 1 573 39
+ 1047 00a4 BB69     		ldr	r3, [r7, #24]
+ 1048 00a6 1340     		ands	r3, r3, r2
+ 1049              		.loc 1 573 19
+ 1050 00a8 002B     		cmp	r3, #0
+ 1051 00aa 0BD0     		beq	.L64
+ 574:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 575:./Drivers/FreeRTOS/event_groups.c ****                     xMatchFound = pdTRUE;
+ 1052              		.loc 1 575 33
+ 1053 00ac 0123     		movs	r3, #1
+ 1054 00ae FB62     		str	r3, [r7, #44]
+ 1055 00b0 08E0     		b	.L64
+ 1056              	.L63:
+ 576:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 577:./Drivers/FreeRTOS/event_groups.c ****                 else
+ 578:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 579:./Drivers/FreeRTOS/event_groups.c ****                     mtCOVERAGE_TEST_MARKER();
+ 580:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 581:./Drivers/FreeRTOS/event_groups.c ****             }
+ 582:./Drivers/FreeRTOS/event_groups.c ****             else if( ( uxBitsWaitedFor & pxEventBits->uxEventBits ) == uxBitsWaitedFor )
+ 1057              		.loc 1 582 53
+ 1058 00b2 BB6A     		ldr	r3, [r7, #40]
+ 1059 00b4 1A68     		ldr	r2, [r3]
+ 1060              		.loc 1 582 40
+ 1061 00b6 BB69     		ldr	r3, [r7, #24]
+ 1062 00b8 1340     		ands	r3, r3, r2
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 34
+
+
+ 1063              		.loc 1 582 20
+ 1064 00ba BA69     		ldr	r2, [r7, #24]
+ 1065 00bc 9A42     		cmp	r2, r3
+ 1066 00be 01D1     		bne	.L64
+ 583:./Drivers/FreeRTOS/event_groups.c ****             {
+ 584:./Drivers/FreeRTOS/event_groups.c ****                 /* All bits are set. */
+ 585:./Drivers/FreeRTOS/event_groups.c ****                 xMatchFound = pdTRUE;
+ 1067              		.loc 1 585 29
+ 1068 00c0 0123     		movs	r3, #1
+ 1069 00c2 FB62     		str	r3, [r7, #44]
+ 1070              	.L64:
+ 586:./Drivers/FreeRTOS/event_groups.c ****             }
+ 587:./Drivers/FreeRTOS/event_groups.c ****             else
+ 588:./Drivers/FreeRTOS/event_groups.c ****             {
+ 589:./Drivers/FreeRTOS/event_groups.c ****                 /* Need all bits to be set, but not all the bits were set. */
+ 590:./Drivers/FreeRTOS/event_groups.c ****             }
+ 591:./Drivers/FreeRTOS/event_groups.c **** 
+ 592:./Drivers/FreeRTOS/event_groups.c ****             if( xMatchFound != pdFALSE )
+ 1071              		.loc 1 592 15
+ 1072 00c4 FB6A     		ldr	r3, [r7, #44]
+ 1073 00c6 002B     		cmp	r3, #0
+ 1074 00c8 10D0     		beq	.L65
+ 593:./Drivers/FreeRTOS/event_groups.c ****             {
+ 594:./Drivers/FreeRTOS/event_groups.c ****                 /* The bits match.  Should the bits be cleared on exit? */
+ 595:./Drivers/FreeRTOS/event_groups.c ****                 if( ( uxControlBits & eventCLEAR_EVENTS_ON_EXIT_BIT ) != ( EventBits_t ) 0 )
+ 1075              		.loc 1 595 37
+ 1076 00ca 7B69     		ldr	r3, [r7, #20]
+ 1077 00cc 03F08073 		and	r3, r3, #16777216
+ 1078              		.loc 1 595 19
+ 1079 00d0 002B     		cmp	r3, #0
+ 1080 00d2 03D0     		beq	.L66
+ 596:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 597:./Drivers/FreeRTOS/event_groups.c ****                     uxBitsToClear |= uxBitsWaitedFor;
+ 1081              		.loc 1 597 35
+ 1082 00d4 3A6B     		ldr	r2, [r7, #48]
+ 1083 00d6 BB69     		ldr	r3, [r7, #24]
+ 1084 00d8 1343     		orrs	r3, r3, r2
+ 1085 00da 3B63     		str	r3, [r7, #48]
+ 1086              	.L66:
+ 598:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 599:./Drivers/FreeRTOS/event_groups.c ****                 else
+ 600:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 601:./Drivers/FreeRTOS/event_groups.c ****                     mtCOVERAGE_TEST_MARKER();
+ 602:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 603:./Drivers/FreeRTOS/event_groups.c **** 
+ 604:./Drivers/FreeRTOS/event_groups.c ****                 /* Store the actual event flag value in the task's event list
+ 605:./Drivers/FreeRTOS/event_groups.c ****                  * item before removing the task from the event list.  The
+ 606:./Drivers/FreeRTOS/event_groups.c ****                  * eventUNBLOCKED_DUE_TO_BIT_SET bit is set so the task knows
+ 607:./Drivers/FreeRTOS/event_groups.c ****                  * that is was unblocked due to its required bits matching, rather
+ 608:./Drivers/FreeRTOS/event_groups.c ****                  * than because it timed out. */
+ 609:./Drivers/FreeRTOS/event_groups.c ****                 vTaskRemoveFromUnorderedEventList( pxListItem, pxEventBits->uxEventBits | eventUNBL
+ 1087              		.loc 1 609 75
+ 1088 00dc BB6A     		ldr	r3, [r7, #40]
+ 1089 00de 1B68     		ldr	r3, [r3]
+ 1090              		.loc 1 609 17
+ 1091 00e0 43F00073 		orr	r3, r3, #33554432
+ 1092 00e4 1946     		mov	r1, r3
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 35
+
+
+ 1093 00e6 786B     		ldr	r0, [r7, #52]
+ 1094 00e8 FFF7FEFF 		bl	vTaskRemoveFromUnorderedEventList
+ 1095              	.L65:
+ 610:./Drivers/FreeRTOS/event_groups.c ****             }
+ 611:./Drivers/FreeRTOS/event_groups.c **** 
+ 612:./Drivers/FreeRTOS/event_groups.c ****             /* Move onto the next list item.  Note pxListItem->pxNext is not
+ 613:./Drivers/FreeRTOS/event_groups.c ****              * used here as the list item may have been removed from the event list
+ 614:./Drivers/FreeRTOS/event_groups.c ****              * and inserted into the ready/pending reading list. */
+ 615:./Drivers/FreeRTOS/event_groups.c ****             pxListItem = pxNext;
+ 1096              		.loc 1 615 24
+ 1097 00ec FB69     		ldr	r3, [r7, #28]
+ 1098 00ee 7B63     		str	r3, [r7, #52]
+ 1099              	.L62:
+ 560:./Drivers/FreeRTOS/event_groups.c ****         {
+ 1100              		.loc 1 560 14
+ 1101 00f0 7A6B     		ldr	r2, [r7, #52]
+ 1102 00f2 3B6A     		ldr	r3, [r7, #32]
+ 1103 00f4 9A42     		cmp	r2, r3
+ 1104 00f6 BED1     		bne	.L67
+ 616:./Drivers/FreeRTOS/event_groups.c ****         }
+ 617:./Drivers/FreeRTOS/event_groups.c **** 
+ 618:./Drivers/FreeRTOS/event_groups.c ****         /* Clear any bits that matched when the eventCLEAR_EVENTS_ON_EXIT_BIT
+ 619:./Drivers/FreeRTOS/event_groups.c ****          * bit was set in the control word. */
+ 620:./Drivers/FreeRTOS/event_groups.c ****         pxEventBits->uxEventBits &= ~uxBitsToClear;
+ 1105              		.loc 1 620 34
+ 1106 00f8 BB6A     		ldr	r3, [r7, #40]
+ 1107 00fa 1A68     		ldr	r2, [r3]
+ 1108              		.loc 1 620 37
+ 1109 00fc 3B6B     		ldr	r3, [r7, #48]
+ 1110 00fe DB43     		mvns	r3, r3
+ 1111              		.loc 1 620 34
+ 1112 0100 1A40     		ands	r2, r2, r3
+ 1113 0102 BB6A     		ldr	r3, [r7, #40]
+ 1114 0104 1A60     		str	r2, [r3]
+ 621:./Drivers/FreeRTOS/event_groups.c ****     }
+ 622:./Drivers/FreeRTOS/event_groups.c ****     ( void ) xTaskResumeAll();
+ 1115              		.loc 1 622 14
+ 1116 0106 FFF7FEFF 		bl	xTaskResumeAll
+ 623:./Drivers/FreeRTOS/event_groups.c **** 
+ 624:./Drivers/FreeRTOS/event_groups.c ****     return pxEventBits->uxEventBits;
+ 1117              		.loc 1 624 23
+ 1118 010a BB6A     		ldr	r3, [r7, #40]
+ 1119 010c 1B68     		ldr	r3, [r3]
+ 625:./Drivers/FreeRTOS/event_groups.c **** }
+ 1120              		.loc 1 625 1
+ 1121 010e 1846     		mov	r0, r3
+ 1122 0110 3837     		adds	r7, r7, #56
+ 1123              	.LCFI29:
+ 1124              		.cfi_def_cfa_offset 8
+ 1125 0112 BD46     		mov	sp, r7
+ 1126              	.LCFI30:
+ 1127              		.cfi_def_cfa_register 13
+ 1128              		@ sp needed
+ 1129 0114 80BD     		pop	{r7, pc}
+ 1130              		.cfi_endproc
+ 1131              	.LFE10:
+ 1133              		.section	.text.vEventGroupDelete,"ax",%progbits
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 36
+
+
+ 1134              		.align	1
+ 1135              		.global	vEventGroupDelete
+ 1136              		.syntax unified
+ 1137              		.thumb
+ 1138              		.thumb_func
+ 1139              		.fpu fpv4-sp-d16
+ 1141              	vEventGroupDelete:
+ 1142              	.LFB11:
+ 626:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 627:./Drivers/FreeRTOS/event_groups.c **** 
+ 628:./Drivers/FreeRTOS/event_groups.c **** void vEventGroupDelete( EventGroupHandle_t xEventGroup )
+ 629:./Drivers/FreeRTOS/event_groups.c **** {
+ 1143              		.loc 1 629 1
+ 1144              		.cfi_startproc
+ 1145              		@ args = 0, pretend = 0, frame = 24
+ 1146              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1147 0000 80B5     		push	{r7, lr}
+ 1148              	.LCFI31:
+ 1149              		.cfi_def_cfa_offset 8
+ 1150              		.cfi_offset 7, -8
+ 1151              		.cfi_offset 14, -4
+ 1152 0002 86B0     		sub	sp, sp, #24
+ 1153              	.LCFI32:
+ 1154              		.cfi_def_cfa_offset 32
+ 1155 0004 00AF     		add	r7, sp, #0
+ 1156              	.LCFI33:
+ 1157              		.cfi_def_cfa_register 7
+ 1158 0006 7860     		str	r0, [r7, #4]
+ 630:./Drivers/FreeRTOS/event_groups.c ****     EventGroup_t * pxEventBits = xEventGroup;
+ 1159              		.loc 1 630 20
+ 1160 0008 7B68     		ldr	r3, [r7, #4]
+ 1161 000a 7B61     		str	r3, [r7, #20]
+ 631:./Drivers/FreeRTOS/event_groups.c ****     const List_t * pxTasksWaitingForBits;
+ 632:./Drivers/FreeRTOS/event_groups.c **** 
+ 633:./Drivers/FreeRTOS/event_groups.c ****     configASSERT( pxEventBits );
+ 1162              		.loc 1 633 5
+ 1163 000c 7B69     		ldr	r3, [r7, #20]
+ 1164 000e 002B     		cmp	r3, #0
+ 1165 0010 0AD1     		bne	.L70
+ 1166              	.LBB60:
+ 1167              	.LBB61:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 1168              		.loc 2 198 9
+ 1169              		.syntax unified
+ 1170              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 1171 0012 4FF05003 			mov r3, #80												
+ 1172 0016 83F31188 		msr basepri, r3											
+ 1173 001a BFF36F8F 		isb														
+ 1174 001e BFF34F8F 		dsb														
+ 1175              	
+ 1176              	@ 0 "" 2
+ 1177              		.thumb
+ 1178              		.syntax unified
+ 1179 0022 FB60     		str	r3, [r7, #12]
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 1180              		.loc 2 206 5
+ 1181 0024 00BF     		nop
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 37
+
+
+ 1182              	.L71:
+ 1183              	.LBE61:
+ 1184              	.LBE60:
+ 1185              		.loc 1 633 5 discriminator 1
+ 1186 0026 FEE7     		b	.L71
+ 1187              	.L70:
+ 634:./Drivers/FreeRTOS/event_groups.c **** 
+ 635:./Drivers/FreeRTOS/event_groups.c ****     pxTasksWaitingForBits = &( pxEventBits->xTasksWaitingForBits );
+ 1188              		.loc 1 635 27
+ 1189 0028 7B69     		ldr	r3, [r7, #20]
+ 1190 002a 0433     		adds	r3, r3, #4
+ 1191 002c 3B61     		str	r3, [r7, #16]
+ 636:./Drivers/FreeRTOS/event_groups.c **** 
+ 637:./Drivers/FreeRTOS/event_groups.c ****     vTaskSuspendAll();
+ 1192              		.loc 1 637 5
+ 1193 002e FFF7FEFF 		bl	vTaskSuspendAll
+ 638:./Drivers/FreeRTOS/event_groups.c ****     {
+ 639:./Drivers/FreeRTOS/event_groups.c ****         traceEVENT_GROUP_DELETE( xEventGroup );
+ 640:./Drivers/FreeRTOS/event_groups.c **** 
+ 641:./Drivers/FreeRTOS/event_groups.c ****         while( listCURRENT_LIST_LENGTH( pxTasksWaitingForBits ) > ( UBaseType_t ) 0 )
+ 1194              		.loc 1 641 14
+ 1195 0032 17E0     		b	.L72
+ 1196              	.L75:
+ 642:./Drivers/FreeRTOS/event_groups.c ****         {
+ 643:./Drivers/FreeRTOS/event_groups.c ****             /* Unblock the task, returning 0 as the event list is being deleted
+ 644:./Drivers/FreeRTOS/event_groups.c ****              * and cannot therefore have any bits set. */
+ 645:./Drivers/FreeRTOS/event_groups.c ****             configASSERT( pxTasksWaitingForBits->xListEnd.pxNext != ( const ListItem_t * ) &( pxTas
+ 1197              		.loc 1 645 13
+ 1198 0034 3B69     		ldr	r3, [r7, #16]
+ 1199 0036 DA68     		ldr	r2, [r3, #12]
+ 1200 0038 3B69     		ldr	r3, [r7, #16]
+ 1201 003a 0833     		adds	r3, r3, #8
+ 1202 003c 9A42     		cmp	r2, r3
+ 1203 003e 0AD1     		bne	.L73
+ 1204              	.LBB62:
+ 1205              	.LBB63:
+ 198:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h ****         (
+ 1206              		.loc 2 198 9
+ 1207              		.syntax unified
+ 1208              	@ 198 "Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 1209 0040 4FF05003 			mov r3, #80												
+ 1210 0044 83F31188 		msr basepri, r3											
+ 1211 0048 BFF36F8F 		isb														
+ 1212 004c BFF34F8F 		dsb														
+ 1213              	
+ 1214              	@ 0 "" 2
+ 1215              		.thumb
+ 1216              		.syntax unified
+ 1217 0050 BB60     		str	r3, [r7, #8]
+ 206:Drivers/FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 1218              		.loc 2 206 5
+ 1219 0052 00BF     		nop
+ 1220              	.L74:
+ 1221              	.LBE63:
+ 1222              	.LBE62:
+ 1223              		.loc 1 645 13 discriminator 2
+ 1224 0054 FEE7     		b	.L74
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 38
+
+
+ 1225              	.L73:
+ 646:./Drivers/FreeRTOS/event_groups.c ****             vTaskRemoveFromUnorderedEventList( pxTasksWaitingForBits->xListEnd.pxNext, eventUNBLOCK
+ 1226              		.loc 1 646 79
+ 1227 0056 3B69     		ldr	r3, [r7, #16]
+ 1228 0058 DB68     		ldr	r3, [r3, #12]
+ 1229              		.loc 1 646 13
+ 1230 005a 4FF00071 		mov	r1, #33554432
+ 1231 005e 1846     		mov	r0, r3
+ 1232 0060 FFF7FEFF 		bl	vTaskRemoveFromUnorderedEventList
+ 1233              	.L72:
+ 641:./Drivers/FreeRTOS/event_groups.c ****         {
+ 1234              		.loc 1 641 16
+ 1235 0064 3B69     		ldr	r3, [r7, #16]
+ 1236 0066 1B68     		ldr	r3, [r3]
+ 641:./Drivers/FreeRTOS/event_groups.c ****         {
+ 1237              		.loc 1 641 14
+ 1238 0068 002B     		cmp	r3, #0
+ 1239 006a E3D1     		bne	.L75
+ 647:./Drivers/FreeRTOS/event_groups.c ****         }
+ 648:./Drivers/FreeRTOS/event_groups.c **** 
+ 649:./Drivers/FreeRTOS/event_groups.c ****         #if ( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configSUPPORT_STATIC_ALLOCATION == 0 )
+ 650:./Drivers/FreeRTOS/event_groups.c ****             {
+ 651:./Drivers/FreeRTOS/event_groups.c ****                 /* The event group can only have been allocated dynamically - free
+ 652:./Drivers/FreeRTOS/event_groups.c ****                  * it again. */
+ 653:./Drivers/FreeRTOS/event_groups.c ****                 vPortFree( pxEventBits );
+ 1240              		.loc 1 653 17
+ 1241 006c 7869     		ldr	r0, [r7, #20]
+ 1242 006e FFF7FEFF 		bl	vPortFree
+ 654:./Drivers/FreeRTOS/event_groups.c ****             }
+ 655:./Drivers/FreeRTOS/event_groups.c ****         #elif ( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configSUPPORT_STATIC_ALLOCATION == 1
+ 656:./Drivers/FreeRTOS/event_groups.c ****             {
+ 657:./Drivers/FreeRTOS/event_groups.c ****                 /* The event group could have been allocated statically or
+ 658:./Drivers/FreeRTOS/event_groups.c ****                  * dynamically, so check before attempting to free the memory. */
+ 659:./Drivers/FreeRTOS/event_groups.c ****                 if( pxEventBits->ucStaticallyAllocated == ( uint8_t ) pdFALSE )
+ 660:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 661:./Drivers/FreeRTOS/event_groups.c ****                     vPortFree( pxEventBits );
+ 662:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 663:./Drivers/FreeRTOS/event_groups.c ****                 else
+ 664:./Drivers/FreeRTOS/event_groups.c ****                 {
+ 665:./Drivers/FreeRTOS/event_groups.c ****                     mtCOVERAGE_TEST_MARKER();
+ 666:./Drivers/FreeRTOS/event_groups.c ****                 }
+ 667:./Drivers/FreeRTOS/event_groups.c ****             }
+ 668:./Drivers/FreeRTOS/event_groups.c ****         #endif /* configSUPPORT_DYNAMIC_ALLOCATION */
+ 669:./Drivers/FreeRTOS/event_groups.c ****     }
+ 670:./Drivers/FreeRTOS/event_groups.c ****     ( void ) xTaskResumeAll();
+ 1243              		.loc 1 670 14
+ 1244 0072 FFF7FEFF 		bl	xTaskResumeAll
+ 671:./Drivers/FreeRTOS/event_groups.c **** }
+ 1245              		.loc 1 671 1
+ 1246 0076 00BF     		nop
+ 1247 0078 1837     		adds	r7, r7, #24
+ 1248              	.LCFI34:
+ 1249              		.cfi_def_cfa_offset 8
+ 1250 007a BD46     		mov	sp, r7
+ 1251              	.LCFI35:
+ 1252              		.cfi_def_cfa_register 13
+ 1253              		@ sp needed
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 39
+
+
+ 1254 007c 80BD     		pop	{r7, pc}
+ 1255              		.cfi_endproc
+ 1256              	.LFE11:
+ 1258              		.section	.text.vEventGroupSetBitsCallback,"ax",%progbits
+ 1259              		.align	1
+ 1260              		.global	vEventGroupSetBitsCallback
+ 1261              		.syntax unified
+ 1262              		.thumb
+ 1263              		.thumb_func
+ 1264              		.fpu fpv4-sp-d16
+ 1266              	vEventGroupSetBitsCallback:
+ 1267              	.LFB12:
+ 672:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 673:./Drivers/FreeRTOS/event_groups.c **** 
+ 674:./Drivers/FreeRTOS/event_groups.c **** /* For internal use only - execute a 'set bits' command that was pended from
+ 675:./Drivers/FreeRTOS/event_groups.c ****  * an interrupt. */
+ 676:./Drivers/FreeRTOS/event_groups.c **** void vEventGroupSetBitsCallback( void * pvEventGroup,
+ 677:./Drivers/FreeRTOS/event_groups.c ****                                  const uint32_t ulBitsToSet )
+ 678:./Drivers/FreeRTOS/event_groups.c **** {
+ 1268              		.loc 1 678 1
+ 1269              		.cfi_startproc
+ 1270              		@ args = 0, pretend = 0, frame = 8
+ 1271              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1272 0000 80B5     		push	{r7, lr}
+ 1273              	.LCFI36:
+ 1274              		.cfi_def_cfa_offset 8
+ 1275              		.cfi_offset 7, -8
+ 1276              		.cfi_offset 14, -4
+ 1277 0002 82B0     		sub	sp, sp, #8
+ 1278              	.LCFI37:
+ 1279              		.cfi_def_cfa_offset 16
+ 1280 0004 00AF     		add	r7, sp, #0
+ 1281              	.LCFI38:
+ 1282              		.cfi_def_cfa_register 7
+ 1283 0006 7860     		str	r0, [r7, #4]
+ 1284 0008 3960     		str	r1, [r7]
+ 679:./Drivers/FreeRTOS/event_groups.c ****     ( void ) xEventGroupSetBits( pvEventGroup, ( EventBits_t ) ulBitsToSet ); /*lint !e9079 Can't a
+ 1285              		.loc 1 679 14
+ 1286 000a 3968     		ldr	r1, [r7]
+ 1287 000c 7868     		ldr	r0, [r7, #4]
+ 1288 000e FFF7FEFF 		bl	xEventGroupSetBits
+ 680:./Drivers/FreeRTOS/event_groups.c **** }
+ 1289              		.loc 1 680 1
+ 1290 0012 00BF     		nop
+ 1291 0014 0837     		adds	r7, r7, #8
+ 1292              	.LCFI39:
+ 1293              		.cfi_def_cfa_offset 8
+ 1294 0016 BD46     		mov	sp, r7
+ 1295              	.LCFI40:
+ 1296              		.cfi_def_cfa_register 13
+ 1297              		@ sp needed
+ 1298 0018 80BD     		pop	{r7, pc}
+ 1299              		.cfi_endproc
+ 1300              	.LFE12:
+ 1302              		.section	.text.vEventGroupClearBitsCallback,"ax",%progbits
+ 1303              		.align	1
+ 1304              		.global	vEventGroupClearBitsCallback
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 40
+
+
+ 1305              		.syntax unified
+ 1306              		.thumb
+ 1307              		.thumb_func
+ 1308              		.fpu fpv4-sp-d16
+ 1310              	vEventGroupClearBitsCallback:
+ 1311              	.LFB13:
+ 681:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 682:./Drivers/FreeRTOS/event_groups.c **** 
+ 683:./Drivers/FreeRTOS/event_groups.c **** /* For internal use only - execute a 'clear bits' command that was pended from
+ 684:./Drivers/FreeRTOS/event_groups.c ****  * an interrupt. */
+ 685:./Drivers/FreeRTOS/event_groups.c **** void vEventGroupClearBitsCallback( void * pvEventGroup,
+ 686:./Drivers/FreeRTOS/event_groups.c ****                                    const uint32_t ulBitsToClear )
+ 687:./Drivers/FreeRTOS/event_groups.c **** {
+ 1312              		.loc 1 687 1
+ 1313              		.cfi_startproc
+ 1314              		@ args = 0, pretend = 0, frame = 8
+ 1315              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1316 0000 80B5     		push	{r7, lr}
+ 1317              	.LCFI41:
+ 1318              		.cfi_def_cfa_offset 8
+ 1319              		.cfi_offset 7, -8
+ 1320              		.cfi_offset 14, -4
+ 1321 0002 82B0     		sub	sp, sp, #8
+ 1322              	.LCFI42:
+ 1323              		.cfi_def_cfa_offset 16
+ 1324 0004 00AF     		add	r7, sp, #0
+ 1325              	.LCFI43:
+ 1326              		.cfi_def_cfa_register 7
+ 1327 0006 7860     		str	r0, [r7, #4]
+ 1328 0008 3960     		str	r1, [r7]
+ 688:./Drivers/FreeRTOS/event_groups.c ****     ( void ) xEventGroupClearBits( pvEventGroup, ( EventBits_t ) ulBitsToClear ); /*lint !e9079 Can
+ 1329              		.loc 1 688 14
+ 1330 000a 3968     		ldr	r1, [r7]
+ 1331 000c 7868     		ldr	r0, [r7, #4]
+ 1332 000e FFF7FEFF 		bl	xEventGroupClearBits
+ 689:./Drivers/FreeRTOS/event_groups.c **** }
+ 1333              		.loc 1 689 1
+ 1334 0012 00BF     		nop
+ 1335 0014 0837     		adds	r7, r7, #8
+ 1336              	.LCFI44:
+ 1337              		.cfi_def_cfa_offset 8
+ 1338 0016 BD46     		mov	sp, r7
+ 1339              	.LCFI45:
+ 1340              		.cfi_def_cfa_register 13
+ 1341              		@ sp needed
+ 1342 0018 80BD     		pop	{r7, pc}
+ 1343              		.cfi_endproc
+ 1344              	.LFE13:
+ 1346              		.section	.text.prvTestWaitCondition,"ax",%progbits
+ 1347              		.align	1
+ 1348              		.syntax unified
+ 1349              		.thumb
+ 1350              		.thumb_func
+ 1351              		.fpu fpv4-sp-d16
+ 1353              	prvTestWaitCondition:
+ 1354              	.LFB14:
+ 690:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 41
+
+
+ 691:./Drivers/FreeRTOS/event_groups.c **** 
+ 692:./Drivers/FreeRTOS/event_groups.c **** static BaseType_t prvTestWaitCondition( const EventBits_t uxCurrentEventBits,
+ 693:./Drivers/FreeRTOS/event_groups.c ****                                         const EventBits_t uxBitsToWaitFor,
+ 694:./Drivers/FreeRTOS/event_groups.c ****                                         const BaseType_t xWaitForAllBits )
+ 695:./Drivers/FreeRTOS/event_groups.c **** {
+ 1355              		.loc 1 695 1
+ 1356              		.cfi_startproc
+ 1357              		@ args = 0, pretend = 0, frame = 24
+ 1358              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1359              		@ link register save eliminated.
+ 1360 0000 80B4     		push	{r7}
+ 1361              	.LCFI46:
+ 1362              		.cfi_def_cfa_offset 4
+ 1363              		.cfi_offset 7, -4
+ 1364 0002 87B0     		sub	sp, sp, #28
+ 1365              	.LCFI47:
+ 1366              		.cfi_def_cfa_offset 32
+ 1367 0004 00AF     		add	r7, sp, #0
+ 1368              	.LCFI48:
+ 1369              		.cfi_def_cfa_register 7
+ 1370 0006 F860     		str	r0, [r7, #12]
+ 1371 0008 B960     		str	r1, [r7, #8]
+ 1372 000a 7A60     		str	r2, [r7, #4]
+ 696:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xWaitConditionMet = pdFALSE;
+ 1373              		.loc 1 696 16
+ 1374 000c 0023     		movs	r3, #0
+ 1375 000e 7B61     		str	r3, [r7, #20]
+ 697:./Drivers/FreeRTOS/event_groups.c **** 
+ 698:./Drivers/FreeRTOS/event_groups.c ****     if( xWaitForAllBits == pdFALSE )
+ 1376              		.loc 1 698 7
+ 1377 0010 7B68     		ldr	r3, [r7, #4]
+ 1378 0012 002B     		cmp	r3, #0
+ 1379 0014 07D1     		bne	.L79
+ 699:./Drivers/FreeRTOS/event_groups.c ****     {
+ 700:./Drivers/FreeRTOS/event_groups.c ****         /* Task only has to wait for one bit within uxBitsToWaitFor to be
+ 701:./Drivers/FreeRTOS/event_groups.c ****          * set.  Is one already set? */
+ 702:./Drivers/FreeRTOS/event_groups.c ****         if( ( uxCurrentEventBits & uxBitsToWaitFor ) != ( EventBits_t ) 0 )
+ 1380              		.loc 1 702 34
+ 1381 0016 FA68     		ldr	r2, [r7, #12]
+ 1382 0018 BB68     		ldr	r3, [r7, #8]
+ 1383 001a 1340     		ands	r3, r3, r2
+ 1384              		.loc 1 702 11
+ 1385 001c 002B     		cmp	r3, #0
+ 1386 001e 0AD0     		beq	.L80
+ 703:./Drivers/FreeRTOS/event_groups.c ****         {
+ 704:./Drivers/FreeRTOS/event_groups.c ****             xWaitConditionMet = pdTRUE;
+ 1387              		.loc 1 704 31
+ 1388 0020 0123     		movs	r3, #1
+ 1389 0022 7B61     		str	r3, [r7, #20]
+ 1390 0024 07E0     		b	.L80
+ 1391              	.L79:
+ 705:./Drivers/FreeRTOS/event_groups.c ****         }
+ 706:./Drivers/FreeRTOS/event_groups.c ****         else
+ 707:./Drivers/FreeRTOS/event_groups.c ****         {
+ 708:./Drivers/FreeRTOS/event_groups.c ****             mtCOVERAGE_TEST_MARKER();
+ 709:./Drivers/FreeRTOS/event_groups.c ****         }
+ 710:./Drivers/FreeRTOS/event_groups.c ****     }
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 42
+
+
+ 711:./Drivers/FreeRTOS/event_groups.c ****     else
+ 712:./Drivers/FreeRTOS/event_groups.c ****     {
+ 713:./Drivers/FreeRTOS/event_groups.c ****         /* Task has to wait for all the bits in uxBitsToWaitFor to be set.
+ 714:./Drivers/FreeRTOS/event_groups.c ****          * Are they set already? */
+ 715:./Drivers/FreeRTOS/event_groups.c ****         if( ( uxCurrentEventBits & uxBitsToWaitFor ) == uxBitsToWaitFor )
+ 1392              		.loc 1 715 34
+ 1393 0026 FA68     		ldr	r2, [r7, #12]
+ 1394 0028 BB68     		ldr	r3, [r7, #8]
+ 1395 002a 1340     		ands	r3, r3, r2
+ 1396              		.loc 1 715 11
+ 1397 002c BA68     		ldr	r2, [r7, #8]
+ 1398 002e 9A42     		cmp	r2, r3
+ 1399 0030 01D1     		bne	.L80
+ 716:./Drivers/FreeRTOS/event_groups.c ****         {
+ 717:./Drivers/FreeRTOS/event_groups.c ****             xWaitConditionMet = pdTRUE;
+ 1400              		.loc 1 717 31
+ 1401 0032 0123     		movs	r3, #1
+ 1402 0034 7B61     		str	r3, [r7, #20]
+ 1403              	.L80:
+ 718:./Drivers/FreeRTOS/event_groups.c ****         }
+ 719:./Drivers/FreeRTOS/event_groups.c ****         else
+ 720:./Drivers/FreeRTOS/event_groups.c ****         {
+ 721:./Drivers/FreeRTOS/event_groups.c ****             mtCOVERAGE_TEST_MARKER();
+ 722:./Drivers/FreeRTOS/event_groups.c ****         }
+ 723:./Drivers/FreeRTOS/event_groups.c ****     }
+ 724:./Drivers/FreeRTOS/event_groups.c **** 
+ 725:./Drivers/FreeRTOS/event_groups.c ****     return xWaitConditionMet;
+ 1404              		.loc 1 725 12
+ 1405 0036 7B69     		ldr	r3, [r7, #20]
+ 726:./Drivers/FreeRTOS/event_groups.c **** }
+ 1406              		.loc 1 726 1
+ 1407 0038 1846     		mov	r0, r3
+ 1408 003a 1C37     		adds	r7, r7, #28
+ 1409              	.LCFI49:
+ 1410              		.cfi_def_cfa_offset 4
+ 1411 003c BD46     		mov	sp, r7
+ 1412              	.LCFI50:
+ 1413              		.cfi_def_cfa_register 13
+ 1414              		@ sp needed
+ 1415 003e 5DF8047B 		ldr	r7, [sp], #4
+ 1416              	.LCFI51:
+ 1417              		.cfi_restore 7
+ 1418              		.cfi_def_cfa_offset 0
+ 1419 0042 7047     		bx	lr
+ 1420              		.cfi_endproc
+ 1421              	.LFE14:
+ 1423              		.section	.text.uxEventGroupGetNumber,"ax",%progbits
+ 1424              		.align	1
+ 1425              		.global	uxEventGroupGetNumber
+ 1426              		.syntax unified
+ 1427              		.thumb
+ 1428              		.thumb_func
+ 1429              		.fpu fpv4-sp-d16
+ 1431              	uxEventGroupGetNumber:
+ 1432              	.LFB15:
+ 727:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 728:./Drivers/FreeRTOS/event_groups.c **** 
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 43
+
+
+ 729:./Drivers/FreeRTOS/event_groups.c **** #if ( ( configUSE_TRACE_FACILITY == 1 ) && ( INCLUDE_xTimerPendFunctionCall == 1 ) && ( configUSE_T
+ 730:./Drivers/FreeRTOS/event_groups.c **** 
+ 731:./Drivers/FreeRTOS/event_groups.c ****     BaseType_t xEventGroupSetBitsFromISR( EventGroupHandle_t xEventGroup,
+ 732:./Drivers/FreeRTOS/event_groups.c ****                                           const EventBits_t uxBitsToSet,
+ 733:./Drivers/FreeRTOS/event_groups.c ****                                           BaseType_t * pxHigherPriorityTaskWoken )
+ 734:./Drivers/FreeRTOS/event_groups.c ****     {
+ 735:./Drivers/FreeRTOS/event_groups.c ****         BaseType_t xReturn;
+ 736:./Drivers/FreeRTOS/event_groups.c **** 
+ 737:./Drivers/FreeRTOS/event_groups.c ****         traceEVENT_GROUP_SET_BITS_FROM_ISR( xEventGroup, uxBitsToSet );
+ 738:./Drivers/FreeRTOS/event_groups.c ****         xReturn = xTimerPendFunctionCallFromISR( vEventGroupSetBitsCallback, ( void * ) xEventGroup
+ 739:./Drivers/FreeRTOS/event_groups.c **** 
+ 740:./Drivers/FreeRTOS/event_groups.c ****         return xReturn;
+ 741:./Drivers/FreeRTOS/event_groups.c ****     }
+ 742:./Drivers/FreeRTOS/event_groups.c **** 
+ 743:./Drivers/FreeRTOS/event_groups.c **** #endif /* if ( ( configUSE_TRACE_FACILITY == 1 ) && ( INCLUDE_xTimerPendFunctionCall == 1 ) && ( co
+ 744:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 745:./Drivers/FreeRTOS/event_groups.c **** 
+ 746:./Drivers/FreeRTOS/event_groups.c **** #if ( configUSE_TRACE_FACILITY == 1 )
+ 747:./Drivers/FreeRTOS/event_groups.c **** 
+ 748:./Drivers/FreeRTOS/event_groups.c ****     UBaseType_t uxEventGroupGetNumber( void * xEventGroup )
+ 749:./Drivers/FreeRTOS/event_groups.c ****     {
+ 1433              		.loc 1 749 5
+ 1434              		.cfi_startproc
+ 1435              		@ args = 0, pretend = 0, frame = 16
+ 1436              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1437              		@ link register save eliminated.
+ 1438 0000 80B4     		push	{r7}
+ 1439              	.LCFI52:
+ 1440              		.cfi_def_cfa_offset 4
+ 1441              		.cfi_offset 7, -4
+ 1442 0002 85B0     		sub	sp, sp, #20
+ 1443              	.LCFI53:
+ 1444              		.cfi_def_cfa_offset 24
+ 1445 0004 00AF     		add	r7, sp, #0
+ 1446              	.LCFI54:
+ 1447              		.cfi_def_cfa_register 7
+ 1448 0006 7860     		str	r0, [r7, #4]
+ 750:./Drivers/FreeRTOS/event_groups.c ****         UBaseType_t xReturn;
+ 751:./Drivers/FreeRTOS/event_groups.c ****         EventGroup_t const * pxEventBits = ( EventGroup_t * ) xEventGroup; /*lint !e9087 !e9079 Eve
+ 1449              		.loc 1 751 30
+ 1450 0008 7B68     		ldr	r3, [r7, #4]
+ 1451 000a BB60     		str	r3, [r7, #8]
+ 752:./Drivers/FreeRTOS/event_groups.c **** 
+ 753:./Drivers/FreeRTOS/event_groups.c ****         if( xEventGroup == NULL )
+ 1452              		.loc 1 753 11
+ 1453 000c 7B68     		ldr	r3, [r7, #4]
+ 1454 000e 002B     		cmp	r3, #0
+ 1455 0010 02D1     		bne	.L83
+ 754:./Drivers/FreeRTOS/event_groups.c ****         {
+ 755:./Drivers/FreeRTOS/event_groups.c ****             xReturn = 0;
+ 1456              		.loc 1 755 21
+ 1457 0012 0023     		movs	r3, #0
+ 1458 0014 FB60     		str	r3, [r7, #12]
+ 1459 0016 02E0     		b	.L84
+ 1460              	.L83:
+ 756:./Drivers/FreeRTOS/event_groups.c ****         }
+ 757:./Drivers/FreeRTOS/event_groups.c ****         else
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 44
+
+
+ 758:./Drivers/FreeRTOS/event_groups.c ****         {
+ 759:./Drivers/FreeRTOS/event_groups.c ****             xReturn = pxEventBits->uxEventGroupNumber;
+ 1461              		.loc 1 759 21
+ 1462 0018 BB68     		ldr	r3, [r7, #8]
+ 1463 001a 9B69     		ldr	r3, [r3, #24]
+ 1464 001c FB60     		str	r3, [r7, #12]
+ 1465              	.L84:
+ 760:./Drivers/FreeRTOS/event_groups.c ****         }
+ 761:./Drivers/FreeRTOS/event_groups.c **** 
+ 762:./Drivers/FreeRTOS/event_groups.c ****         return xReturn;
+ 1466              		.loc 1 762 16
+ 1467 001e FB68     		ldr	r3, [r7, #12]
+ 763:./Drivers/FreeRTOS/event_groups.c ****     }
+ 1468              		.loc 1 763 5
+ 1469 0020 1846     		mov	r0, r3
+ 1470 0022 1437     		adds	r7, r7, #20
+ 1471              	.LCFI55:
+ 1472              		.cfi_def_cfa_offset 4
+ 1473 0024 BD46     		mov	sp, r7
+ 1474              	.LCFI56:
+ 1475              		.cfi_def_cfa_register 13
+ 1476              		@ sp needed
+ 1477 0026 5DF8047B 		ldr	r7, [sp], #4
+ 1478              	.LCFI57:
+ 1479              		.cfi_restore 7
+ 1480              		.cfi_def_cfa_offset 0
+ 1481 002a 7047     		bx	lr
+ 1482              		.cfi_endproc
+ 1483              	.LFE15:
+ 1485              		.section	.text.vEventGroupSetNumber,"ax",%progbits
+ 1486              		.align	1
+ 1487              		.global	vEventGroupSetNumber
+ 1488              		.syntax unified
+ 1489              		.thumb
+ 1490              		.thumb_func
+ 1491              		.fpu fpv4-sp-d16
+ 1493              	vEventGroupSetNumber:
+ 1494              	.LFB16:
+ 764:./Drivers/FreeRTOS/event_groups.c **** 
+ 765:./Drivers/FreeRTOS/event_groups.c **** #endif /* configUSE_TRACE_FACILITY */
+ 766:./Drivers/FreeRTOS/event_groups.c **** /*-----------------------------------------------------------*/
+ 767:./Drivers/FreeRTOS/event_groups.c **** 
+ 768:./Drivers/FreeRTOS/event_groups.c **** #if ( configUSE_TRACE_FACILITY == 1 )
+ 769:./Drivers/FreeRTOS/event_groups.c **** 
+ 770:./Drivers/FreeRTOS/event_groups.c ****     void vEventGroupSetNumber( void * xEventGroup,
+ 771:./Drivers/FreeRTOS/event_groups.c ****                                UBaseType_t uxEventGroupNumber )
+ 772:./Drivers/FreeRTOS/event_groups.c ****     {
+ 1495              		.loc 1 772 5
+ 1496              		.cfi_startproc
+ 1497              		@ args = 0, pretend = 0, frame = 8
+ 1498              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1499              		@ link register save eliminated.
+ 1500 0000 80B4     		push	{r7}
+ 1501              	.LCFI58:
+ 1502              		.cfi_def_cfa_offset 4
+ 1503              		.cfi_offset 7, -4
+ 1504 0002 83B0     		sub	sp, sp, #12
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 45
+
+
+ 1505              	.LCFI59:
+ 1506              		.cfi_def_cfa_offset 16
+ 1507 0004 00AF     		add	r7, sp, #0
+ 1508              	.LCFI60:
+ 1509              		.cfi_def_cfa_register 7
+ 1510 0006 7860     		str	r0, [r7, #4]
+ 1511 0008 3960     		str	r1, [r7]
+ 773:./Drivers/FreeRTOS/event_groups.c ****         ( ( EventGroup_t * ) xEventGroup )->uxEventGroupNumber = uxEventGroupNumber; /*lint !e9087 
+ 1512              		.loc 1 773 64
+ 1513 000a 7B68     		ldr	r3, [r7, #4]
+ 1514 000c 3A68     		ldr	r2, [r7]
+ 1515 000e 9A61     		str	r2, [r3, #24]
+ 774:./Drivers/FreeRTOS/event_groups.c ****     }
+ 1516              		.loc 1 774 5
+ 1517 0010 00BF     		nop
+ 1518 0012 0C37     		adds	r7, r7, #12
+ 1519              	.LCFI61:
+ 1520              		.cfi_def_cfa_offset 4
+ 1521 0014 BD46     		mov	sp, r7
+ 1522              	.LCFI62:
+ 1523              		.cfi_def_cfa_register 13
+ 1524              		@ sp needed
+ 1525 0016 5DF8047B 		ldr	r7, [sp], #4
+ 1526              	.LCFI63:
+ 1527              		.cfi_restore 7
+ 1528              		.cfi_def_cfa_offset 0
+ 1529 001a 7047     		bx	lr
+ 1530              		.cfi_endproc
+ 1531              	.LFE16:
+ 1533              		.text
+ 1534              	.Letext0:
+ 1535              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\arm-none-eabi\\include\\
+ 1536              		.file 4 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.07\\arm-none-eabi\\include\\
+ 1537              		.file 5 "Drivers/FreeRTOS/include/list.h"
+ 1538              		.file 6 "Drivers/FreeRTOS/include/event_groups.h"
+ARM GAS  C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s 			page 46
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 event_groups.c
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:18     .text.xEventGroupCreate:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:26     .text.xEventGroupCreate:00000000 xEventGroupCreate
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:78     .text.xEventGroupSync:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:85     .text.xEventGroupSync:00000000 xEventGroupSync
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:913    .text.xEventGroupSetBits:00000000 xEventGroupSetBits
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:359    .text.xEventGroupSync:00000158 $d
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:364    .text.xEventGroupWaitBits:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:371    .text.xEventGroupWaitBits:00000000 xEventGroupWaitBits
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1353   .text.prvTestWaitCondition:00000000 prvTestWaitCondition
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:695    .text.xEventGroupWaitBits:00000198 $d
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:700    .text.xEventGroupClearBits:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:707    .text.xEventGroupClearBits:00000000 xEventGroupClearBits
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:816    .text.xEventGroupGetBitsFromISR:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:823    .text.xEventGroupGetBitsFromISR:00000000 xEventGroupGetBitsFromISR
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:906    .text.xEventGroupSetBits:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1134   .text.vEventGroupDelete:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1141   .text.vEventGroupDelete:00000000 vEventGroupDelete
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1259   .text.vEventGroupSetBitsCallback:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1266   .text.vEventGroupSetBitsCallback:00000000 vEventGroupSetBitsCallback
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1303   .text.vEventGroupClearBitsCallback:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1310   .text.vEventGroupClearBitsCallback:00000000 vEventGroupClearBitsCallback
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1347   .text.prvTestWaitCondition:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1424   .text.uxEventGroupGetNumber:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1431   .text.uxEventGroupGetNumber:00000000 uxEventGroupGetNumber
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1486   .text.vEventGroupSetNumber:00000000 $t
+C:\Users\Benson\AppData\Local\Temp\ccXSGHO1.s:1493   .text.vEventGroupSetNumber:00000000 vEventGroupSetNumber
+
+UNDEFINED SYMBOLS
+pvPortMalloc
+vListInitialise
+xTaskGetSchedulerState
+vTaskSuspendAll
+vTaskPlaceOnUnorderedEventList
+xTaskResumeAll
+uxTaskResetEventItemValue
+vPortEnterCritical
+vPortExitCritical
+vTaskRemoveFromUnorderedEventList
+vPortFree

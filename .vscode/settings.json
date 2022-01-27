@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "stm32f303ze_usart_driver.h": "c",
+        "myusart.h": "c"
+    },
+    "cortex-debug.registerUseNaturalFormat": false
+}
