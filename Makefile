@@ -5,13 +5,14 @@
 # ------------------------------------------------
 
 # 目標編譯檔案
-TARGET = main
+TARGET = Exercise/Exercise1
 # 編譯檔案資料夾
 BUILD_DIR = Debug
 # C Source 使用到的.c檔
-C_SOURCES = 			\
-$(wildcard ./Src/*.c)	\
-$(wildcard ./Drivers/FreeRTOS/*.c) \
+C_SOURCES = 						\
+$(wildcard ./Src/$(TARGET).c)		\
+$(wildcard ./Src/*.c)				\
+$(wildcard ./Drivers/FreeRTOS/*.c) 	\
 $(wildcard ./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/*.c) \
 $(wildcard ./Drivers/FreeRTOS/portable/MemMang/*.c) \
 
@@ -49,7 +50,7 @@ C_INCLUDES = 			   \
 # -Wall 編譯後顯示所有警告
 # -fdata-sections 在編譯的時候把每個資料作為一個section。其中每個sections名與function或data名保持一致，能夠減小生成檔案的大小
 # -ffunction-sections 在編譯的時候把每個函式作為一個section
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) -O0 -Wall -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) -O3 -Wall -fdata-sections -ffunction-sections
 # -g -gdwarf-2 生成 gdb 除錯資訊 格式為 dward-2
 CFLAGS += -g -gdwarf-2
 # -MMD 用以避免產生系統標頭檔案，如 <stdint.h>
@@ -67,20 +68,20 @@ vpath %.c $(dir $(C_SOURCES))
 OBJECTS += $(patsubst %.s,$(BUILD_DIR)/%.o,$(notdir $(ASM_SOURCES)))  # ASM .o檔
 vpath %.s $(dir $(ASM_SOURCES))
 
-all: clean $(BUILD_DIR)/$(TARGET).elf
+all: clean $(BUILD_DIR)/$(notdir $(TARGET)).elf
 $(BUILD_DIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 $(BUILD_DIR)/%.o: %.s
 	$(AS) -c $(CFLAGS) $< -o $@
-$(BUILD_DIR)/$(TARGET).elf: $(BUILD_DIR) $(OBJECTS)
+$(BUILD_DIR)/$(notdir $(TARGET)).elf: $(BUILD_DIR) $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
 $(BUILD_DIR):
 	mkdir $@
 
 .PHONY: disassembly load upload clean
-disassembly: $(BUILD_DIR)/$(TARGET).elf
-	$(COMPILER)objdump.exe -d $^ > $(BUILD_DIR)/$(TARGET).S
+disassembly: $(BUILD_DIR)/$(notdir $(TARGET)).elf
+	$(COMPILER)objdump.exe -d $^ > $(BUILD_DIR)/$(notdir $(TARGET)).S
 load: 
 	openocd -f board/st_nucleo_f3.cfg
 upload:
