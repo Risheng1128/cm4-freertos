@@ -15,8 +15,8 @@
 #include "FreeRTOS.h"
 #include "task.h"     // include FreeRTOS task lib 
 
-void task1_handler(void* parameters);
-void task2_handler(void* parameters);
+static void task1_handler(void* parameters);
+static void task2_handler(void* parameters);
 
 int main(void) {
     TaskHandle_t task1_handle, task2_handle;
@@ -45,13 +45,13 @@ int main(void) {
 	  return 0;
 }
 
-void task1_handler(void* parameters) {
+static void task1_handler(void* parameters) {
     while (1) {
         printf("%s\n", (char*)parameters);
     }
 }
 
-void task2_handler(void* parameters) {
+static void task2_handler(void* parameters) {
     while (1) {
         printf("%s\n", (char*)parameters);
     }
