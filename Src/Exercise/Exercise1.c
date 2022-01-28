@@ -22,22 +22,22 @@ int main(void) {
     TaskHandle_t task1_handle, task2_handle;
     BaseType_t status;
 	  MYUSART_Init();
-    status = xTaskCreate( (TaskFunction_t)task1_handler,  \
-                          "Task-1",       \
-                          200,            \
-                          "Hello World from Task-1",  \
-                          2,              \
-                          &task1_handle   \
+    status = xTaskCreate( (TaskFunction_t)task1_handler,  /* Task函式地址 */ \
+                          "Task-1",       /* 辨識Task的名字 */ \
+                          200,            /* Stack的大小，這裡為800bytes */ \
+                          "Hello World from Task-1",  /* 傳到Task的變數 */ \
+                          2,              /* Task的優先度 */ \
+                          &task1_handle   /* 用來保存Task */ \
                         );
 
     configASSERT(status == pdPASS);
 
-    status = xTaskCreate( (TaskFunction_t)task2_handler,  \
-                          "Task-2",       \
-                          200,            \
-                          "Hello World from Task-2", \
-                          2,              \
-                          &task2_handle   \
+    status = xTaskCreate( (TaskFunction_t)task2_handler, /* Task函式地址 */ \
+                          "Task-2",       /* 辨識Task的名字 */ \
+                          200,            /* Stack的大小，這裡為800bytes */ \
+                          "Hello World from Task-2", /* 傳到Task的變數 */  \
+                          2,              /* Task的優先度 */ \
+                          &task2_handle   /* 用來保存Task */ \
                         );
 
     configASSERT(status == pdPASS);
