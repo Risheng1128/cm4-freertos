@@ -32,5 +32,37 @@
   - 結果
     編譯成功!!!(爽)
     ![](https://i.imgur.com/JjfRH0Q.png)
+    
+- FreeRTOS API
+  [FreeRTOS API官方文件](https://freertos.org/a00106.html)
+
+## 練習
+### Exercise1
+- 目標: 
+  1. Write an application that creates 2 tasks, Task-1 and Task-2
+  2. Task-1 印 "Hello World from Task-1"
+  3. Task-2 印 "Hello World from Task-2"
+- 結果: 由於兩個Task的優先度一樣，因此可以看到印出來的結果為互相輪流執行
+  ![](https://i.imgur.com/mXqkWxw.png)
+
+## 遭遇的問題
+- 記憶體(bss)問題
+  - 問題: STM32F303ZE的.bss空間不夠大
+    ![](https://i.imgur.com/GEv5QmR.png)
+  - 解法: 修改FreeRTOSConfig.h裡的`configTOTAL_HEAP_SIZE`
+    由於使用的開發版RAM只有64KB，而`configTOTAL_HEAP_SIZE`預設為75KB，只要將該數字條小即可(最後改成32KB)
+    > #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 32 * 1024 ) )
+  - 結果: 問題解決!
+    ![](https://i.imgur.com/vpWPEJF.png)
+    
+- FreeRTOS設定問題
+  ![](https://i.imgur.com/EBv8sbZ.png)
+  
+  解法: 
+  1. 修改FreeRTOSConfig.h裡的`configUSE_IDLE_HOOK`為0
+  2. 修改FreeRTOSConfig.h裡的`configCPU_CLOCK_HZ`為80000000 (STM32F303ZE預設clock)
+  
+  結果:
+  ![](https://i.imgur.com/A6mDpJ7.png)
 
 還在努力學習!!
