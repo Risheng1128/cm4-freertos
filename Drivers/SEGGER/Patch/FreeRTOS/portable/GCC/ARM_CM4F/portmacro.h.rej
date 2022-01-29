@@ -1,0 +1,11 @@
+--- FreeRTOS/portable/GCC/ARM_CM4F/portmacro.h	2020-12-16 00:24:27.000000000 +0530
++++ new/portmacro.h	2021-02-04 18:10:05.178951000 +0530
+@@ -90,7 +90,7 @@
+ 
+     #define portNVIC_INT_CTRL_REG     ( *( ( volatile uint32_t * ) 0xe000ed04 ) )
+     #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )
+-    #define portEND_SWITCHING_ISR( xSwitchRequired )    if( xSwitchRequired != pdFALSE ) portYIELD()
++    #define portEND_SWITCHING_ISR( xSwitchRequired ) { if( xSwitchRequired != pdFALSE ) { traceISR_EXIT_TO_SCHEDULER(); portYIELD(); } else { traceISR_EXIT(); } }
+     #define portYIELD_FROM_ISR( x )                     portEND_SWITCHING_ISR( x )
+ /*-----------------------------------------------------------*/
+ 

@@ -1,0 +1,12 @@
+--- FreeRTOS/include/portable.h	2021-02-04 18:32:35.603444600 +0530
++++ new/portable.h	2021-02-04 17:23:06.083461500 +0530
+@@ -207,6 +207,9 @@
+                                     uint32_t ulStackDepth ) PRIVILEGED_FUNCTION;
+ #endif
+ 
++
++void vInitPrioGroupValue(void);
++
+ /* *INDENT-OFF* */
+ #ifdef __cplusplus
+     }
