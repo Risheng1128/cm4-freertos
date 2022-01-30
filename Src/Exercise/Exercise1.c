@@ -11,9 +11,16 @@
   */
 
 #include <stdio.h>
-#include "myusart.h"
+#include "mysetting.h"
+
+#if (USE_MYUSART == 1)
+    #include "myusart.h"
+#endif
+
 #include "FreeRTOS.h"
 #include "task.h"     // include FreeRTOS task lib 
+
+#define DWT_CTRL    *(uint32_t*)0xE0001000U // SWT Control Register
 
 static void task1_handler(void* parameters);
 static void task2_handler(void* parameters);
@@ -21,7 +28,16 @@ static void task2_handler(void* parameters);
 int main(void) {
     TaskHandle_t task1_handle, task2_handle;
     BaseType_t status;
-	  MYUSART_Init();
+
+#if (USE_MYUSART == 1)
+    MYUSART_Init();
+#endif
+#if (USE_SYSTEMVIEW == 1)
+    DWT_CTRL |= (1 << 0); // Enable the CYCCNT ciunter
+    SEGGER_SYSVIEW_Conf();  // SystemView Setting
+    SEGGER_SYSVIEW_Start(); // SystemView Start
+#endif
+    
     status = xTaskCreate( (TaskFunction_t)task1_handler,  /* Task函式地址 */ \
                           "Task-1",       /* 辨識Task的名字 */ \
                           200,            /* Stack的大小，這裡為800bytes */ \

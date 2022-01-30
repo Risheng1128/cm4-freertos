@@ -5,26 +5,15 @@
         {
             "name": "Debug (OpenOCD)",
             "cwd": "${workspaceRoot}",
-            "executable": "Debug/main.elf",
+            "executable": "Debug/Exercise1.elf",
             "request": "launch",
             "type": "cortex-debug",
             "targetId": "STM32F303ZE",         //使用J-link GDB Server時必須
             "svdFile": "STM32F303.svd",        //svd文件，有這個文件才能查看寄存器的值
             "servertype": "openocd",           //使用的GDB Server
             "configFiles": [
-                /* Lab */
-                //"D:/OpenOCD/share/openocd/scripts/interface/stlink.cfg",
-                /* Home */
-                //"G:/OpenOCD/share/openocd/scripts/interface/stlink.cfg",
                 "${workspaceRoot}/st_nucleo_f3.cfg",
             ],
-            //"runToMain": true,
-            /* Home */
-            //"cortex-debug.openocdPath": "G:/OpenOCD/bin/openocd.exe",
-            //"cortex-debug.armToolchainPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2021.07/bin/",
-            /* Lab */
-            "cortex-debug.openocdPath": "D:/OpenOCD/bin/openocd.exe",
-            "cortex-debug.armToolchainPath": "D:/GNU Arm Embedded Toolchain/10 2021.07/bin/",
         }
     ]
 }

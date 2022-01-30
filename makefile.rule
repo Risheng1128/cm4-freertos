@@ -1,0 +1,42 @@
+# 因為兩種都會用到_write和_read，因此使用參數設定，不可以同時為0或1
+# 要和mysetting.h的設定相同
+USE_MYUSART    = 0
+USE_SYSTEMVIEW = 1
+
+TARGET = Exercise/Exercise1
+BUILD_DIR = Debug
+# C Source 使用到的.c檔
+C_SOURCES = \
+$(wildcard ./Src/$(TARGET).c) \
+$(wildcard ./Src/syscalls.c) \
+$(wildcard ./Drivers/FreeRTOS/*.c) \
+$(wildcard ./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/*.c) \
+$(wildcard ./Drivers/FreeRTOS/portable/MemMang/*.c) \
+
+# ASM sources
+ASM_SOURCES = $(wildcard ./Startup/*.s)
+
+# C includes 函式庫.h 路徑
+C_INCLUDES = 			    \
+-IInc                       \
+-IDrivers/CMSIS 		    \
+-IDrivers/FreeRTOS/include  \
+-IDrivers/FreeRTOS/portable/GCC/ARM_CM4F \
+
+ifeq ($(USE_MYUSART), 1)
+    C_SOURCES   +=  $(wildcard ./Src/myusart.c)
+endif
+
+ifeq ($(USE_SYSTEMVIEW), 1)
+    C_SOURCES   +=  $(wildcard ./Drivers/SEGGER/Config/*.c) \
+                    $(wildcard ./Drivers/SEGGER/OS/*.c) \
+                    $(wildcard ./Drivers/SEGGER/SEGGER/*.c) \
+                    $(wildcard ./Drivers/SEGGER/SEGGER/Syscalls/*.c) \
+    
+    ASM_SOURCES +=  $(wildcard ./Drivers/SEGGER/SEGGER/*.s)
+    
+    C_INCLUDES  +=  -IDrivers/SEGGER/Config \
+                    -IDrivers/SEGGER/OS \
+                    -IDrivers/SEGGER/SEGGER \
+
+endif
