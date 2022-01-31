@@ -25,7 +25,8 @@
 static void task1_handler(void* parameters);
 static void task2_handler(void* parameters);
 
-int main(void) {
+int main(void) 
+{
     TaskHandle_t task1_handle, task2_handle;
     BaseType_t status;
 
@@ -57,18 +58,34 @@ int main(void) {
                         );
 
     configASSERT(status == pdPASS);
-	  vTaskStartScheduler(); // FreeRTOS開始
-	  return 0;
+	vTaskStartScheduler(); // FreeRTOS開始
+	return 0;
 }
 
-static void task1_handler(void* parameters) {
-    while (1) {
-        printf("%s\n", (char*)parameters);
+static void task1_handler(void* parameters) 
+{
+    char msg[100];
+    while (1) 
+    {
+        // printf("%s\n", (char*)parameters); // MYUSRAT Used
+        
+        // Send to Host
+        snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
+        SEGGER_SYSVIEW_PrintfTarget(msg);
+        taskYIELD(); // Co-operative scheduling used
     }
 }
 
-static void task2_handler(void* parameters) {
-    while (1) {
-        printf("%s\n", (char*)parameters);
+static void task2_handler(void* parameters)
+{
+    char msg[100];
+    while (1) 
+    {
+        // printf("%s\n", (char*)parameters); // MYUSRAT Used
+        
+        // Send to Host
+        snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
+        SEGGER_SYSVIEW_PrintfTarget(msg);
+        taskYIELD(); // Co-operative scheduling used
     }
 }

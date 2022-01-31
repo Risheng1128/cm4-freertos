@@ -53,7 +53,8 @@ void MYUSART_Init()
 
 void MYUSART_SendData(uint8_t* pTxBuffer, uint8_t len)
 {
-    for(uint8_t i = 0; i < len; i++) {
+    for(uint8_t i = 0; i < len; i++) 
+    {
         /* Waiting for the transmit data register empty (bit 7 TXE) */
         while(!(USART3_ISR & 0x80));
         /* Send Data */
@@ -84,7 +85,8 @@ int _write(int file, char *ptr, int len)
 
 int _read(int file, char *ptr, int len) 
 {
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < len; i++) 
+    {
 		*ptr = (char)MYUSART_ReceiveData();
 		if(*ptr == '\r') break; /* read Enter */
 		MYUSART_SendData((uint8_t*)ptr++, 1);
