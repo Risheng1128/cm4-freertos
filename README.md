@@ -3,7 +3,7 @@
 
 ## 目前進度
 - 完成FreeRTOS安裝及測試
-- 完成FreeRTOS和SystemView的整合
+- 完成FreeRTOS和SystemView的整合，可使用single-shot recording
   - FreeRTOS版本: 10.1.1
   - SystemView版本: 3.20
 
@@ -181,7 +181,7 @@
   - 編譯成功!
     ![](https://i.imgur.com/3B3dpMw.png)
 
-- Step8: Collect the recorded data(RTT buffer)
+- Step8: Collect the recorded data(RTT buffer)，使用single shot recording
   1. 查看資料位址: Global &rarr; aUp &rarr; 1 &rarr; pBuffer
      ![](https://i.imgur.com/T9ITMHU.png)
   2. 使用openocd的dump_image讀取資料
@@ -193,6 +193,37 @@
   4. 將record.SVDat載入進SystemView
      ![](https://i.imgur.com/LaLNdfy.png)
   5. 成功啦讚!
+
+## Send data to HOST (採用Co-operative scheduling)
+![](https://i.imgur.com/76Q0EaA.png)
+- 使用Exercise 1作範例
+  - 修改Task Hander
+    ```c=
+    static void task1_handler(void* parameters) {
+        char msg[100];
+        while (1) {
+            // Send to Host
+            snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
+            SEGGER_SYSVIEW_PrintfTarget(msg);
+            taskYIELD();
+        }
+    }
+
+    static void task2_handler(void* parameters) {
+        char msg[100];
+        while (1) {
+            // Send to Host
+            snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
+            SEGGER_SYSVIEW_PrintfTarget(msg);
+            taskYIELD();
+        }
+    }
+    ```
+- 結果
+  - 可以看到有資料傳到HOST(log)
+    ![](https://i.imgur.com/kw9dCbO.png)
+  - Terminal
+    ![](https://i.imgur.com/e2xqKxA.png)
 
 ## 遭遇的問題
 - 記憶體(bss)問題
