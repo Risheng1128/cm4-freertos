@@ -1,7 +1,7 @@
 # 因為兩種都會用到_write和_read，因此使用參數設定，不可以同時為0或1
 # 要和mysetting.h的設定相同
-USE_MYUSART    = 0
-USE_SYSTEMVIEW = 1
+USE_MYUSART    = 1
+USE_SYSTEMVIEW = 0
 
 TARGET = Exercise/Exercise1
 BUILD_DIR = Debug
