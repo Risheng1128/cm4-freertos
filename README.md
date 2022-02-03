@@ -6,6 +6,9 @@
 - 完成FreeRTOS和SystemView的整合，可使用single-shot recording
   - FreeRTOS版本: 10.1.1
   - SystemView版本: 3.20
+- 在myusart.c和myusart.h新增SystemView的Continuous recording的功能(使用UART)
+  - 使用USART3
+  - Baudrate: 38400
 
 ## Install Real Time Operating System (RTOS)
 ### 下載: 這次練習使用10.1.1版 (版本太新SystemView會有問題QQ)
@@ -194,7 +197,7 @@
      ![](https://i.imgur.com/LaLNdfy.png)
   5. 成功啦讚!
 
-## Send data to HOST (採用Co-operative scheduling)
+### Send data to HOST (這裡採用Co-operative scheduling)
 ![](https://i.imgur.com/76Q0EaA.png)
 - 使用Exercise 1作範例
   - 修改Task Hander
@@ -224,6 +227,18 @@
     ![](https://i.imgur.com/kw9dCbO.png)
   - Terminal
     ![](https://i.imgur.com/e2xqKxA.png)
+    
+### Real time recording 測試
+- 使用範例檔案: Exercise1-2.c
+- 在VS code中開啟Debug模式
+  ![](https://i.imgur.com/Skn7flg.png)
+- 在SystemView設定UART(Recorder Configuration)
+  - Port: COM16
+  - Baudrate: 38400
+  ![](https://i.imgur.com/4frPRRe.png)
+- 開始Recording (有時候要停止再啟動一次，目前還不知道為什麼QQ)
+  ![](https://i.imgur.com/ZpGEVYA.png)
+
 
 ## 遭遇的問題
 - 記憶體(bss)問題
