@@ -1,20 +1,21 @@
-# 因為兩種都會用到_write和_read，因此使用參數設定，不可以同時為0或1
-# 要和mysetting.h的設定相同
-USE_MYUSART    = 1
-USE_SYSTEMVIEW = 0
-
-TARGET = Exercise/Exercise1
+TARGET = Exercise/Exercise1-2
 BUILD_DIR = Debug
 # C Source 使用到的.c檔
 C_SOURCES = \
-$(wildcard ./Src/$(TARGET).c) \
-$(wildcard ./Src/syscalls.c) \
+$(wildcard ./Src/$(TARGET).c)   \
+$(wildcard ./Src/*.c)    \
 $(wildcard ./Drivers/FreeRTOS/*.c) \
 $(wildcard ./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/*.c) \
 $(wildcard ./Drivers/FreeRTOS/portable/MemMang/*.c) \
+$(wildcard ./Drivers/SEGGER/Config/*.c) \
+$(wildcard ./Drivers/SEGGER/OS/*.c) \
+$(wildcard ./Drivers/SEGGER/SEGGER/*.c) \
+$(wildcard ./Drivers/SEGGER/SEGGER/Syscalls/*.c) \
 
 # ASM sources
-ASM_SOURCES = $(wildcard ./Startup/*.s)
+ASM_SOURCES = \
+$(wildcard ./Startup/*.s) \
+$(wildcard ./Drivers/SEGGER/SEGGER/*.s) \
 
 # C includes 函式庫.h 路徑
 C_INCLUDES = 			    \
@@ -22,21 +23,6 @@ C_INCLUDES = 			    \
 -IDrivers/CMSIS 		    \
 -IDrivers/FreeRTOS/include  \
 -IDrivers/FreeRTOS/portable/GCC/ARM_CM4F \
-
-ifeq ($(USE_MYUSART), 1)
-    C_SOURCES   +=  $(wildcard ./Src/myusart.c)
-endif
-
-ifeq ($(USE_SYSTEMVIEW), 1)
-    C_SOURCES   +=  $(wildcard ./Drivers/SEGGER/Config/*.c) \
-                    $(wildcard ./Drivers/SEGGER/OS/*.c) \
-                    $(wildcard ./Drivers/SEGGER/SEGGER/*.c) \
-                    $(wildcard ./Drivers/SEGGER/SEGGER/Syscalls/*.c) \
-    
-    ASM_SOURCES +=  $(wildcard ./Drivers/SEGGER/SEGGER/*.s)
-    
-    C_INCLUDES  +=  -IDrivers/SEGGER/Config \
-                    -IDrivers/SEGGER/OS \
-                    -IDrivers/SEGGER/SEGGER \
-
-endif
+-IDrivers/SEGGER/Config \
+-IDrivers/SEGGER/OS \
+-IDrivers/SEGGER/SEGGER \

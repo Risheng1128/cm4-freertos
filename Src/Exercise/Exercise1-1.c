@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Exercise1.c
+  * @file    Exercise1-1.c
   * @author  Ri-Sheng Chen
   * @brief   This file is a simple FreeRTOS example
   ******************************************************************************
@@ -8,15 +8,11 @@
   * 	1. Write an application that creates 2 tasks, Task-1 and Task-2, 
   * 	2. Task-1 印 "Hello World from Task-1"
   *     3. Task-2 印 "Hello World from Task-2"
+  *     4. 可選擇要使用 PUTTY 或是 SystemView 的 Single-Shot Recording
   */
 
 #include <stdio.h>
-#include "mysetting.h"
-
-#if (USE_MYUSART == 1)
-    #include "myusart.h"
-#endif
-
+#include "myusart.h"
 #include "FreeRTOS.h"
 #include "task.h"     // include FreeRTOS task lib 
 
@@ -30,9 +26,10 @@ int main(void)
     TaskHandle_t task1_handle, task2_handle;
     BaseType_t status;
 
-    #if (USE_MYUSART == 1)
+    #if (USE_PUTTY == 1)
         MYUSART_Init();
     #endif
+   
     #if (USE_SYSTEMVIEW == 1)
         DWT_CTRL |= (1 << 0); // Enable the CYCCNT ciunter
         SEGGER_SYSVIEW_Conf();  // SystemView Setting
@@ -69,13 +66,13 @@ static void task1_handler(void* parameters)
     #endif
     while (1) 
     {
-        #if (USE_MYUSART == 1)
+        #if (USE_PUTTY == 1)
             printf("%s\n", (char*)parameters); // MYUSRAT Used
         #endif
         #if (USE_SYSTEMVIEW == 1)
-        // Send to Host
-        snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
-        SEGGER_SYSVIEW_PrintfTarget(msg);
+            // Send to Host
+            snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
+            SEGGER_SYSVIEW_PrintfTarget(msg);
         #endif
         #if (configUSE_PREEMPTION == 0)
             taskYIELD(); // Co-operative scheduling used
@@ -90,7 +87,7 @@ static void task2_handler(void* parameters)
     #endif
     while (1) 
     {
-        #if (USE_MYUSART == 1)
+        #if (USE_PUTTY == 1)
             printf("%s\n", (char*)parameters); // MYUSRAT Used
         #endif
         #if (USE_SYSTEMVIEW == 1)

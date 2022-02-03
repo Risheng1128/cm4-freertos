@@ -22,7 +22,7 @@ CFLAGS += -g -gdwarf-2
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(notdir $(TARGET)).map,--cref -Wl,--gc-sections
 
-LDSCRIPT = STM32F303ZETX_FLASH.ld # link script
+LDSCRIPT = STM32F303ZETX_FLASH.ld # linker script
 LIBS = -lc -lm -lnosys
 
 OBJECTS = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(C_SOURCES))) 	# C code .o檔

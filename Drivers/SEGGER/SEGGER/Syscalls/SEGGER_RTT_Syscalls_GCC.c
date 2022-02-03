@@ -97,12 +97,14 @@ _ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len);
 *   including stdout.
 *   Write data via RTT.
 */
-_ssize_t _write(int file, const void *ptr, size_t len) {
-  (void) file;  /* Not used, avoid warning */
-  SEGGER_RTT_Write(0, ptr, len);
-  return len;
-}
-
+#include "mysetting.h"
+#if (USE_PUTTY == 0) // 不使用PUTTY時使用
+    _ssize_t _write(int file, const void *ptr, size_t len) {
+        (void) file;  /* Not used, avoid warning */
+        SEGGER_RTT_Write(0, ptr, len);
+        return len;
+    }
+#endif
 /*********************************************************************
 *
 *       _write_r()
@@ -113,12 +115,14 @@ _ssize_t _write(int file, const void *ptr, size_t len) {
 *   including stdout.
 *   Write data via RTT.
 */
-_ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len) {
-  (void) file;  /* Not used, avoid warning */
-  (void) r;     /* Not used, avoid warning */
-  SEGGER_RTT_Write(0, ptr, len);
-  return len;
-}
+#if (USE_PUTTY == 0) // 不使用PUTTY時使用
+    _ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len) {
+          (void) file;  /* Not used, avoid warning */
+          (void) r;     /* Not used, avoid warning */
+          SEGGER_RTT_Write(0, ptr, len);
+          return len;
+    }
+#endif
 
 #endif
 /****** End Of File *************************************************/
