@@ -1,9 +1,10 @@
-TARGET = Exercise/Exercise1-2
+TARGET = Exercise2/LED-2
 BUILD_DIR = Debug
 # C Source 使用到的.c檔
 C_SOURCES = \
 $(wildcard ./Src/$(TARGET).c)   \
 $(wildcard ./Src/*.c)    \
+$(wildcard ./Drivers/HAL/Src/*.c) \
 $(wildcard ./Drivers/FreeRTOS/*.c) \
 $(wildcard ./Drivers/FreeRTOS/portable/GCC/ARM_CM4F/*.c) \
 $(wildcard ./Drivers/FreeRTOS/portable/MemMang/*.c) \
@@ -21,6 +22,7 @@ $(wildcard ./Drivers/SEGGER/SEGGER/*.s) \
 C_INCLUDES = 			    \
 -IInc                       \
 -IDrivers/CMSIS 		    \
+-IDrivers/HAL/Inc           \
 -IDrivers/FreeRTOS/include  \
 -IDrivers/FreeRTOS/portable/GCC/ARM_CM4F \
 -IDrivers/SEGGER/Config \
