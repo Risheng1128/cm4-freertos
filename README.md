@@ -11,7 +11,7 @@
   - Baudrate: 38400
 
 ## Install Real Time Operating System (RTOS)
-### 下載: 這次練習使用10.1.1版 (版本太新SystemView會有問題QQ)
+### 下載: 這次練習使用10.1.1版 (版本太新整合SystemView會有問題QQ)
 [FreeRTOS github](https://github.com/FreeRTOS/FreeRTOS/releases)
 - 下載[FreeRTOS](https://freertos.org/)
 - 下載FreeRTOS Kernel
