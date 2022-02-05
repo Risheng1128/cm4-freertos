@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    LED-1.c
   * @author  Ri-Sheng Chen
-  * @brief   This file is a simple FreeRTOS example
+  * @brief   This file is a simple FreeRTOS example using vTaskDelay
   ******************************************************************************
   * @attention
   *     1. Toggle 3 LEDs of the NUCLEO-F303ZE board with the duration.
@@ -52,7 +52,8 @@ int main(void)
     status = xTaskCreate((TaskFunction_t)blue_handler, "Blue_Task", 200, NULL, 2, &blue_handle);
     configASSERT(status == pdPASS);
 	status = xTaskCreate((TaskFunction_t)red_handler, "Red_Task", 200, NULL, 2, &red_handle);
-    
+    configASSERT(status == pdPASS);
+
     vTaskStartScheduler(); // FreeRTOS開始
 	return 0;
 }
