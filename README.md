@@ -1,4 +1,4 @@
-# ARM Cortex-M FreeRTOS
+# CM4 FreeRTOS
 ###### tags: `ARM Cortex-M` `FreeRTOS`
 
 ## 目前進度
