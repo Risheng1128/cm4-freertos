@@ -1,4 +1,4 @@
-TARGET = Exercise3/LED_Task_Notify
+TARGET = Exercise4/hook
 BUILD_DIR = Debug
 # C Source 使用到的.c檔
 C_SOURCES = \
