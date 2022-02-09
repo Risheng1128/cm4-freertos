@@ -2,6 +2,8 @@
 ###### tags: `ARM Cortex-M` `FreeRTOS`
 
 ## 目前進度
+- 根據[線上課程](https://www.udemy.com/course/mastering-rtos-hands-on-with-freertos-arduino-and-stm32fx/)所完成的小專案
+- 使用開發版: NUCLEO-F303ZE
 - 完成FreeRTOS安裝及測試
 - 完成FreeRTOS和SystemView的整合，可使用single-shot recording
   - FreeRTOS版本: 10.1.1
@@ -239,7 +241,6 @@
 - 開始Recording (有時候要停止再啟動一次，目前還不知道為什麼QQ)
   ![](https://i.imgur.com/ZpGEVYA.png)
 
-
 ## 遭遇的問題
 - 記憶體(bss)問題
   - 問題: STM32F303ZE的.bss空間不夠大
@@ -264,6 +265,5 @@
   - 原因: FreeRTOS的版本太新
     ![](https://i.imgur.com/HLRPszJ.png)
   - 解法: 使用較舊的版本，從10.4.3改成10.1.1
-
 
 還在努力學習!!
