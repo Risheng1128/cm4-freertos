@@ -5,7 +5,7 @@
         {
             "name": "Debug (OpenOCD)",
             "cwd": "${workspaceRoot}",
-            "executable": "Debug/LED_Task_Notify.elf",
+            "executable": "Debug/LED_Task_ISR.elf",
             "request": "launch",
             "type": "cortex-debug",
             "targetId": "STM32F303ZE",         //使用J-link GDB Server時必須
