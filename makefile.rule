@@ -1,4 +1,4 @@
-TARGET = Exercise3/LED_Task_ISR
+TARGET = Exercise2/LED-1
 BUILD_DIR = Debug
 # C Source 使用到的.c檔
 C_SOURCES = \

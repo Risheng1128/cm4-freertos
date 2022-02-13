@@ -16,7 +16,7 @@
   *   - GPIOD_AFRH:      AF7 (USART3 Tx/Rx)
   *  
   *   ---------- USART3 Set ------------
-  *   - F_CLK:           8MHz
+  *   - APB1_CLK:        8 MHz
   *   - USART3_Mode:     Tx/Rx Enable
   *   - USART3_Parity:   Parity disable
   *   - USART3_StopBits: 1
@@ -24,10 +24,21 @@
   *   - USART3_Baud:     38400
   *   - USART3_HW_FLOW:  None
   *   - Oversampling:    16
+  * 
+  *   ------ USE_SEGGER_UART_REC ------ (還正在實作)
+  *   - APB1_CLK:        36 MHz
+  *   - USART3_Mode:     Tx/Rx Enable
+  *   - USART3_Parity:   Parity disable
+  *   - USART3_StopBits: 1
+  *   - USART3_WordLen:  8
+  *   - USART3_Baud:     500000
+  *   - USART3_HW_FLOW:  None
+  *   - Oversampling:    16
   **/
 
 #include "myusart.h"
 
+uint32_t SystemCoreClock;
 void MYUSART_Init()
 {
     /**************************** GPIO Set ****************************/
@@ -48,7 +59,7 @@ void MYUSART_Init()
     /* USART mode set */
     USART3_CR1 |= (1 << 2) | (1 << 3);  /* Enable Tx/Rx */
     /* Baudrate Set */
-    USART3_BRR = DEFAULT_F_CLK / BAUDRATE_38400;
+    USART3_BRR = APB1_CLK_DEFAULT / BAUDRATE_38400;
 }
 
 void MYUSART_SendData(uint8_t* pTxBuffer, uint8_t len)
@@ -172,26 +183,31 @@ uint8_t MYUSART_ReceiveData()
     *    (1) This is a high-prio interrupt so it may NOT use embOS functions
     *        However, this also means that embOS will never disable this interrupt
     */
-    void USART3_EXTI28_IRQHandler(void) {
+    void USART3_EXTI28_IRQHandler(void) 
+    {
         uint32_t UsartStatus = USART3_ISR; // Examine status register
         uint8_t v;
         
-        int r;         
-        if (UsartStatus & (1 << USART_ISR_RXNE)) {             // Data received?
+        int r;
+        if (UsartStatus & (1 << USART_ISR_RXNE)) // Data received?
+        {             
             v = USART3_RDR;                                    // Read data
-            if (!(UsartStatus & USART_ISR_RX_ERROR_FLAGS)) {   // Only process data if no error occurred
+            if (!(UsartStatus & USART_ISR_RX_ERROR_FLAGS))     // Only process data if no error occurred
+            {
                 (void)v;                                       // Avoid warning in BTL
-                if (_cbOnRx) {
+                if (_cbOnRx) 
+                {
                     _cbOnRx(v);
                 }
             }
         }
-        if (UsartStatus & (1 << USART_ISR_TXE)) {              // Tx (data register) empty? => Send next character Note: Shift register may still hold a character that has not been sent yet.
+        if (UsartStatus & (1 << USART_ISR_TXE)) // Tx (data register) empty? => Send next character Note: Shift register may still hold a character that has not been sent yet.
+        {
             // Under special circumstances, (old) BTL of Flasher does not wait until a complete string has been sent via UART,
             // so there might be an TxE interrupt pending *before* the FW had a chance to set the callbacks accordingly which would result in a NULL-pointer call...
             // Therefore, we need to check if the function pointer is valid.
             if (_cbOnTx == NULL) // No callback set? => Nothing to do...
-            {  
+            {
                 return;
             }
             r = _cbOnTx(&v);
@@ -205,13 +221,27 @@ uint8_t MYUSART_ReceiveData()
                 USART3_TDR = v;  // Start transmission by writing to data register
             }
         }
+
     }
 
-    void HIF_UART_EnableTXEInterrupt(void) {
+    void HIF_UART_EnableTXEInterrupt(void) 
+    {
         USART3_CR1 |= (1 << USART_CR1_TXEIE);  // enable Tx empty interrupt => Triggered as soon as data register content has been copied to shift register
     }
 
-    void HIF_UART_Init(UART_ON_TX_FUNC_P cbOnTx, UART_ON_RX_FUNC_P cbOnRx) {
+    void HIF_UART_Init(UART_ON_TX_FUNC_P cbOnTx, UART_ON_RX_FUNC_P cbOnRx) 
+    {
+        SystemCoreClock = APB1_CLK_72M;
+        /*************************** SYSCLK Set ****************************/
+        RCC_CFGR |= (1 << 15);  // PLL entry clock source (HSI used as PREDIV1 entry)
+        RCC_CFGR |= (1 << 18) | (1 << 19) | (1 << 20); // PLL multiplication factor (PLL input clock x 9)
+        RCC_CR   |= (1 << 24);  // PLL enable
+        while(!((RCC_CR & 0x02000000) >> 25)); // 等待PLL開啟完成
+        RCC_CFGR  |= (1 << 10); // APB1 high-speed prescaler (HCLK divided by 2)
+        FLASH_ACR |= (1 << 1);  // Flash Latency (Zero wait state, if 48 < HCLK ≤ 72 MHz)
+        RCC_CFGR  |= (1 << 1);  // System clock switch (PLL selected as system clock)
+        while(((RCC_CFGR & 0xc) >> 2) != 2); // 等待System clock switch完成
+
         /**************************** GPIO Set ****************************/
         /* GPIOD RCC Enable */
         RCC_AHBENR |= 1 << 20;  /* Enable clock of GPIOD */
@@ -225,20 +255,19 @@ uint8_t MYUSART_ReceiveData()
         /**************************** USART Set ****************************/
         /* USART RCC Enable */
         RCC_AHPB1ENR |= 1 << 18;   /* Enable clock of USART3 */
-        USART3_CR1 |=   0
-                        | (1 << USART_CR1_UE)       // UE = 1; USART enabled
-                        | (1 << USART_CR1_RE)       // RE = 1; Receiver enabled
-                        | (1 << USART_CR1_TE)       // TE = 1; Transmitter enabled
-                        | (1 << USART_CR1_RXNEIE)   // RXNEIE = 1; RXNE interrupt enabled
-                        | (0 << USART_CR1_PCE)      // PCE = 0; No parity control
-                        | (0 << USART_CR1_M0)       // M0 = 0; 1 start bit, 8 data bits
-                        | (0 << USART_CR1_M1);      // M1 = 0; 1 start bit, 8 data bits
+        USART3_CR1 |= (1 << USART_CR1_RE);       // RE = 1; Receiver enabled
+        USART3_CR1 |= (1 << USART_CR1_TE);       // TE = 1; Transmitter enabled
+        USART3_CR1 |= (1 << USART_CR1_RXNEIE);   // RXNEIE = 1; RXNE interrupt enabled
+        USART3_CR1 &= ~(1 << USART_CR1_PCE);     // PCE = 0; No parity control
+        USART3_CR1 &= ~(1 << USART_CR1_M0);      // M0 = 0; 1 start bit, 8 data bits
+        USART3_CR1 &= ~(1 << USART_CR1_M1);      // M1 = 0; 1 start bit, 8 data bits
 
-        USART3_CR2 |=   0
-                        | (0 << USART_CR2_STOP0)    // STOP = 00b; 1 stop bit     
-                        | (0 << USART_CR2_STOP1);   // STOP = 00b; 1 stop bit
+        USART3_CR2 &= ~(1 << USART_CR2_STOP0);   // STOP = 00b; 1 stop bit     
+        USART3_CR2 &= ~(1 << USART_CR2_STOP1);   // STOP = 00b; 1 stop bit
         
-        USART3_BRR = DEFAULT_F_CLK / BAUDRATE_38400; /* Baudrate Set */
+        USART3_BRR = APB1_CLK_36M / BAUDRATE_500000; /* Baudrate Set */
+        
+        USART3_CR1 |= (1 << USART_CR1_UE);          // UE = 1; USART enabled
 
         // Setup callbacks which are called by ISR handler and enable interrupt in NVIC
         _cbOnRx = cbOnRx;

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *   1. 可以使用Putty接受及送出資料
-  *   2. 可以使用SEGGER SYSTEM VIEW的Continuous recording功能
+  *   2. 可以使用SEGGER SYSTEM VIEW的Continuous recording功能 (目前還有問題)
   */
 
 #ifndef _USART_H_
@@ -15,14 +15,21 @@
 #include <stdint.h>
 #include "mysetting.h"
 
-#define DEFAULT_F_CLK       8000000U
+#define APB1_CLK_DEFAULT    8000000U    // 不調整任何Clock時的預設時脈
+#define APB1_CLK_36M        36000000U
+#define APB1_CLK_72M        72000000U
+
 #define BAUDRATE_38400      38400U
+#define BAUDRATE_500000     500000U
 
 #define NVIC_ISER1          *(volatile uint32_t*)0xE000E104U  /* Interrupt Set-Enable Registers */
 #define NVIC_IPR9           *(volatile uint32_t*)0xE000E424U  /* Interrupt Priority Registers */
 
+#define RCC_CR              *(volatile uint32_t*)0x40021000U  /* Clock control register */
+#define RCC_CFGR            *(volatile uint32_t*)0x40021004U  /* Clock configuration register */
 #define RCC_AHBENR          *(volatile uint32_t*)0x40021014U  /* AHB peripheral clock enable register */
 #define RCC_AHPB1ENR        *(volatile uint32_t*)0x4002101CU  /* APB1 peripheral clock enable register */
+#define FLASH_ACR           *(volatile uint32_t*)0x40022000U  /* Flash access control register */
 
 #define GPIOD_MODE          *(volatile uint32_t*)0x48000C00U  /* GPIO port mode register */
 #define GPIOD_AFRH          *(volatile uint32_t*)0x48000C24U  /* GPIO alternate function high register */
@@ -65,7 +72,7 @@ uint8_t MYUSART_ReceiveData();
 
     #define _SERVER_HELLO_SIZE        (4)
     #define _TARGET_HELLO_SIZE        (4)
-    #define USART_PRIORITY            6   // the highest priority
+    #define USART_PRIORITY             6   // the highest priority
     
     typedef void (*UART_ON_RX_FUNC_P)(uint8_t Data);
     typedef int  (*UART_ON_TX_FUNC_P)(uint8_t* pChar);
@@ -74,7 +81,6 @@ uint8_t MYUSART_ReceiveData();
     void SEGGER_UART_init(void);
     void HIF_UART_WaitForTxEnd(void);
     void HIF_UART_EnableTXEInterrupt(void);
-    void USART3_EXTI28_IRQHandler(void);
   
 #endif
 
