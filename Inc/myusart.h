@@ -17,7 +17,6 @@
 
 #define APB1_CLK_DEFAULT    8000000U    // 不調整任何Clock時的預設時脈
 #define APB1_CLK_36M        36000000U
-#define APB1_CLK_72M        72000000U
 
 #define BAUDRATE_38400      38400U
 #define BAUDRATE_500000     500000U
