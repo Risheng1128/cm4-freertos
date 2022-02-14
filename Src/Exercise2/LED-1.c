@@ -60,8 +60,7 @@ int main(void)
 
 static void green_handler(void* parameters) 
 {   
-    while (1) 
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("Toggling green led\n");
         GPIO_ToggleOutputPin(GREEN.pGPIOx, GREEN.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -70,8 +69,7 @@ static void green_handler(void* parameters)
 
 static void blue_handler(void* parameters)
 {   
-    while (1) 
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("Toggling blue led\n");
         GPIO_ToggleOutputPin(BLUE.pGPIOx, BLUE.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelay(pdMS_TO_TICKS(800));
@@ -80,8 +78,7 @@ static void blue_handler(void* parameters)
 
 static void red_handler(void* parameters)
 {
-    while (1) 
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("Toggling red led\n");
         GPIO_ToggleOutputPin(RED.pGPIOx, RED.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelay(pdMS_TO_TICKS(400));

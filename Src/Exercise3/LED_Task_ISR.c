@@ -65,12 +65,10 @@ int main(void)
 static void green_handler(void* parameters) 
 {
     BaseType_t status;
-    while (1) 
-    {
+    while (1) {
         GPIO_ToggleOutputPin(GREEN.pGPIOx, GREEN.GPIO_PINCFG.GPIO_PinNumber);
         status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(1000));
-        if(status == pdTRUE) // 收到 Notification
-        {
+        if(status == pdTRUE) { // 收到 Notification
             portENTER_CRITICAL(); // 避免其他Task影響到shared data
             next_tesk_handle = blue_handle;
             GPIO_WriteToOutputPin(GREEN.pGPIOx, GREEN.GPIO_PINCFG.GPIO_PinNumber, ENABLE);
@@ -84,12 +82,10 @@ static void green_handler(void* parameters)
 static void blue_handler(void* parameters)
 {   
     BaseType_t status;
-    while (1) 
-    {
+    while (1) {
         GPIO_ToggleOutputPin(BLUE.pGPIOx, BLUE.GPIO_PINCFG.GPIO_PinNumber);
         status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800));
-        if(status == pdTRUE) // 收到 Notification
-        {   
+        if(status == pdTRUE) { // 收到 Notification
             portENTER_CRITICAL(); // 避免其他Task影響到shared data
             next_tesk_handle = red_handle;
             GPIO_WriteToOutputPin(BLUE.pGPIOx, BLUE.GPIO_PINCFG.GPIO_PinNumber, ENABLE);
@@ -103,12 +99,10 @@ static void blue_handler(void* parameters)
 static void red_handler(void* parameters)
 {
     BaseType_t status;
-    while (1)
-    {
+    while (1) {
         GPIO_ToggleOutputPin(RED.pGPIOx, RED.GPIO_PINCFG.GPIO_PinNumber);
         status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));
-        if(status == pdTRUE) // 收到 Notification
-        {
+        if(status == pdTRUE) { // 收到 Notification
             portENTER_CRITICAL(); // 避免其他Task影響到shared data
             next_tesk_handle = NULL;
             xTaskResumeAll();

@@ -19,26 +19,20 @@
 void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 {
     /* configure the mode of gpio pin */
-    if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode <= GPIO_MODE_ANALOG) /* Normal MOde */
-    {  
+    if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode <= GPIO_MODE_ANALOG) { /* Normal MOde */
         pGPIOHandle->pGPIOx->MODER &= ~( 0x3 << (2 * pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber) ); /* Clear bits */
         pGPIOHandle->pGPIOx->MODER |=  pGPIOHandle->GPIO_PINCFG.GPIO_PinMode << (2 * pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber);
-    } 
-    else /* Interrupt Mode */
-    { 
+    } else { /* Interrupt Mode */ 
         /* configure edge trigger */
-        if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_IT_FT) 
-        {
+        if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_IT_FT) {
             EXTI->FTSR1 |=   1 << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber;
             EXTI->RTSR1 &= ~(1 << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber); /* Clear */
         } 
-        else if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_IT_RT) 
-        {
+        else if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_IT_RT) {
             EXTI->RTSR1 |=   1 << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber;
             EXTI->FTSR1 &= ~(1 << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber); /* Clear */
         } 
-        else if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_IT_RFT) 
-        { 
+        else if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_IT_RFT) { 
             EXTI->FTSR1 |= 1 << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber;
             EXTI->RTSR1 |= 1 << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber;
         }
@@ -66,8 +60,7 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
     pGPIOHandle->pGPIOx->OTYPER |=  pGPIOHandle->GPIO_PINCFG.GPIO_PinOType << pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber;
     
     /* configure the alternate functionality */
-    if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_ALTFN) /* Alternate function mode */
-    { 
+    if(pGPIOHandle->GPIO_PINCFG.GPIO_PinMode == GPIO_MODE_ALTFN) { /* Alternate function mode */ 
         uint32_t temp1, temp2;
         temp1 = pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber / 8; /* 0 or 1*/
         temp2 = pGPIOHandle->GPIO_PINCFG.GPIO_PinNumber % 8;
@@ -115,8 +108,7 @@ void GPIO_DeInit(GPIO_RegDef_t *pGPIOx)
  *********************************************************/
 void GPIO_PeriClockControl(GPIO_RegDef_t* pGPIOx, uint8_t EnorDi)
 {
-    if(EnorDi == ENABLE) 
-    {
+    if(EnorDi == ENABLE) {
         if(pGPIOx == GPIOA)
             GPIOA_PCLK_EN();
         else if(pGPIOx == GPIOB)
@@ -133,9 +125,7 @@ void GPIO_PeriClockControl(GPIO_RegDef_t* pGPIOx, uint8_t EnorDi)
             GPIOG_PCLK_EN();
         else if(pGPIOx == GPIOH)
             GPIOH_PCLK_EN();
-    } 
-    else 
-    {
+    } else {
         if(pGPIOx == GPIOA)
             GPIOA_PCLK_DI();
         else if(pGPIOx == GPIOB)
@@ -194,12 +184,9 @@ uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx)
  *********************************************************/
 void GPIO_WriteToOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber, uint8_t EnorDi)
 {
-    if(EnorDi == GPIO_PIN_SET) 
-    {
+    if(EnorDi == GPIO_PIN_SET) {
         pGPIOx->ODR |=  (1 << PinNumber); /* Setup 1 */
-    } 
-    else 
-    {
+    } else {
         pGPIOx->ODR &= ~(1 << PinNumber); /* Setup 0 */
     }
 }
@@ -243,17 +230,14 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber)
  *********************************************************/
 void GPIO_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi)
 {
-    if(EnorDi == ENABLE) 
-    {
+    if(EnorDi == ENABLE) {
         if(IRQNumber < 32)
             *NVIC_ISER0 |= 1 << IRQNumber;
         else if(IRQNumber >= 32 && IRQNumber < 64)
             *NVIC_ISER1 |= 1 << (IRQNumber % 32);
         else if(IRQNumber >= 64 && IRQNumber < 96)
             *NVIC_ISER2 |= 1 << (IRQNumber * 64);
-    } 
-    else 
-    {
+    } else {
         if(IRQNumber < 32)
             *NVIC_ICER0 |= 1 << IRQNumber;
         else if(IRQNumber >= 32 && IRQNumber < 64)

@@ -64,8 +64,7 @@ static void task1_handler(void* parameters)
     #if (USE_SYSTEMVIEW == 1)
         char msg[100];
     #endif
-    while (1) 
-    {
+    while (1) {
         #if (USE_PUTTY == 1)
             printf("%s\n", (char*)parameters); // MYUSRAT Used
         #endif
@@ -85,8 +84,7 @@ static void task2_handler(void* parameters)
     #if (USE_SYSTEMVIEW == 1)
         char msg[100];
     #endif
-    while (1) 
-    {
+    while (1) {
         #if (USE_PUTTY == 1)
             printf("%s\n", (char*)parameters); // MYUSRAT Used
         #endif

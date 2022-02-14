@@ -68,12 +68,10 @@ int main(void)
 static void green_handler(void* parameters) 
 {
     BaseType_t status;
-    while (1) 
-    {
+    while (1) {
         GPIO_ToggleOutputPin(GREEN.pGPIOx, GREEN.GPIO_PINCFG.GPIO_PinNumber);
         status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(1000));
-        if(status == pdTRUE) // 收到 Notification
-        {
+        if(status == pdTRUE) { // 收到 Notification
             vTaskSuspendAll(); // 避免其他Task影響到shared data
             next_tesk_handle = blue_handle;
             xTaskResumeAll();
@@ -87,12 +85,10 @@ static void green_handler(void* parameters)
 static void blue_handler(void* parameters)
 {   
     BaseType_t status;
-    while (1) 
-    {
+    while (1) {
         GPIO_ToggleOutputPin(BLUE.pGPIOx, BLUE.GPIO_PINCFG.GPIO_PinNumber);
         status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800));
-        if(status == pdTRUE) // 收到 Notification
-        {   
+        if(status == pdTRUE) { // 收到 Notification
             vTaskSuspendAll(); // 避免其他Task影響到shared data
             next_tesk_handle = red_handle;
             xTaskResumeAll();
@@ -106,12 +102,10 @@ static void blue_handler(void* parameters)
 static void red_handler(void* parameters)
 {
     BaseType_t status;
-    while (1)
-    {
+    while (1) {
         GPIO_ToggleOutputPin(RED.pGPIOx, RED.GPIO_PINCFG.GPIO_PinNumber);
         status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));
-        if(status == pdTRUE) // 收到 Notification
-        {
+        if(status == pdTRUE) { // 收到 Notification
             vTaskSuspendAll(); // 避免其他Task影響到shared data
             next_tesk_handle = NULL;
             xTaskResumeAll();
@@ -127,8 +121,7 @@ static void btn_handler(void* parameter)
     uint8_t curr_read = 0, prev_read = 0;
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    while(1)
-    {
+    while(1) {
         curr_read = GPIO_ReadFromInputPin(BUTTON.pGPIOx, BUTTON.GPIO_PINCFG.GPIO_PinNumber);
         if(curr_read && !prev_read)
             xTaskNotify(next_tesk_handle, 0, eNoAction); // Notify the next_tesk_handle task

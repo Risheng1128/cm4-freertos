@@ -62,8 +62,7 @@ static void green_handler(void* parameters)
 {   
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    while (1) 
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("Toggling green led\n");
         GPIO_ToggleOutputPin(GREEN.pGPIOx, GREEN.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
@@ -74,8 +73,7 @@ static void blue_handler(void* parameters)
 {   
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    while (1) 
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("Toggling blue led\n");
         GPIO_ToggleOutputPin(BLUE.pGPIOx, BLUE.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(800));
@@ -86,8 +84,7 @@ static void red_handler(void* parameters)
 {
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    while (1) 
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("Toggling red led\n");
         GPIO_ToggleOutputPin(RED.pGPIOx, RED.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(400));

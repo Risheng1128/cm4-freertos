@@ -57,8 +57,7 @@ int main(void)
 static void task1_handler(void* parameters) 
 {
     char msg[100];
-    while (1) 
-    {
+    while (1) {
         // Send to Host
         snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
         SEGGER_SYSVIEW_PrintfTarget(msg);
@@ -71,8 +70,7 @@ static void task1_handler(void* parameters)
 static void task2_handler(void* parameters)
 {
     char msg[100];
-    while (1) 
-    {
+    while (1) {
         // Send to Host
         snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
         SEGGER_SYSVIEW_PrintfTarget(msg);

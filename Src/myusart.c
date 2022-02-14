@@ -64,8 +64,7 @@ void MYUSART_Init()
 
 void MYUSART_SendData(uint8_t* pTxBuffer, uint8_t len)
 {
-    for(uint8_t i = 0; i < len; i++) 
-    {
+    for(uint8_t i = 0; i < len; i++) {
         /* Waiting for the transmit data register empty (bit 7 TXE) */
         while(!(USART3_ISR & 0x80));
         /* Send Data */
@@ -88,7 +87,7 @@ uint8_t MYUSART_ReceiveData()
 }
 
 #if (USE_PUTTY == 1)    // 如果使用Putty，才會用到
-    int _write(int file, char *ptr, int len)
+    int _write(int file, char *ptr, int len) 
     {
         MYUSART_SendData((uint8_t*)ptr, len);
         MYUSART_SendData((uint8_t*)"\r", 1);
@@ -97,8 +96,7 @@ uint8_t MYUSART_ReceiveData()
 
     int _read(int file, char *ptr, int len) 
     {
-        for (int i = 0; i < len; i++) 
-        {
+        for (int i = 0; i < len; i++) {
             *ptr = (char)MYUSART_ReceiveData();
             if(*ptr == '\r') break; /* read Enter */
             MYUSART_SendData((uint8_t*)ptr++, 1);
@@ -128,8 +126,7 @@ uint8_t MYUSART_ReceiveData()
 
     static void _cbOnUARTRx(U8 Data) 
     {
-        if (_SVInfo.NumBytesHelloRcvd < _SERVER_HELLO_SIZE) // Not all bytes of <Hello> message received by SysView yet?
-        {  
+        if (_SVInfo.NumBytesHelloRcvd < _SERVER_HELLO_SIZE) {  // Not all bytes of <Hello> message received by SysView yet?
             _SVInfo.NumBytesHelloRcvd++;
             goto Done;
         }
@@ -143,16 +140,14 @@ uint8_t MYUSART_ReceiveData()
     {
         int r;
 
-        if (_SVInfo.NumBytesHelloSent < _TARGET_HELLO_SIZE) // Not all bytes of <Hello> message sent to SysView yet?
-        {  
+        if (_SVInfo.NumBytesHelloSent < _TARGET_HELLO_SIZE) {  // Not all bytes of <Hello> message sent to SysView yet?
             *pChar = _abHelloMsg[_SVInfo.NumBytesHelloSent];
             _SVInfo.NumBytesHelloSent++;
             r = 1;
             goto Done;
         }
         r = SEGGER_RTT_ReadUpBufferNoLock(_SVInfo.ChannelID, pChar, 1);
-        if (r < 0) // Failed to read from up buffer?
-        {  
+        if (r < 0) {  // Failed to read from up buffer?
             r = 0;
         }
     Done:
@@ -189,34 +184,26 @@ uint8_t MYUSART_ReceiveData()
         uint8_t v;
         
         int r;
-        if (UsartStatus & (1 << USART_ISR_RXNE)) // Data received?
-        {             
+        if (UsartStatus & (1 << USART_ISR_RXNE)) {  // Data received?
             v = USART3_RDR;                                    // Read data
-            if (!(UsartStatus & USART_ISR_RX_ERROR_FLAGS))     // Only process data if no error occurred
-            {
+            if (!(UsartStatus & USART_ISR_RX_ERROR_FLAGS)) {   // Only process data if no error occurred
                 (void)v;                                       // Avoid warning in BTL
-                if (_cbOnRx) 
-                {
+                if (_cbOnRx) {
                     _cbOnRx(v);
                 }
             }
         }
-        if (UsartStatus & (1 << USART_ISR_TXE)) // Tx (data register) empty? => Send next character Note: Shift register may still hold a character that has not been sent yet.
-        {
+        if (UsartStatus & (1 << USART_ISR_TXE)) { // Tx (data register) empty? => Send next character Note: Shift register may still hold a character that has not been sent yet.
             // Under special circumstances, (old) BTL of Flasher does not wait until a complete string has been sent via UART,
             // so there might be an TxE interrupt pending *before* the FW had a chance to set the callbacks accordingly which would result in a NULL-pointer call...
             // Therefore, we need to check if the function pointer is valid.
-            if (_cbOnTx == NULL) // No callback set? => Nothing to do...
-            {
+            if (_cbOnTx == NULL) { // No callback set? => Nothing to do...
                 return;
             }
             r = _cbOnTx(&v);
-            if (!r) // No more characters to send ?
-            {                          
+            if (!r) {  // No more characters to send ?                         
                 USART3_CR1 &= ~(1UL << USART_CR1_TXEIE);  // Disable further tx interrupts
-            } 
-            else 
-            {
+            } else {
                 USART3_ISR;      // Makes sure that "transmission complete" flag in USART_SR is reset to 0 as soon as we write USART_DR. If USART_SR is not read before, writing USART_DR does not clear "transmission complete". See STM32F4 USART documentation for more detailed description.
                 USART3_TDR = v;  // Start transmission by writing to data register
             }

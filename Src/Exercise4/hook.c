@@ -43,8 +43,7 @@ static void task1_handler(void* parameters)
 {
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    while (1)
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("In task-1\n");
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
@@ -54,8 +53,7 @@ static void task2_handler(void* parameters)
 {
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    while (1)
-    {
+    while (1) {
         SEGGER_SYSVIEW_PrintfTarget("In task-2\n");
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(800));
     }
