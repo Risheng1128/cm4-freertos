@@ -7,6 +7,5 @@
         "freertos.h": "c",
         "mysetting.h": "c"
     },
-    "cortex-debug.registerUseNaturalFormat": false,
-    "cortex-debug.variableUseNaturalFormat": false
+    "cortex-debug.gdbPath": "gdb-multiarch"
 }

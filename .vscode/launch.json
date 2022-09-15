@@ -5,14 +5,14 @@
         {
             "name": "Debug (OpenOCD)",
             "cwd": "${workspaceRoot}",
-            "executable": "Debug/LED-1.elf",
+            "executable": "Debug/Exercise1-1.elf",
             "request": "launch",
             "type": "cortex-debug",
-            "targetId": "STM32F303ZE",         //使用J-link GDB Server時必須
-            "svdFile": "STM32F303.svd",        //svd文件，有這個文件才能查看寄存器的值
-            "servertype": "openocd",           //使用的GDB Server
+            "targetId": "STM32F303ZE",
+            "svdFile": "STM32F303.svd",
+            "servertype": "openocd",
             "configFiles": [
-                "${workspaceRoot}/st_nucleo_f3.cfg",
+                "board/st_nucleo_f3.cfg",
             ],
         }
     ]
