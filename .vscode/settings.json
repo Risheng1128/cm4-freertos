@@ -7,5 +7,6 @@
         "freertos.h": "c",
         "mysetting.h": "c"
     },
-    "cortex-debug.gdbPath": "gdb-multiarch"
+    "cortex-debug.gdbPath.linux": "gdb-multiarch",
+    "cortex-debug.gdbPath.windows": "gdb"
 }
