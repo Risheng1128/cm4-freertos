@@ -1,4 +1,4 @@
-# CM4 FreeRTOS
+# How to integrate FreeRTOS into CM4 processor
 ###### tags: `ARM Cortex-M` `FreeRTOS`
 
 ## 目前進度
@@ -8,69 +8,67 @@
 - 完成 FreeRTOS 和 SystemView 的整合，可使用 single-shot recording
   - FreeRTOS版本: `10.1.1`
   - SystemView版本: `3.20`
-- 在 myusart.c 和 myusart.h 新增 SystemView 的 Continuous recording 功能(使用 UART)
+- 在 `myusart.c` 和 `myusart.h` 新增 SystemView 的 Continuous recording 功能
   - 使用 USART3
-  - Baudrate: 38400
+  - processor clock frequency: 72MHz
+  - Baudrate: 500000
 
 ## Install Real Time Operating System (RTOS)
-### 下載: 這次練習使用 `10.1.1` 版 (版本太新整合 SystemView 會有問題)
+### FreeRTOS 下載: 這次練習使用 `10.1.1` 版 (版本太新整合 SystemView 會有問題)
 [FreeRTOS github](https://github.com/FreeRTOS/FreeRTOS/releases)
-- 下載[FreeRTOS](https://freertos.org/)
-- 下載FreeRTOS Kernel
+- [FreeRTOS  官方網站](https://freertos.org/)
+- 下載 FreeRTOS Kernel
   ![](https://i.imgur.com/He0LcGg.png)
 
 ### Creating FreeRTOS based project for STM32 MCUs
-- Adding FreeRTOS kernel source to project
-  1. 複製 License
-     ![](https://i.imgur.com/NyqwLJG.png)
-  2. 複製 Source 裡的所有檔案
-     ![](https://i.imgur.com/5mW2kZj.png)
-  3. 從 portable 裡刪除不需要的檔案，只要留下 GCC, MemMang 及 readme.txt 即可
-     ![](https://i.imgur.com/56abKIB.png)
-  4. 從 GCC 裡刪除不需要的檔案，只保留 ARM_CM4F (因為使用NUCLEO-F303ZE)
-     ![](https://i.imgur.com/If3hpyg.png)
-  5. 從 MemMang 刪除 heap4.c 以外的檔案(目前使用 heap4.c 的方式管理記憶體)
-     ![](https://i.imgur.com/03Z6NvV.png)
-  6. FreeRTOSConfig.h
-     - 參考 [FreeRTOSConfig.h 官方說明](https://freertos.org/a00110.html)
-     - 從RTOS的source code裡的DEMO資料夾搜尋 `CORTEX_M4F_STM32F407ZG` (沒有 F303ZE 的先將就用QQ)
+首先將 FreeRTOS 的 source file 加到我們的 project ，以下為主要步驟
+1. 複製 License
+   ![](https://i.imgur.com/NyqwLJG.png)
+2. 複製 Source 裡的所有檔案
+   ![](https://i.imgur.com/5mW2kZj.png)
+3. 從 portable 裡刪除不需要的檔案，只要留下 GCC, MemMang 及 readme.txt 即可
+   ![](https://i.imgur.com/56abKIB.png)
+4. 從 GCC 裡刪除不需要的檔案，只保留 ARM_CM4F (因為使用 NUCLEO-F303ZE)
+   ![](https://i.imgur.com/If3hpyg.png)
+5. 從 MemMang 刪除 heap4.c 以外的檔案(目前使用 heap4.c 的方式管理記憶體)
+   ![](https://i.imgur.com/03Z6NvV.png)
+6. FreeRTOSConfig.h
+   - 參考 [FreeRTOSConfig.h 官方說明](https://freertos.org/a00110.html)
+   - 從 FreeRTOS 的 source code 裡的 DEMO 資料夾搜尋 `CORTEX_M4F_STM32F407ZG` (沒有 F303ZE 的先將就用)
 
-- 編譯
-  - 錯誤(搞有夠久QQ)
-    ![](https://i.imgur.com/JBBbbeH.png)
-  - 解決方法
-    將FreeRTOSConfig.h裡的 `configUSE_TICK_HOOK` 、 `configUSE_MALLOC_FAILED_HOOK` 及 `configCHECK_FOR_STACK_OVERFLOW` 更改成 `0` 即可
-  - 結果
-    編譯成功!!!
-    ![](https://i.imgur.com/JjfRH0Q.png)
+接著編譯試試看，結果產生了以下的錯誤
+![](https://i.imgur.com/JBBbbeH.png)
+> 解決方法: 將檔案 `FreeRTOSConfig.h` 裡的 `configUSE_TICK_HOOK` 、 `configUSE_MALLOC_FAILED_HOOK` 及 `configCHECK_FOR_STACK_OVERFLOW` 更改成 `0` 即可
+
+結果: 編譯成功!
+![](https://i.imgur.com/JjfRH0Q.png)
     
-- FreeRTOS API
-  [FreeRTOS API官方文件](https://freertos.org/a00106.html)
+最後提供 [FreeRTOS API](https://freertos.org/a00106.html) 相關文件
 
-## Trace tool
-### Trace tool download: 這次練習使用3.20版
-- 下載以下的tool
-  1. SEGGER SystemView software (給host)
-  2. SEGGER SystemView target source files (給target)
+## Trace tool - SystemView
+### Trace tool download: 使用 3.20 版
+Trace tool 的部份則使用 SEGGER 推出的 [SystemView](https://www.segger.com/products/development-tools/systemview/) 做練習，可參考以下步驟
+- 下載下列的 tool
+  1. SEGGER SystemView software (給 host)
+  2. SEGGER SystemView target source files (給 target)
   3. SEGGER ST-Link Reflash u (Not used)
   4. SEGGER J-Link software package V5.12b or later (Not used)
   5. SystemView user manual
 
-- 下載 [SystemView](https://www.segger.com/products/development-tools/systemview/)
-  - [載點](https://www.segger.com/downloads/systemview/)
-  - SEGGER SystemView software
-    ![](https://i.imgur.com/yNZGt9S.png)
-  - SEGGER SystemView target source files
-    ![](https://i.imgur.com/m5MeuLO.png)
-  - SystemView user manual
-    ![](https://i.imgur.com/HA1tbnK.png)
+- [下載 SystemView](https://www.segger.com/downloads/systemview/)
+  1. SEGGER SystemView software (選擇 v3.20)
+     ![](https://i.imgur.com/wlKPGac.png)
+  2. SEGGER SystemView target source files
+     ![](https://i.imgur.com/m5MeuLO.png)
+  3. SystemView user manual
+     ![](https://i.imgur.com/HA1tbnK.png)
 
 - SystemView Test
-  - 點擊 File &rarr; Load data 
-    ![](https://i.imgur.com/FuS2xxz.png)
+  1. 點擊 File &rarr; Load data 
+     ![](https://i.imgur.com/FuS2xxz.png)
   
-  - 使用 `OS_IP_WebServer.SVDat` 作測試
-    ![](https://i.imgur.com/034Le7j.png)
+  2. 使用 `OS_IP_WebServer.SVDat` (預設的檔案) 測試
+     ![](https://i.imgur.com/034Le7j.png)
 
 ### 將 SystemView 加入專案裡
 - Step1: Adding SEGGER SystemView Target sources to the project
@@ -186,7 +184,7 @@
   - 編譯成功!
     ![](https://i.imgur.com/3B3dpMw.png)
 
-- Step8: Collect the recorded data(RTT buffer)，使用 single shot recording
+- Step8: Collect the recorded data (RTT buffer)，使用 single shot recording
   1. 查看資料位址: `Global` &rarr; `aUp` &rarr; `1` &rarr; `pBuffer`
      ![](https://i.imgur.com/T9ITMHU.png)
   2. 使用 openocd 的 `dump_image` 讀取資料
@@ -267,5 +265,3 @@
   - 原因: FreeRTOS 的版本太新
     ![](https://i.imgur.com/HLRPszJ.png)
   - 解法: 使用較舊的版本，從 `10.4.3` 改成 `10.1.1`
-
-還在努力學習!!
