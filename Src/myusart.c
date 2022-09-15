@@ -260,7 +260,7 @@ void HIF_UART_Init(UART_ON_TX_FUNC_P cbOnTx, UART_ON_RX_FUNC_P cbOnRx)
     _cbOnTx = cbOnTx;
 
     NVIC_IPR9 |= (USART_PRIORITY << 28); // Highest prio, so it is not disabled by embOS
-    NVIC_ISER1 |= (1 << 7);     /* Enable USART3 interrupt */    
+    NVIC_ISER1_REG |= (1 << 7);     /* Enable USART3 interrupt */    
 }
 
 #endif

@@ -22,7 +22,7 @@
 #define BAUDRATE_38400      38400U
 #define BAUDRATE_500000     500000U
 
-#define NVIC_ISER1          (*(volatile uint32_t *)0xE000E104U)  /* Interrupt Set-Enable Registers */
+#define NVIC_ISER1_REG      (*(volatile uint32_t *)0xE000E104U)  /* Interrupt Set-Enable Registers */
 #define NVIC_IPR9           (*(volatile uint32_t *)0xE000E424U)  /* Interrupt Priority Registers */
 
 #define RCC_CR              (*(volatile uint32_t *)0x40021000U)  /* Clock control register */
