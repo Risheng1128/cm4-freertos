@@ -16,10 +16,10 @@
 #include "FreeRTOS.h"
 #include "task.h"     // include FreeRTOS task lib 
 
-#define DWT_CTRL    *(uint32_t*)0xE0001000U // SWT Control Register
+#define DWT_CTRL    (*(uint32_t *)0xE0001000U) // SWT Control Register
 
-static void task1_handler(void* parameters);
-static void task2_handler(void* parameters);
+static void task1_handler(void *parameters);
+static void task2_handler(void *parameters);
 
 int main(void) 
 {
@@ -55,12 +55,12 @@ int main(void)
 	return 0;
 }
 
-static void task1_handler(void* parameters) 
+static void task1_handler(void *parameters) 
 {
     char msg[100];
     while (1) {
         // Send to Host
-        snprintf(msg, 100, "%s\n", (char*)parameters); // initialize
+        snprintf(msg, 100, "%s\n", (char *)parameters); // initialize
 #if (USE_SYSTEMVIEW_UART_REC == 1)
         SEGGER_SYSVIEW_PrintfTarget(msg);
 #endif
@@ -71,12 +71,12 @@ static void task1_handler(void* parameters)
     }
 }
 
-static void task2_handler(void* parameters)
+static void task2_handler(void *parameters)
 {
     char msg[100];
     while (1) {
         // Send to Host
-        snprintf(msg, 100, "%s\n", (char*)parameters); // initialize
+        snprintf(msg, 100, "%s\n", (char *)parameters); // initialize
 #if (USE_SYSTEMVIEW_UART_REC == 1)
         SEGGER_SYSVIEW_PrintfTarget(msg);
 #endif

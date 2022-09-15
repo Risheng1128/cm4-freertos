@@ -19,7 +19,7 @@
 #include "myusart.h"
 #endif
 
-#define DWT_CTRL    *(uint32_t *)0xE0001000U // SWT Control Register
+#define DWT_CTRL    (*(uint32_t *)0xE0001000U) // SWT Control Register
 
 static void task1_handler(void *parameters);
 static void task2_handler(void *parameters);
@@ -69,12 +69,12 @@ static void task1_handler(void *parameters)
 #endif
     while (1) {
 #if (USE_PUTTY == 1)
-        printf("%s\n", (char*)parameters); // MYUSRAT Used
+        printf("%s\n", (char *)parameters); // MYUSRAT Used
 #endif
 
 #if (USE_SYSTEMVIEW_SINGLE_SHOT == 1)
         // Send to Host
-        snprintf(msg, 100, "%s\n", (char*)parameters); // initialize
+        snprintf(msg, 100, "%s\n", (char *)parameters); // initialize
         SEGGER_SYSVIEW_PrintfTarget(msg);
 #endif
 
@@ -91,12 +91,12 @@ static void task2_handler(void *parameters)
 #endif
     while (1) {
 #if (USE_PUTTY == 1)
-        printf("%s\n", (char*)parameters); // MYUSRAT Used
+        printf("%s\n", (char *)parameters); // MYUSRAT Used
 #endif
 
 #if (USE_SYSTEMVIEW_SINGLE_SHOT == 1)
         // Send to Host
-        snprintf(msg, 100, "%s\n", (char*)parameters); // initialize
+        snprintf(msg, 100, "%s\n", (char *)parameters); // initialize
         SEGGER_SYSVIEW_PrintfTarget(msg);
 #endif
 

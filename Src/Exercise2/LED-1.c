@@ -23,12 +23,12 @@
 #include "task.h"
 #include "stm32f303ze_gpio_driver.h"
 
-#define DWT_CTRL    *(uint32_t*)0xE0001000U // SWT Control Register
+#define DWT_CTRL    (*(uint32_t *)0xE0001000U) // SWT Control Register
 
-static void green_handler(void* parameters);
-static void blue_handler(void* parameters);
-static void red_handler(void* parameters);
-static void LED_CFG(GPIO_Handle_t* LED, uint8_t GPIO_PinNumber);
+static void green_handler(void *parameters);
+static void blue_handler(void *parameters);
+static void red_handler(void *parameters);
+static void LED_CFG(GPIO_Handle_t *LED, uint8_t GPIO_PinNumber);
 
 GPIO_Handle_t RED, GREEN, BLUE;
 int main(void) 
@@ -62,7 +62,7 @@ int main(void)
 	return 0;
 }
 
-static void green_handler(void* parameters) 
+static void green_handler(void *parameters) 
 {   
     while (1) {
 #if (USE_SYSTEMVIEW_UART_REC == 1)
@@ -73,7 +73,7 @@ static void green_handler(void* parameters)
     }
 }
 
-static void blue_handler(void* parameters)
+static void blue_handler(void *parameters)
 {   
     while (1) {
 #if (USE_SYSTEMVIEW_UART_REC == 1)
@@ -84,7 +84,7 @@ static void blue_handler(void* parameters)
     }
 }
 
-static void red_handler(void* parameters)
+static void red_handler(void *parameters)
 {
     while (1) {
 #if (USE_SYSTEMVIEW_UART_REC == 1)
@@ -95,7 +95,7 @@ static void red_handler(void* parameters)
     }
 }
 
-static void LED_CFG(GPIO_Handle_t* LED, uint8_t GPIO_PinNumber)
+static void LED_CFG(GPIO_Handle_t *LED, uint8_t GPIO_PinNumber)
 {
     LED->pGPIOx = GPIOB;								   
     LED->GPIO_PINCFG.GPIO_PinNumber   = GPIO_PinNumber;    
