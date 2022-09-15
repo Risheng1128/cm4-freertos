@@ -10,10 +10,11 @@
   *         2. LED2_BLUE:   800ms
   *         3. LED3_RED:    400ms
   *     2. Create 3 FreeRTOS tasks of the same priority to handle three different LEDs
-  *         1. Task1: 處理LED1_GREEN (PB0)
-  *         2. Task2: 處理LED2_BLUE (PB7)
-  *         3. Task3: 處理LED3_RED (PB14)
-  *     3. 使用 vTaskDelayUntil() 實現
+  *         1. Task1: deal with LED1_GREEN (PB0)
+  *         2. Task2: deal with LED2_BLUE (PB7)
+  *         3. Task3: deal with LED3_RED (PB14)
+  *     3. Use vTaskDelayUntil() to implement
+  *     4. Use SystemView continuous recording mode
   */
 
 #include <stdio.h>
@@ -43,10 +44,12 @@ int main(void)
     GPIO_Init(&BLUE);
     GPIO_Init(&RED);
 
+#if (USE_SYSTEMVIEW_UART_REC == 1)
     SEGGER_UART_init();
-    DWT_CTRL |= (1 << 0); // Enable the CYCCNT counter
+    DWT_CTRL |= (1 << 0);   // enable the CYCCNT counter
     SEGGER_SYSVIEW_Conf();  // SystemView Setting
-    
+#endif
+
     status = xTaskCreate((TaskFunction_t)green_handler, "Green_Task", 200, NULL, 2, &green_handle);
     configASSERT(status == pdPASS);
     status = xTaskCreate((TaskFunction_t)blue_handler, "Blue_Task", 200, NULL, 2, &blue_handle);
@@ -54,7 +57,7 @@ int main(void)
 	status = xTaskCreate((TaskFunction_t)red_handler, "Red_Task", 200, NULL, 2, &red_handle);
     configASSERT(status == pdPASS);
 
-    vTaskStartScheduler(); // FreeRTOS開始
+    vTaskStartScheduler(); // FreeRTOS starts
 	return 0;
 }
 
@@ -63,7 +66,9 @@ static void green_handler(void* parameters)
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
     while (1) {
+#if (USE_SYSTEMVIEW_UART_REC == 1)
         SEGGER_SYSVIEW_PrintfTarget("Toggling green led\n");
+#endif
         GPIO_ToggleOutputPin(GREEN.pGPIOx, GREEN.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
@@ -74,7 +79,9 @@ static void blue_handler(void* parameters)
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
     while (1) {
+#if (USE_SYSTEMVIEW_UART_REC == 1)
         SEGGER_SYSVIEW_PrintfTarget("Toggling blue led\n");
+#endif
         GPIO_ToggleOutputPin(BLUE.pGPIOx, BLUE.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(800));
     }
@@ -85,7 +92,9 @@ static void red_handler(void* parameters)
     /* Initialize the xLastWakeTime with the current time */
     TickType_t xLastWakeTime = xTaskGetTickCount();
     while (1) {
+#if (USE_SYSTEMVIEW_UART_REC == 1)
         SEGGER_SYSVIEW_PrintfTarget("Toggling red led\n");
+#endif
         GPIO_ToggleOutputPin(RED.pGPIOx, RED.GPIO_PINCFG.GPIO_PinNumber);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(400));
     }

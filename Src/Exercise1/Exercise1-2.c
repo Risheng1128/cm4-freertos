@@ -12,7 +12,6 @@
   */
 
 #include <stdio.h>
-#include "mysetting.h"
 #include "myusart.h"
 #include "FreeRTOS.h"
 #include "task.h"     // include FreeRTOS task lib 

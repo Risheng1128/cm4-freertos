@@ -14,14 +14,9 @@
 #include <stdio.h>
 #include "FreeRTOS.h"
 #include "task.h"     // include FreeRTOS task lib
-#include "mysetting.h"
 
 #if (USE_PUTTY == 1)
 #include "myusart.h"
-#endif
-
-#if (USE_SYSTEMVIEW_SINGLE_SHOT == 1)
-#include "SEGGER_SYSVIEW.h"
 #endif
 
 #define DWT_CTRL    *(uint32_t *)0xE0001000U // SWT Control Register

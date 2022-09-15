@@ -1,6 +1,6 @@
 TARGET = Exercise2/LED-1
 BUILD_DIR = Debug
-# C Source 使用到的.c檔
+
 C_SOURCES = \
 $(wildcard ./Src/$(TARGET).c)   \
 $(wildcard ./Src/*.c)    \
@@ -13,12 +13,10 @@ $(wildcard ./Drivers/SEGGER/OS/*.c) \
 $(wildcard ./Drivers/SEGGER/SEGGER/*.c) \
 $(wildcard ./Drivers/SEGGER/SEGGER/Syscalls/*.c) \
 
-# ASM sources
 ASM_SOURCES = \
 $(wildcard ./Startup/*.s) \
 $(wildcard ./Drivers/SEGGER/SEGGER/*.s) \
 
-# C includes 函式庫.h 路徑
 C_INCLUDES = 			    \
 -IInc                       \
 -IDrivers/CMSIS 		    \
