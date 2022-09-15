@@ -101,7 +101,7 @@ static void task2_handler(void *parameters)
 
 #if (USE_SYSTEMVIEW_SINGLE_SHOT == 1)
         // Send to Host
-        snprintf(msg, 100, "%s\n", (char*)parameters); // 格式化
+        snprintf(msg, 100, "%s\n", (char*)parameters); // initialize
         SEGGER_SYSVIEW_PrintfTarget(msg);
 #endif
 
