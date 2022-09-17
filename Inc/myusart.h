@@ -15,9 +15,9 @@
 #include <stdint.h>
 #include "mysetting.h"
 
-#define APB1_CLK_DEFAULT    8000000U
-#define APB1_CLK_36M        36000000U
-#define APB1_CLK_72M        72000000U
+#define PROCESSOR_CLK_DEFAULT    8000000U
+#define PROCESSOR_CLK_36M        36000000U
+#define PROCESSOR_CLK_72M        72000000U
 
 #define BAUDRATE_38400      38400U
 #define BAUDRATE_500000     500000U

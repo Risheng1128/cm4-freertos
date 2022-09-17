@@ -16,29 +16,31 @@
   *   - GPIOD_AFRH:      AF7 (USART3 Tx/Rx)
   *  
   *   ---------- USART3 Set ------------
-  *   - APB1_CLK:        8 MHz
-  *   - USART3_Mode:     Tx/Rx Enable
-  *   - USART3_Parity:   Parity disable
-  *   - USART3_StopBits: 1
-  *   - USART3_WordLen:  8
-  *   - USART3_Baud:     38400
-  *   - USART3_HW_FLOW:  None
-  *   - Oversampling:    16
+  *   - Processor clock freq: 8 MHz
+  *   - APB1 clock freq:      8 MHz
+  *   - USART3_Mode:          Tx/Rx Enable
+  *   - USART3_Parity:        Parity disable
+  *   - USART3_StopBits:      1
+  *   - USART3_WordLen:       8
+  *   - USART3_Baud:          38400
+  *   - USART3_HW_FLOW:       None
+  *   - Oversampling:         16
   * 
   *   ------ USE_SEGGER_UART_REC ------
-  *   - APB1_CLK:        36 MHz
-  *   - USART3_Mode:     Tx/Rx Enable
-  *   - USART3_Parity:   Parity disable
-  *   - USART3_StopBits: 1
-  *   - USART3_WordLen:  8
-  *   - USART3_Baud:     500000
-  *   - USART3_HW_FLOW:  None
-  *   - Oversampling:    16
+  *   - Processor clock freq: 72 MHz
+  *   - APB1 clock freq:      36 MHz
+  *   - USART3_Mode:          Tx/Rx Enable
+  *   - USART3_Parity:        Parity disable
+  *   - USART3_StopBits:      1
+  *   - USART3_WordLen:       8
+  *   - USART3_Baud:          500000
+  *   - USART3_HW_FLOW:       None
+  *   - Oversampling:         16
   **/
 
 #include "myusart.h"
 
-uint32_t SystemCoreClock;
+uint32_t SystemCoreClock = PROCESSOR_CLK_DEFAULT;
 void MYUSART_Init()
 {
     /**************************** GPIO Set ****************************/
@@ -59,7 +61,7 @@ void MYUSART_Init()
     /* USART mode set */
     USART3_CR1 |= (1 << 2) | (1 << 3);  /* Enable Tx/Rx */
     /* Baudrate Set */
-    USART3_BRR = APB1_CLK_DEFAULT / BAUDRATE_38400;
+    USART3_BRR = SystemCoreClock / BAUDRATE_38400;
 }
 
 void MYUSART_SendData(uint8_t* pTxBuffer, uint8_t len)
@@ -217,7 +219,7 @@ void HIF_UART_EnableTXEInterrupt(void)
 
 void HIF_UART_Init(UART_ON_TX_FUNC_P cbOnTx, UART_ON_RX_FUNC_P cbOnRx) 
 {
-    SystemCoreClock = APB1_CLK_72M;
+    SystemCoreClock = PROCESSOR_CLK_72M;
     /*************************** SYSCLK Set ****************************/
     RCC_CFGR |= (1 << 15);  // PLL entry clock source (HSI used as PREDIV1 entry)
     RCC_CFGR |= (1 << 18) | (1 << 19) | (1 << 20); // PLL multiplication factor (PLL input clock x 9)
@@ -251,7 +253,7 @@ void HIF_UART_Init(UART_ON_TX_FUNC_P cbOnTx, UART_ON_RX_FUNC_P cbOnRx)
     USART3_CR2 &= ~(1 << USART_CR2_STOP0);   // STOP = 00b; 1 stop bit     
     USART3_CR2 &= ~(1 << USART_CR2_STOP1);   // STOP = 00b; 1 stop bit
     
-    USART3_BRR = APB1_CLK_36M / BAUDRATE_500000; /* Baudrate Set */
+    USART3_BRR = PROCESSOR_CLK_36M / BAUDRATE_500000; /* Baudrate Set */
     
     USART3_CR1 |= (1 << USART_CR1_UE);          // UE = 1; USART enabled
 
