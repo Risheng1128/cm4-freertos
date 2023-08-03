@@ -40,7 +40,6 @@ static void task2_handler(void *parameters)
 
 int main(void)
 {
-    TaskHandle_t task1_handle, task2_handle;
     BaseType_t status;
 
     /* initialize USART */
@@ -51,7 +50,7 @@ int main(void)
                          200,                            /* size of stack */
                          "Hello World from Task-1\r\n",  /* task's parameter */
                          2,                              /* priority of task */
-                         &task1_handle                   /* task handle */
+                         NULL                            /* task handle */
     );
 
     configASSERT(status == pdPASS);
@@ -61,7 +60,7 @@ int main(void)
                          200,                            /* size of stack */
                          "Hello World from Task-2\r\n",  /* task's parameter */
                          2,                              /* priority of task */
-                         &task2_handle                   /* task handle */
+                         NULL                            /* task handle */
     );
 
     configASSERT(status == pdPASS);

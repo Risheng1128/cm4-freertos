@@ -12,10 +12,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "FreeRTOS.h"
-#include "task.h"
 #include "dwt.h"
+#include "task.h"
 
-static void task1_handler(void *parameters) 
+static void task1_handler(void *parameters)
 {
     char msg[100] = {0};
     while (1) {
@@ -33,10 +33,10 @@ static void task2_handler(void *parameters)
     }
 }
 
-int main(void) 
+int main(void)
 {
     BaseType_t status;
-   
+
     CYCCNT_COUNTER_EN();
     SEGGER_SYSVIEW_Conf();  /* systemview configuration */
     SEGGER_SYSVIEW_Start(); /* systemview Start */
@@ -46,8 +46,7 @@ int main(void)
                          200,                            /* size of stack */
                          "Hello World from Task-1\r\n",  /* task's parameter */
                          2,                              /* priority of task */
-                         NULL
-    );
+                         NULL);
 
     configASSERT(status == pdPASS);
 
@@ -56,10 +55,9 @@ int main(void)
                          200,                            /* size of stack */
                          "Hello World from Task-2\r\n",  /* task's parameter */
                          2,                              /* priority of task */
-                         NULL
-    );
+                         NULL);
 
     configASSERT(status == pdPASS);
-	vTaskStartScheduler();
-	return 0;
+    vTaskStartScheduler();
+    return 0;
 }
