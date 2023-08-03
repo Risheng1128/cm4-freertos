@@ -85,6 +85,10 @@ to exclude the API function. */
 #define INCLUDE_vTaskSuspend 1
 #define INCLUDE_vTaskDelayUntil 1
 #define INCLUDE_vTaskDelay 1
+#define INCLUDE_xTaskGetIdleTaskHandle 1
+#define INCLUDE_pxTaskGetStackStart 1
+
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS

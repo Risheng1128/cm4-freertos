@@ -1,0 +1,44 @@
+diff --git a/drivers/systemview/SYSVIEW/SEGGER_SYSVIEW_ConfDefaults.h b/drivers/systemview/SYSVIEW/SEGGER_SYSVIEW_ConfDefaults.h
+index 66aadc1..60480ec 100644
+--- a/SYSVIEW/SEGGER_SYSVIEW_ConfDefaults.h
++++ b/SYSVIEW/SEGGER_SYSVIEW_ConfDefaults.h
+@@ -120,7 +120,7 @@ extern "C" {
+   #endif
+ 
+   #ifndef   SEGGER_SYSVIEW_CORE
+-    #define SEGGER_SYSVIEW_CORE SEGGER_SYSVIEW_CORE_OTHER
++    #define SEGGER_SYSVIEW_CORE SEGGER_SYSVIEW_CORE_CM3
+   #endif
+ #endif
+ 
+@@ -143,7 +143,7 @@ extern "C" {
+ *    Convenience define to be used for SEGGER_SYSVIEW_SendSysDesc().
+ */
+ #ifndef   SEGGER_SYSVIEW_APP_NAME
+-  #define SEGGER_SYSVIEW_APP_NAME                 "SystemView-enabled Application"
++  #define SEGGER_SYSVIEW_APP_NAME "FreeRTOS Application"
+ #endif
+ 
+ /*********************************************************************
+@@ -158,7 +158,7 @@ extern "C" {
+ *    Convenience define to be used for SEGGER_SYSVIEW_SendSysDesc().
+ */
+ #ifndef   SEGGER_SYSVIEW_DEVICE_NAME
+-  #define SEGGER_SYSVIEW_DEVICE_NAME              "undefined device"
++  #define SEGGER_SYSVIEW_DEVICE_NAME "STM32F303ZE"
+ #endif
+ 
+ /*********************************************************************
+diff --git a/drivers/systemview/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.h b/drivers/systemview/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.h
+index eb69c8b..f06ed55 100644
+--- a/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.h
++++ b/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.h
+@@ -284,7 +284,7 @@ Notes:
+ // Define INCLUDE_xTaskGetIdleTaskHandle as 1 in FreeRTOSConfig.h to allow identification of Idle state.
+ //
+ #if ( INCLUDE_xTaskGetIdleTaskHandle == 1 )
+-  #define traceTASK_SWITCHED_IN()                   if(prvGetTCBFromHandle(NULL) == xIdleTaskHandle) {                  \
++  #define traceTASK_SWITCHED_IN()                   if(prvGetTCBFromHandle(NULL) == (void *) xIdleTaskHandles) {        \
+                                                       SEGGER_SYSVIEW_OnIdle();                                          \
+                                                     } else {                                                            \
+                                                       SEGGER_SYSVIEW_OnTaskStartExec((U32)pxCurrentTCB);                \

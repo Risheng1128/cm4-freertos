@@ -1,3 +1,11 @@
 [submodule "drivers/freertos"]
 	path = drivers/freertos
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+	ignore = dirty
+[submodule "drivers/systemview"]
+	path = drivers/systemview
+	url = https://github.com/SEGGERMicro/SystemView.git
+	ignore = dirty
+[submodule "drivers/rtt"]
+	path = drivers/rtt
+	url = https://github.com/SEGGERMicro/RTT.git

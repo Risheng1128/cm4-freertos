@@ -4,22 +4,42 @@ OUT = build
 TARGET = src/exercise1/$(BIN).c
 
 HAL = drivers/hal
-FREERTOS = drivers/freertos
 STARTUP = startup
+FREERTOS = drivers/freertos
+SYSTEMVIEW = drivers/systemview
+RTT = drivers/rtt
 CONFIG = drivers/config
+PATCH = drivers/patch
 
 C_SRCS = \
 $(HAL)/usart.c \
+$(STARTUP)/startup.c \
 $(FREERTOS)/portable/GCC/ARM_CM4F/port.c \
 $(FREERTOS)/portable/MemMang/heap_1.c \
 $(wildcard $(FREERTOS)/*.c) \
-$(STARTUP)/startup.c \
+$(SYSTEMVIEW)/SYSVIEW/SEGGER_SYSVIEW.c \
+$(SYSTEMVIEW)/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.c \
+$(SYSTEMVIEW)/Sample/FreeRTOSV10.4/Config/Cortex-M/SEGGER_SYSVIEW_Config_FreeRTOS.c \
+$(RTT)/RTT/SEGGER_RTT_printf.c \
+$(RTT)/RTT/SEGGER_RTT.c \
+$(RTT)/Syscalls/SEGGER_RTT_Syscalls_GCC.c \
 $(TARGET)
+
+ASM_SRCS = $(RTT)/RTT/SEGGER_RTT_ASM_ARMv7M.S
 
 C_INCS = \
 -I$(HAL) \
 -I$(FREERTOS)/portable/GCC/ARM_CM4F \
 -I$(FREERTOS)/include \
+-I$(SYSTEMVIEW)/Config \
+-I$(SYSTEMVIEW)/SEGGER \
+-I$(SYSTEMVIEW)/SYSVIEW \
+-I$(SYSTEMVIEW)/Sample/FreeRTOSV10.4 \
+-I$(RTT)/Config \
+-I$(RTT)/RTT \
 -I$(CONFIG)
 
 LDSCRIPT = $(STARTUP)/link.ld
+
+FREERTOS_PATCH = $(PATCH)/freertos-patch.diff
+SYSTEMVIEW_PATCH = $(PATCH)/systemview-patch.diff

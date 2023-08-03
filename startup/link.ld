@@ -46,9 +46,13 @@ SECTIONS
     .bss :
     {
         _sbss = .; /* start of bss */
+        __bss_start__ = _sbss;
         *(.bss)    /* bss section */
         *(.bss.*)
         . = ALIGN(4);
         _ebss = .; /* end of bss */
+        __bss_end__ = _ebss;
+        . = ALIGN(4);
+        end = .;
     } >RAM
 }
